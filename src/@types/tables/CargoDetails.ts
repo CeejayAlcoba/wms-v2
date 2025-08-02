@@ -1,0 +1,22 @@
+export type CargoDetails = {
+  id?: number;
+  name?: string;
+  description?: string;
+  skuCode?: string;
+  proNumber?: string;
+  deliveryNote?: string;
+  unitOfMeasurementId?: number;
+  batchNo?: string;
+  expirationDate?: Date;
+  palleteCount?: number;
+  quantity?: number;
+  lengthCm?: number;
+  heightCm?: number;
+  widthCm?: number;
+  cubicMeter?: number;
+  customerName?: string;
+  shelfDetailsId?: number;
+  totalAmount?: number;
+  goodsReceiptId?: number;
+  bookingDetailsId?: number;
+};

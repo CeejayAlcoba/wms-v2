@@ -1,0 +1,45 @@
+import { Button, Card } from "antd";
+import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import InputFormik from "../../../components/Formik/InputFormik";
+import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
+import { SearchOutlined } from "@ant-design/icons";
+import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
+
+export type FilterCardProps = {
+  onSearch: (
+    values: RefPrincipal,
+    formikHelpers: FormikHelpers<RefPrincipal>
+  ) => void | Promise<any>;
+};
+
+export default function FilterCard(props: FilterCardProps) {
+  const { onSearch } = props;
+
+  const formik = useFormik({
+    initialValues: EMPTY_FORM,
+    enableReinitialize: true,
+    onSubmit: onSearch,
+  });
+
+  return (
+    <Card className="mb-2">
+      <h6>Filters</h6>
+      <FormikProvider value={formik}>
+        <div className="row row-cols-lg-2">
+          <InputFormik<RefPrincipal> label="Name" name="name" />
+          <InputFormik<RefPrincipal> label="Other Name" name="otherName" />
+          <InputFormik<RefPrincipal> label="address" name="address" />
+        </div>
+        <div className="d-flex justify-content-end">
+          <Button
+            type="primary"
+            onClick={() => formik.submitForm()}
+            icon={<SearchOutlined />}
+          >
+            Search
+          </Button>
+        </div>
+      </FormikProvider>
+    </Card>
+  );
+}
