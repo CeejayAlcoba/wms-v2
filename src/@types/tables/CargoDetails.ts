@@ -1,0 +1,22 @@
+export type CargoDetails = {
+  id?: number | null;
+  name?: string | null;
+  description?: string | null;
+  skuCode: string | null;
+  proNumber: string | null;
+  deliveryNote?: string | null;
+  unitOfMeasurementId: number | null;
+  batchNo?: string | null;
+  expirationDate: Date | null;
+  palleteCount: number | null;
+  quantity: number | null;
+  lengthCm: number | null;
+  heightCm: number | null;
+  widthCm: number | null;
+  cubicMeter: number | null;
+  customerName?: string | null;
+  shelfDetailsId?: number | null;
+  totalAmount: number | null;
+  goodsReceiptId?: number | null;
+  bookingDetailsId?: number | null;
+};
