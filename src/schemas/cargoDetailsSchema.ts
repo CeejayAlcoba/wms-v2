@@ -2,7 +2,7 @@ import * as yup from "yup";
 import type { CargoDetails } from "../@types/tables/CargoDetails";
 import { requiredMessage } from "./yupInitials";
 
-export const cargoDetailsSchema : yup.Schema<CargoDetails>= yup.object().shape({
+export const cargoDetailsSchema: yup.Schema<CargoDetails> = yup.object().shape({
   id: yup.number().nullable(),
   name: yup.string().nullable(),
   description: yup.string().required(requiredMessage),
@@ -21,6 +21,5 @@ export const cargoDetailsSchema : yup.Schema<CargoDetails>= yup.object().shape({
   customerName: yup.string().nullable(),
   shelfDetailsId: yup.number().nullable(),
   totalAmount: yup.number().required(requiredMessage),
-  goodsReceiptId: yup.number().nullable(),
   bookingDetailsId: yup.number().nullable(),
 });

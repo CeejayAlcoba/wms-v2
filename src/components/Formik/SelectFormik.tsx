@@ -3,7 +3,7 @@ import { Form, Select } from "antd";
 import type { SelectProps } from "antd";
 import { useEffect, useState } from "react";
 
-type SelectFormikProps<T = unknown, T2 = any> = {
+export type SelectFormikProps<T = unknown, T2 = any> = {
   name: keyof T & string;
   label?: string;
   placeholder?: string;

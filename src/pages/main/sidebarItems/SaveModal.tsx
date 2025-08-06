@@ -15,14 +15,14 @@ import { sidebarMenuService } from "../../../services/sidebarMenuService";
 import usePage from "../../../hooks/usePage";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: MasterSidebarMenuItem | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
 
@@ -95,11 +95,7 @@ export default function SaveModal(props: SameModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik
-          label="Name"
-          askterisk
-          name="name"
-        />
+        <InputFormik label="Name" askterisk name="name" />
         <SelectFormik<MasterSidebarMenuItem, any>
           label="Sidebar Menu"
           name="sidebarMenuId"

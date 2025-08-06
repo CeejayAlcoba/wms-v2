@@ -8,14 +8,14 @@ import { unitOfMeasurementService } from "../../../services/unitOfMeasurementSer
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { unitOfMeasurementSchema } from "../../../schemas/unitOfMeasurementSchema.ts";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: RefUnitOfMeasurement | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
 

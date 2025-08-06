@@ -12,14 +12,14 @@ import SelectFormik from "../../../components/Formik/SelectFormik";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
 import { productCategorySchema } from "../../../schemas/productCategorySchema";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: RefProductCategory | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
   const { data: principals } = useQuery({

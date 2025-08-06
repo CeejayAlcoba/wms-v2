@@ -1,10 +1,11 @@
 export type PickListDetailsRecord = {
-  id?: number;
-  pickListDetailsId?: number;
-  cargoDetailsId?: number;
-  quantity?: number;
-  palleteCount?: number;
-  pullOutDate?: Date;
-  pullOutDateRecieved?: Date;
-  deliveryDueDate?: Date;
+  id?: number | null;
+  pickListDetailsId?: number | null;
+  cargoDetailsId?: number | null;
+  quantity?: number | null;
+  cubicMeter?: number | null;
+  palleteCount?: number | null;
+  pullOutDate?: Date | null;
+  pullOutDateRecieved?: Date | null;
+  deliveryDueDate?: Date | null;
 };

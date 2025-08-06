@@ -8,14 +8,14 @@ import { billTypeService } from "../../../services/billTypeService";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { billTypeSchema } from "../../../schemas/billTypeSchema";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: MasterBillType | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
 

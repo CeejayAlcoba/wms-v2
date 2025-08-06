@@ -2,7 +2,7 @@ import { FieldArray, useFormikContext } from "formik";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SelectFormik from "../../../components/Formik/SelectFormik";
-import { Button, Collapse, Tooltip } from "antd";
+import { Button, Collapse, Popconfirm, Tooltip } from "antd";
 import { EMPTY_CARGO } from "./__constants__/EMPTY_CARGO";
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
@@ -31,8 +31,6 @@ export default function CargoListPage() {
         <>
           <Collapse activeKey={activeKey} onChange={onChange}>
             {values.cargoDetails.map((cargo, index) => {
-              const arrayName = `cargoDetails[${index}]`;
-
               return (
                 <Panel
                   header={
@@ -52,7 +50,10 @@ export default function CargoListPage() {
                   }
                   key={index}
                 >
-                  <CargoForm arrayName={arrayName} />
+                  <CargoForm
+                    arrayName={`cargoDetails[${index}]`}
+                    index={index}
+                  />
                 </Panel>
               );
             })}
@@ -75,7 +76,7 @@ export default function CargoListPage() {
   );
 }
 
-function CargoForm(props: { arrayName: string }) {
+function CargoForm(props: { arrayName: string; index: number }) {
   const { arrayName } = props;
 
   const { getFieldProps, setFieldValue } = useFormikContext<CheckInByICRDTO>();
@@ -89,7 +90,6 @@ function CargoForm(props: { arrayName: string }) {
     const cbm =
       (lengthCm / 100) * (heightCm / 100) * (widthCm / 100) * quantity;
 
-    console.log(cbm);
     setFieldValue(`${arrayName}.cubicMeter`, handleRoundOff(cbm));
   }, [
     getFieldProps(`${arrayName}.lengthCm`).value,
@@ -128,10 +128,7 @@ function CargoForm(props: { arrayName: string }) {
         option={unitOfMeasurements}
         askterisk
       />
-      <InputFormik<any>
-        label="Batch No"
-        name={`${arrayName}.batchNo`}
-      />
+      <InputFormik<any> label="Batch No" name={`${arrayName}.batchNo`} />
       <DatePickerFormik<any>
         label="Expiration Date"
         name={`${arrayName}.expirationDate`}

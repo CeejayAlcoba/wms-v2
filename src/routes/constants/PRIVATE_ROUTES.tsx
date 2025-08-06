@@ -16,9 +16,7 @@ const PRIVATE_ROUTES: PageRouteType[] = [
   },
   {
     key: "SidebarItem",
-    element: lazy(
-      () => import("../../pages/main/sidebarItems/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/sidebarItems/IndexPage")),
   },
   {
     key: "AntIcon",
@@ -30,9 +28,7 @@ const PRIVATE_ROUTES: PageRouteType[] = [
   },
   {
     key: "Product",
-    element: lazy(
-      () => import("../../pages/main/productCategory/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/productCategory/IndexPage")),
   },
   {
     key: "BillType",
@@ -44,33 +40,35 @@ const PRIVATE_ROUTES: PageRouteType[] = [
   },
   {
     key: "TruckDetails",
-    element: lazy(
-      () => import("../../pages/main/truckDetails/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/truckDetails/IndexPage")),
   },
   {
     key: "BillingStatement",
-    element: lazy(
-      () => import("../../pages/main/billingStatement/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/billingStatement/IndexPage")),
   },
-   {
+  {
     key: "CheckInByICR",
-    element: lazy(
-      () => import("../../pages/main/checkInByICR/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/checkInByICR/IndexPage")),
   },
-    {
+  {
     key: "CargoType",
-    element: lazy(
-      () => import("../../pages/main/cargoType/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/cargoType/IndexPage")),
   },
-   {
+  {
     key: "UnitOfMeasurement",
-    element: lazy(
-      () => import("../../pages/main/unitOfMeasurement/IndexPage")
-    ),
+    element: lazy(() => import("../../pages/main/unitOfMeasurement/IndexPage")),
+  },
+  {
+    key: "GoodsReceipt",
+    element: lazy(() => import("../../pages/main/goodsReceipt/IndexPage")),
+  },
+  {
+    key: "Inbound",
+    element: lazy(() => import("../../pages/main/inbound/IndexPage")),
+  },
+  {
+    key: "PickList",
+    element: lazy(() => import("../../pages/main/picklist/IndexPage")),
   },
   {
     key: "Test",

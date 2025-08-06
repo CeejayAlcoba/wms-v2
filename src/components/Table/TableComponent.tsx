@@ -10,12 +10,18 @@ import {
 import type { TableProps } from "antd/es/table";
 import { useMemo } from "react";
 import { debounce } from "lodash";
+import PrintTable, {
+  type PrintTableProps,
+} from "../Documents/Print/PrintTable";
+import useDocument from "../../contexts/useDocument";
+import DownloadPdfTable from "../Documents/Pdf/PdfTable";
 
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
   headerTitle?: string;
   search?: InputProps;
   add?: ButtonProps;
+  print?: PrintTableProps;
 };
 
 export default function TableComponent<T extends object = any>(
@@ -26,8 +32,11 @@ export default function TableComponent<T extends object = any>(
     indexedColumn: true,
     ...props,
   };
-  const { headerTitle, search, indexedColumn, add, columns, ...rest } =
+  const { headerTitle, search, indexedColumn, add, columns, print, ...rest } =
     initialProps;
+  const { setTitle, setColumns, setData, handlePrint, handleDownloadPdf } =
+    useDocument();
+
   const debouncedSearch = useMemo(
     () => debounce(search?.onChange ? search?.onChange : () => {}, 500),
     []
@@ -48,22 +57,56 @@ export default function TableComponent<T extends object = any>(
       ];
     }
 
-    return newColumns;
+    return newColumns.map((col) => ({
+      ...col,
+      render: (data: any, record: T, index: number) =>
+        col.render
+          ? col.render(data, record, index)
+          : data || <span className="text-secondary">N/A</span>,
+    }));
+  };
+
+  const handleColumnDocument = () => {
+    return handleUpdateColumns().filter(
+      (h) => h.title != "Action" && h.title != "#"
+    );
+  };
+  const handleOnPrint = () => {
+    setTitle(headerTitle ?? "");
+    setData([...(rest.dataSource ?? [])]);
+    setColumns(handleColumnDocument());
+    handlePrint();
+  };
+  const handleOnDownloadPdf = () => {
+    setTitle(headerTitle ?? "");
+    setData([...(rest.dataSource ?? [])]);
+    setColumns(handleColumnDocument());
+    handleDownloadPdf();
   };
 
   return (
     <Card>
-      <div className="d-flex justify-content-between mb-2">
-        <div>{headerTitle && <h6>{headerTitle}</h6>}</div>
-        <div className="d-flex gap-1">
+      <div className="row align-items-center mb-3">
+        {/* Left side: title */}
+        <div className="col-lg-6">
+          {headerTitle && <h6 className="mb-0">{headerTitle}</h6>}
+        </div>
+
+        {/* Right side: search + buttons */}
+        <div className="col-lg-6 d-flex justify-content-end gap-2 flex-wrap">
           {search && (
             <Input
               {...search}
               addonBefore={<SearchOutlined />}
               onChange={debouncedSearch}
-              placeholder="large size"
+              placeholder="Search here..."
+              style={{ maxWidth: 200 }}
             />
           )}
+
+          <DownloadPdfTable onDownload={handleOnDownloadPdf} />
+          <PrintTable onPrint={handleOnPrint} />
+
           {add && (
             <Button
               {...add}
@@ -81,6 +124,7 @@ export default function TableComponent<T extends object = any>(
         {...rest}
         columns={handleUpdateColumns()}
         pagination={{ showQuickJumper: true, ...rest.pagination }}
+        scroll={{ x: "max-content" }}
       />
     </Card>
   );

@@ -15,28 +15,28 @@ export default function IndexPage() {
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
   };
-   const handleSubmit = async(values: CheckInByICRDTO, formikHelpers: FormikHelpers<CheckInByICRDTO>) => {
-
-    try{
+  const handleSubmit = async (
+    values: CheckInByICRDTO,
+    formikHelpers: FormikHelpers<CheckInByICRDTO>
+  ) => {
+    try {
       formikHelpers.setSubmitting(true);
       await checkInByICRService.Add(values);
       SweetAlert({
-          title:"ICR Check-In Completed",
-          timer: undefined,
-          showConfirmButton:true,
-      })
+        title: "ICR Check-In Completed",
+        timer: undefined,
+        showConfirmButton: true,
+      });
       formik.resetForm();
       setCurrentStep(0);
-    }
-    catch{
-       SweetAlert({
-          title:"Error Occurs",
-          icon:"error",
-          timer: undefined,
-           showConfirmButton:true,
-      })
-    }
-    finally{
+    } catch {
+      SweetAlert({
+        title: "Error Occurs",
+        icon: "error",
+        timer: undefined,
+        showConfirmButton: true,
+      });
+    } finally {
       formikHelpers.setSubmitting(false);
     }
   };
@@ -48,28 +48,23 @@ export default function IndexPage() {
   const handleStep = () => {
     return CHECK_IN_STEPS[currentStep];
   };
- 
+
   const formik = useFormik({
-    validationSchema:checkInByICRSchema,
+    validationSchema: checkInByICRSchema,
     initialValues: EMPTY_FORM,
     onSubmit: handleSubmit,
   });
- useEffect(() => {
-  const handler = setTimeout(() => {
-    console.log(JSON.stringify(formik.values))
-    // localStorage.setItem(CHECK_IN_BY_ICR,"hi")
-  }, 500);
 
-  return () => {
-    clearTimeout(handler);
-  };
-}, [formik.values]);
   return (
     <FormikProvider value={formik}>
-      <CurrentStepContext value={{ currentStep, handlePrev,handleNext }}>
-        <Steps current={currentStep} items={CHECK_IN_STEPS} />
-        <Card title={handleStep().title}>{handleStep().componentPage}</Card>
-       <div className="d-flex justify-content-end"><WizardButton /></div> 
+      <CurrentStepContext value={{ currentStep, handlePrev, handleNext }}>
+        <div className="row gap-4">
+          <Steps current={currentStep} items={CHECK_IN_STEPS} />
+          <Card title={handleStep().title}>{handleStep().componentPage}</Card>
+          <div className="d-flex justify-content-end">
+            <WizardButton />
+          </div>
+        </div>
       </CurrentStepContext>
     </FormikProvider>
   );

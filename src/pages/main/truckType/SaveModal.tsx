@@ -8,14 +8,14 @@ import { truckTypeService } from "../../../services/truckTypeService";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { truckTypeSchema } from "../../../schemas/truckTypeSchema";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: RefTruckType | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
 

@@ -1,6 +1,8 @@
 import { Field, type FieldProps } from "formik";
 import { Form, DatePicker } from "antd";
 import type { DatePickerProps } from "antd";
+import moment from "moment";
+import dayjs from "dayjs";
 
 type InputFormikProps<T = unknown> = {
   name: keyof T & string;
@@ -29,11 +31,14 @@ export default function DatePickerFormik<T = unknown>({
             <DatePicker
               style={{ width: "100%" }}
               {...rest}
-              value={field.value}
+              value={field.value ? dayjs(field.value) : null}
               onBlur={() => form.setFieldTouched(name, true)}
               onChange={(date) => {
                 form.setFieldTouched(name, true);
-                form.setFieldValue(name, date ?? null);
+                form.setFieldValue(
+                  name,
+                  date ? dayjs(date).format("YYYY-MM-DD") : null
+                );
               }}
             />
           </div>

@@ -5,27 +5,17 @@ import InputFormik from "../../../components/Formik/InputFormik";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import { useQuery } from "@tanstack/react-query";
 import { cargoTypeService } from "../../../services/cargoTypeService";
-import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
-import type { RefProductCategory } from "../../../@types/tables/RefProductCategory";
 import type { RefTruckType } from "../../../@types/tables/RefTruckType";
 import { truckTypeService } from "../../../services/truckTypeService";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { principalService } from "../../../services/principalService";
-import { productCategoryService } from "../../../services/productCategoryService";
 import { useFormikContext } from "formik";
+import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 
 export default function ICRPage() {
-  const [productCategories, setProductCategories] = useState<
-    RefProductCategory[]
-  >([]);
-  const { setFieldValue, getFieldProps } = useFormikContext<CheckInByICRDTO>();
+  const { setFieldValue } = useFormikContext<CheckInByICRDTO>();
   const fieldName: keyof CheckInByICRDTO = "bookingDetails";
 
-  const { data: principals } = useQuery({
-    queryKey: ["principals"],
-    queryFn: async () => await principalService.GetAll(),
-    initialData: [],
-  });
   const { data: cargoTypes } = useQuery({
     queryKey: ["cargoTypes"],
     queryFn: async () => {
@@ -40,25 +30,6 @@ export default function ICRPage() {
     queryFn: async () => await truckTypeService.GetAll(),
     initialData: [],
   });
-
-  useEffect(() => {
-    const principalId = getFieldProps(`${fieldName}.principalId`).value;
-    const prods =
-      principals.find((p) => p.id == principalId)?.productCategories ?? [];
-    setProductCategories(prods);
-  }, [getFieldProps(`${fieldName}.principalId`).value]);
-
-  const handleChangePrincipal = (principalId: number) => {
-    if (!principalId) {
-      setProductCategories([]);
-      setFieldValue(`${fieldName}.productCategoryId`, null);
-      return;
-    }
-
-    const prods =
-      principals.find((p) => p.id == principalId)?.productCategories ?? [];
-    setProductCategories(prods);
-  };
 
   return (
     <div className="row row-cols-lg-3">
@@ -81,23 +52,9 @@ export default function ICRPage() {
         option={cargoTypes}
         askterisk
       />
-      <SelectFormik<any, RefPrincipal>
-        label="Principal"
-        name={`${fieldName}.principalId`}
-        keyValue="id"
-        keyLabel="name"
-        option={principals}
-        onChange={(val) => handleChangePrincipal(val)}
-        askterisk
-      />
-      <SelectFormik<any, RefProductCategory>
-        label="Product Category"
-        name={`${fieldName}.productCategoryId`}
-        keyValue="id"
-        keyLabel="name"
-        option={productCategories}
-        askterisk
-      
+      <PrincipalProductSelect<CheckInByICRDTO>
+        principalName={`${fieldName}.principalId`}
+        productCategoryName={`${fieldName}.productCategoryId`}
       />
       <SelectFormik<any, RefTruckType>
         label="Truck Details"

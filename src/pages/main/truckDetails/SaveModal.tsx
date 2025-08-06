@@ -12,14 +12,14 @@ import SelectFormik from "../../../components/Formik/SelectFormik";
 import { useQuery } from "@tanstack/react-query";
 import { truckTypeService } from "../../../services/truckTypeService";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: RefTruckDetails | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
 

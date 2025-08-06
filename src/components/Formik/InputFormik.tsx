@@ -1,4 +1,4 @@
-import { Field, type FieldProps } from "formik";
+import { FastField, type FieldProps } from "formik";
 import { Input, Form } from "antd";
 import type { InputProps } from "antd";
 
@@ -21,7 +21,7 @@ export default function InputFormik<T = unknown>({
   const AntInputComponent = type === "password" ? Input.Password : Input;
 
   return (
-    <Field name={name}>
+    <FastField name={name}>
       {({ field, form, meta }: FieldProps) => (
         <Form.Item
           validateStatus={meta.touched && meta.error ? "error" : ""}
@@ -40,6 +40,6 @@ export default function InputFormik<T = unknown>({
           />
         </Form.Item>
       )}
-    </Field>
+    </FastField>
   );
 }

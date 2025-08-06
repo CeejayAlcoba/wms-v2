@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { antIconService } from "../../../services/antIconService";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import TableComponent from "../../../components/TableComponent/TableComponent";
+import TableComponent from "../../../components/Table/TableComponent";
 import SaveModal from "./SaveModal";
 import usePage from "../../../hooks/usePage";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
@@ -51,8 +51,8 @@ export default function IndexPage() {
     await antIconService.Delete(record.id);
     await refetch();
     SweetAlert({
-      title:"Successfully deleted."
-    })
+      title: "Successfully deleted.",
+    });
   };
 
   const handleAfterSave = () => {
@@ -127,7 +127,7 @@ export default function IndexPage() {
           onClick: handleClickAdd,
         }}
         search={{
-          onChange: (e) => {
+          onChange: (e: any) => {
             handleSearch(e.target.value);
           },
         }}

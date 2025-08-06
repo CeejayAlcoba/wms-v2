@@ -9,7 +9,7 @@ type ButtonType = "Previous" | "Next" | "Submit";
 
 export default function WizardButton() {
   const { currentStep, handleNext, handlePrev } = useCurrentStep();
-  const { validateForm, setTouched, submitForm, values } =
+  const { validateForm, setTouched, submitForm, values, isSubmitting } =
     useFormikContext<CheckInByICRDTO>();
 
   const handleValidateAndShowErrors = async (
@@ -84,6 +84,7 @@ export default function WizardButton() {
           type="primary"
           icon={<CheckOutlined />}
           onClick={() => handleClickButton("Submit")}
+          loading={isSubmitting}
         >
           Submit
         </Button>

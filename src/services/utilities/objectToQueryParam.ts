@@ -2,7 +2,7 @@ const objectToQueryParam = (object: any) => {
   if (!object) return "";
   var str = "";
   for (var key in object) {
-    if (!object[key]) continue;
+    if (object[key] == null || object[key] == undefined) continue;
     if (str != "") {
       str += "&";
     }

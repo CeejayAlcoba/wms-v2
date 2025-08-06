@@ -7,12 +7,12 @@ import {
 import MainLayout from "../pages/layouts/MainLayout";
 import useUser from "../contexts/useUser";
 import LoginPage from "../pages/auth/login/LoginPage";
-import { meService } from "../services/meService";
 import PRIVATE_ROUTES from "./constants/PRIVATE_ROUTES";
 import { Suspense, useEffect, useState } from "react";
 import type { MasterSidebarMenuItem } from "../@types/tables/MasterSidebarMenuItem";
 import useSidebar from "../contexts/useSidebar";
 import LoadingScreenLayout from "../pages/layouts/LoadingScreenLayout";
+import { routeService } from "../services/routeService";
 
 export default function MainRoute() {
   const { user } = useUser();
@@ -21,7 +21,7 @@ export default function MainRoute() {
   const handleGetMenuItems = async () => {
     try {
       setLoading(true);
-      const res = await meService.SidebarMenuItems();
+      const res = await routeService.GetAll();
       setMenuItems(res);
     } catch {
     } finally {

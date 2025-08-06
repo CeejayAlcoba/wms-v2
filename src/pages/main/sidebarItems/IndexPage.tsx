@@ -3,7 +3,7 @@ import type { MasterSidebarMenuItem } from "../../../@types/tables/MasterSidebar
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import TableComponent from "../../../components/TableComponent/TableComponent";
+import TableComponent from "../../../components/Table/TableComponent";
 
 import AntIcon from "../../../components/AntIcon/AntIcon";
 import SaveModal from "./SaveModal";
@@ -58,8 +58,8 @@ export default function IndexPage() {
     await sidebarMenuItemService.Delete(record.id);
     await refetch();
     SweetAlert({
-      title:"Successfully deleted."
-    })
+      title: "Successfully deleted.",
+    });
   };
 
   const handleAfterSave = () => {
@@ -99,7 +99,7 @@ export default function IndexPage() {
       title: "Any roles",
       dataIndex: "isAccessibleToAnyRole",
       key: "isAccessibleToAnyRole",
-      render: (data) => <ToggleTag data={data}/>,
+      render: (data) => <ToggleTag data={data} />,
     },
     {
       title: "Icon",

@@ -1,15 +1,17 @@
-import { Menu, Spin, type MenuProps } from "antd";
+import { Drawer, Menu, Spin, type MenuProps } from "antd";
 import Sider from "antd/es/layout/Sider";
 import useSidebar from "../../contexts/useSidebar";
 import { useQuery } from "@tanstack/react-query";
 import { meService } from "../../services/meService";
 import { useLocation, useNavigate } from "react-router-dom";
 import AntIcon from "../../components/AntIcon/AntIcon";
+import useWindowWidth from "../../hooks/useWindowWidth";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 export default function SidebarLayout() {
-  const { collapsed, loading } = useSidebar();
+  const { collapsed, loading, setCollapsed } = useSidebar();
+  const { windowWidth } = useWindowWidth();
   const navigate = useNavigate();
   const handleMapMenu = async () => {
     const menus = await meService.Sidebar();
@@ -20,7 +22,10 @@ export default function SidebarLayout() {
           label: i.name,
           key: i?.path || "",
           icon: <AntIcon icon={i?.antIcon || ""} />,
-          onClick: () => navigate(i.path ?? ""),
+          onClick: () => {
+            windowWidth <= 768 && setCollapsed(false);
+            navigate(i.path ?? "");
+          },
         };
       });
 
@@ -44,6 +49,22 @@ export default function SidebarLayout() {
     initialData: [],
   });
   const location = useLocation();
+  if (windowWidth <= 768)
+    return (
+      <Drawer
+        open={collapsed}
+        placement="left"
+        onClose={() => setCollapsed(false)}
+        bodyStyle={{ padding: 0, margin: 0 }}
+      >
+        <Menu
+          mode="inline"
+          theme="dark"
+          defaultSelectedKeys={[location.pathname]}
+          items={sidebarMenus}
+        />
+      </Drawer>
+    );
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
       <div className="demo-logo-vertical" />

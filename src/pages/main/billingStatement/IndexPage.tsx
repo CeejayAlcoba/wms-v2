@@ -7,7 +7,7 @@ import {
   EditOutlined,
   PercentageOutlined,
 } from "@ant-design/icons";
-import TableComponent from "../../../components/TableComponent/TableComponent";
+import TableComponent from "../../../components/Table/TableComponent";
 import usePage from "../../../hooks/usePage";
 import FilterCard from "./FilterCard";
 import { billingStatementService } from "../../../services/billingStatementService";
@@ -61,8 +61,8 @@ export default function IndexPage() {
     await billingStatementService.Delete(record.id);
     await refetch();
     SweetAlert({
-      title:"Successfully deleted."
-    })
+      title: "Successfully deleted.",
+    });
   };
 
   const handleAfterSave = () => {
@@ -88,7 +88,12 @@ export default function IndexPage() {
       key: "handlingInRate",
       render: (value, record) => (
         <span>
-          <ToggleText  data={record.handlingInBillType=="CBM"} falseProps={{style:{color:"green"}}}>{value} / {record.handlingInBillType}</ToggleText> 
+          <ToggleText
+            data={record.handlingInBillType == "CBM"}
+            falseProps={{ style: { color: "green" } }}
+          >
+            {value} / {record.handlingInBillType}
+          </ToggleText>
         </span>
       ),
     },
@@ -98,7 +103,12 @@ export default function IndexPage() {
       key: "handlingOutRate",
       render: (value, record) => (
         <span>
-           <ToggleText  data={record.handlingOutBillType=="CBM"} falseProps={{style:{color:"green"}}}>{value} /{record.handlingOutBillType}</ToggleText> 
+          <ToggleText
+            data={record.handlingOutBillType == "CBM"}
+            falseProps={{ style: { color: "green" } }}
+          >
+            {value} /{record.handlingOutBillType}
+          </ToggleText>
         </span>
       ),
     },
@@ -108,7 +118,12 @@ export default function IndexPage() {
       key: "storageRate",
       render: (value, record) => (
         <span>
-           <ToggleText  data={record.storageBillType=="CBM"} falseProps={{style:{color:"green"}}}>{value} / {record.storageBillType}</ToggleText> 
+          <ToggleText
+            data={record.storageBillType == "CBM"}
+            falseProps={{ style: { color: "green" } }}
+          >
+            {value} / {record.storageBillType}
+          </ToggleText>
         </span>
       ),
     },

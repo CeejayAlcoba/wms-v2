@@ -3,7 +3,7 @@ import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasu
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import TableComponent from "../../../components/TableComponent/TableComponent";
+import TableComponent from "../../../components/Table/TableComponent";
 import usePage from "../../../hooks/usePage";
 import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
@@ -12,7 +12,9 @@ import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState<RefUnitOfMeasurement | null>(null);
+  const [selectedData, setSelectedData] = useState<RefUnitOfMeasurement | null>(
+    null
+  );
   const [search, setSearch] = useState<RefUnitOfMeasurement>(EMPTY_FORM);
 
   const { title: pageTitle } = usePage();
@@ -25,7 +27,9 @@ export default function IndexPage() {
     queryKey: ["unitOfMeasurements", search],
     queryFn: async ({ queryKey }) => {
       const [, searchParam] = queryKey;
-      return await unitOfMeasurementService.GetAll(searchParam as RefUnitOfMeasurement);
+      return await unitOfMeasurementService.GetAll(
+        searchParam as RefUnitOfMeasurement
+      );
     },
     initialData: [],
   });
@@ -50,8 +54,8 @@ export default function IndexPage() {
     await unitOfMeasurementService.Delete(record.id);
     await refetch();
     SweetAlert({
-      title:"Successfully deleted."
-    })
+      title: "Successfully deleted.",
+    });
   };
 
   const handleAfterSave = () => {
@@ -121,8 +125,7 @@ export default function IndexPage() {
           onClick: handleClickAdd,
         }}
         search={{
-          onChange: (e) =>
-           handleSearch({...search,name:e.target.value})
+          onChange: (e) => handleSearch({ ...search, name: e.target.value }),
         }}
       />
     </>

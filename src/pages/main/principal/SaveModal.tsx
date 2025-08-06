@@ -8,14 +8,14 @@ import { principalService } from "../../../services/principalService";
 import { principalSchema } from "../../../schemas/principalSchema";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 
-type SameModalProps = {
+type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: RefPrincipal | null;
 };
 
-export default function SaveModal(props: SameModalProps) {
+export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
 
