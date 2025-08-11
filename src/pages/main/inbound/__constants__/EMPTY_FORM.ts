@@ -1,6 +1,6 @@
-import type { InboundFilterDTO } from "../../../../@types/DTOs/InboundFilterDTO";
+import type { ReportFilterDTO } from "../../../../@types/DTOs/ReportFilterDTO";
 
-export const EMPTY_FORM: InboundFilterDTO = {
+export const EMPTY_FORM: ReportFilterDTO = {
   actualCheckInDate: null,
   icrReferenceNumber: null,
   principalId: null,

@@ -1,11 +1,9 @@
 import { Tabs, type TabsProps } from "antd";
-
 import { useState } from "react";
 import { bookingDetailsService } from "../../../services/bookingDetailsService";
 import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import { EMPTY_BOOKING_DETAILS } from "./__constants__/EMPTY_BOOKING_DETAILS";
 import { useQuery } from "@tanstack/react-query";
-
 import Table from "./Table";
 import FilterCard from "./FilterCard";
 import type { FormikHelpers } from "formik";
@@ -61,8 +59,8 @@ export default function IndexPage() {
   };
   return (
     <>
-      <Tabs defaultActiveKey="1" items={TAB_ITEMS} onChange={handleTab} />
       <FilterCard onSearch={handleSearch} activeKey={activeKey} />
+      <Tabs defaultActiveKey="1" items={TAB_ITEMS} onChange={handleTab} />
       <Table
         bookingDetails={bookingDetails}
         refetch={refetch}

@@ -15,19 +15,19 @@ export const pickListDetailsRecordSchema: yup.Schema<PickListDetailsRecordDTO> =
         "min",
         "Quantity must not exceed the available limit.",
         async function (value) {
-          return this.parent.cargoDetails.quantity >= value;
+          return this.parent.report.balanceQuantity >= value;
         }
       ),
     cubicMeter: yup.number().required(requiredMessage),
     palleteCount: yup
       .number()
-      .required(requiredMessage)
+      .nullable()
       .min(0, minZeroMessage)
       .test(
         "min",
         "Pallete must not exceed the available limit.",
         async function (value) {
-          return this.parent.cargoDetails.palleteCount >= value;
+          return this.parent.report.balancePalleteCount >= (value??0);
         }
       ),
     pullOutDate: yup.date().required(requiredMessage),

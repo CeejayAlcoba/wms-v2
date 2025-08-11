@@ -2,8 +2,8 @@ import { Button, Card } from "antd";
 import { FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import { SearchOutlined } from "@ant-design/icons";
-import { EMPTY_FILTER } from "./__constants__/EMPTY_FILTER";
-import type { InboundFilterDTO } from "../../../@types/DTOs/InboundFilterDTO";
+import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
+import type { ReportFilterDTO } from "../../../@types/DTOs/ReportFilterDTO";
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import SelectFormik from "../../../components/Formik/SelectFormik";
@@ -16,8 +16,8 @@ import { goodsReceiptService } from "../../../services/goodsReceiptService";
 
 export type FilterCardProps = {
   onSearch: (
-    values: InboundFilterDTO,
-    formikHelpers: FormikHelpers<InboundFilterDTO>
+    values: ReportFilterDTO,
+    formikHelpers: FormikHelpers<ReportFilterDTO>
   ) => void | Promise<any>;
 };
 
@@ -25,7 +25,7 @@ export default function FilterCard(props: FilterCardProps) {
   const { onSearch } = props;
 
   const formik = useFormik({
-    initialValues: EMPTY_FILTER,
+    initialValues: EMPTY_FORM,
     enableReinitialize: true,
     onSubmit: onSearch,
   });
@@ -46,12 +46,12 @@ export default function FilterCard(props: FilterCardProps) {
       <h6>Filters</h6>
       <FormikProvider value={formik}>
         <div className="row row-cols-lg-2">
-          <DatePickerFormik<InboundFilterDTO>
+          <DatePickerFormik<ReportFilterDTO>
             label="Actual Check-in Date"
             name="actualCheckInDate"
           />
 
-          <InputFormik<InboundFilterDTO>
+          <InputFormik<ReportFilterDTO>
             label="ICR Reference Number"
             name="icrReferenceNumber"
             askterisk
@@ -60,32 +60,32 @@ export default function FilterCard(props: FilterCardProps) {
             principalName="principalId"
             productCategoryName="productCategoryId"
           />
-          <SelectFormik<InboundFilterDTO, GoodsReceipt>
+          <SelectFormik<ReportFilterDTO, GoodsReceipt>
             label="Goods Receipt"
             name="goodsReceiptId"
             keyValue="id"
             keyLabel="name"
             option={goodsReceipts}
           />
-          <InputFormik<InboundFilterDTO> label="SKU Code" name="skuCode" />
-          <InputFormik<InboundFilterDTO> label="PRO Number" name="proNumber" />
-          <InputFormik<InboundFilterDTO>
+          <InputFormik<ReportFilterDTO> label="SKU Code" name="skuCode" />
+          <InputFormik<ReportFilterDTO> label="PRO Number" name="proNumber" />
+          <InputFormik<ReportFilterDTO>
             label="Delivery Note"
             name="deliveryNote"
           />
-          <SelectFormik<InboundFilterDTO, RefUnitOfMeasurement>
+          <SelectFormik<ReportFilterDTO, RefUnitOfMeasurement>
             label="Unit of Measurement"
             name="unitOfMeasurementId"
             keyValue="id"
             keyLabel="name"
             option={unitOfMeasurements}
           />
-          <InputFormik<InboundFilterDTO> label="Batch No" name="batchNo" />
-          <DatePickerFormik<InboundFilterDTO>
+          <InputFormik<ReportFilterDTO> label="Batch No" name="batchNo" />
+          <DatePickerFormik<ReportFilterDTO>
             label="Expiration Date"
             name="expirationDate"
           />
-          <SelectFormik<InboundFilterDTO, ShelfDetails>
+          <SelectFormik<ReportFilterDTO, ShelfDetails>
             label="Bin Location"
             name="shelfDetailsId"
             keyValue="id"

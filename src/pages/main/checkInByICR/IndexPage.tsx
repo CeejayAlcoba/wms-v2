@@ -9,6 +9,7 @@ import { checkInByICRSchema } from "../../../schemas/checkInByICRSchema";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 import { checkInByICRService } from "../../../services/checkInByICRService";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
+import { indexDbService } from "../../../services/indexDbService";
 
 export default function IndexPage() {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -29,6 +30,7 @@ export default function IndexPage() {
       });
       formik.resetForm();
       setCurrentStep(0);
+      await indexDbService.deleteItem("checkInByICR",1)
     } catch {
       SweetAlert({
         title: "Error Occurs",
@@ -54,6 +56,25 @@ export default function IndexPage() {
     initialValues: EMPTY_FORM,
     onSubmit: handleSubmit,
   });
+
+  const handleSaveIndexDB = async () => {
+    const value = formik.values as CheckInByICRDTO;
+    await indexDbService.upsertItem("checkInByICR", { ...value, id: 1 });
+  };
+  const handleRestorValue = async () => {
+    const value = await indexDbService.getItem("checkInByICR", 1);
+    if (value) {
+      formik.setValues(value);
+    }
+  };
+
+  useEffect(() => {
+    handleSaveIndexDB();
+  }, [formik.values]);
+
+  useEffect(() => {
+    handleRestorValue();
+  }, []);
 
   return (
     <FormikProvider value={formik}>

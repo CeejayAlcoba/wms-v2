@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table, Tooltip, type TableProps } from "antd";
+import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -7,36 +7,36 @@ import usePage from "../../../hooks/usePage";
 import FilterCard from "./FilterCard";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
-import type { InboundFilterDTO } from "../../../@types/DTOs/InboundFilterDTO";
+import type { ReportFilterDTO } from "../../../@types/DTOs/ReportFilterDTO";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import SaveModal from "./SaveModal";
-import type { InboundDTO } from "../../../@types/DTOs/InboundDTO";
-import { inboundService } from "../../../services/inboundService";
+import {  reportService } from "../../../services/reportService";
 import dayjs from "dayjs";
 import { handleMoney } from "../../../utils/handleMoney";
 import { cargoDetailsService } from "../../../services/cargoDetailsService";
+import type { ReportDTO } from "../../../@types/DTOs/ReportDTO";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<CargoDetails | null>(null);
-  const [search, setSearch] = useState<InboundFilterDTO>(EMPTY_FORM);
+  const [search, setSearch] = useState<ReportFilterDTO>(EMPTY_FORM);
 
   const { title: pageTitle } = usePage();
 
   const {
-    data: principals,
+    data: reports,
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["principals", search],
+    queryKey: ["reports", search],
     queryFn: async ({ queryKey }) => {
       const [, searchParam] = queryKey;
-      return await inboundService.GetAll(searchParam as InboundDTO);
+      return await reportService.GetAll(searchParam as ReportDTO);
     },
     initialData: [],
   });
 
-  const handleClickEdit = (record: InboundDTO) => {
+  const handleClickEdit = (record: ReportDTO) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
@@ -46,7 +46,7 @@ export default function IndexPage() {
     setSaveModalOpen(false);
   };
 
-  const handleDelete = async (record: InboundDTO) => {
+  const handleDelete = async (record: ReportDTO) => {
     if (!record.id) throw new Error("Id is null");
     await cargoDetailsService.Delete(record.id);
     await refetch();
@@ -61,12 +61,12 @@ export default function IndexPage() {
     refetch();
   };
 
-  const handleSearch = async (value: InboundDTO) => {
+  const handleSearch = async (value: ReportFilterDTO) => {
     await setSearch(value);
     await refetch();
   };
 
-  const columns: TableProps<InboundDTO>["columns"] = [
+  const columns: TableProps<ReportDTO>["columns"] = [
     {
       title: "Actual Check-in Date",
       dataIndex: "actualCheckInDate",
@@ -154,6 +154,7 @@ export default function IndexPage() {
     {
       title: "Action",
       key: "action",
+      fixed: "right",
       render: (_, record) => (
         <div className="d-flex gap-1">
           <Tooltip title="Edit">
@@ -193,10 +194,10 @@ export default function IndexPage() {
         selectedData={selectedData}
       />
       <FilterCard onSearch={handleSearch} />
-      <TableComponent<InboundDTO>
+      <TableComponent<ReportDTO>
         headerTitle={pageTitle}
         columns={columns}
-        dataSource={principals}
+        dataSource={reports}
         loading={isFetching}
       />
     </>

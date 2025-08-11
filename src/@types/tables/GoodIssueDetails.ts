@@ -1,6 +1,7 @@
 export type GoodIssueDetails = {
-  id?: number;
-  oCRNumber?: string;
-  note?: string;
-  dOFNumber?: string;
+  id?: number | null
+  ocrNumber?: string| null
+  note?: string| null
+  dofNumber?: string| null
+  pickListDetailsId?:number| null
 };

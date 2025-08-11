@@ -1,7 +1,6 @@
 import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO";
-import type { PickListDetailsRecord } from "../../../../@types/tables/PickListDetailsRecord";
 
-export const EMPTY_FORM: PickListDetailsRecordDTO = {
+export const EMPTY_PICKLIST_RECORD: PickListDetailsRecordDTO = {
   id: null,
   pickListDetailsId: null,
   cargoDetailsId: null,

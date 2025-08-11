@@ -1,6 +1,7 @@
-import type { InboundFilterDTO } from "../../../../@types/DTOs/InboundFilterDTO";
+import type { ReportFilterDTO } from "../../../../@types/DTOs/ReportFilterDTO";
 
-export const EMPTY_FILTER: InboundFilterDTO = {
+
+export const EMPTY_FILTER: ReportFilterDTO = {
   actualCheckInDate: null,
   icrReferenceNumber: null,
   principalId: null,
@@ -25,6 +26,6 @@ export const EMPTY_FILTER: InboundFilterDTO = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
-  allowNullGoodReceipt: false,
+  reportType: "PICKLIST",
   allowZeroBalance: false,
 };

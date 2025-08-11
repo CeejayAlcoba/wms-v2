@@ -3,8 +3,7 @@ import useDocument from "../../contexts/useDocument";
 import "./TableDocumentDesign.css";
 
 export default function TableDocumentDesign() {
-  const { progress, data, columns, title, handlePrint, contentRef } =
-    useDocument();
+  const { data, columns, title, contentRef } = useDocument();
 
   return (
     <div className="d-none">

@@ -32,7 +32,7 @@ export default function CargoDetailTable(props: {
     { title: "Total Amount", dataIndex: "totalAmount", key: "totalAmount" },
   ];
   return (
-    <div className="m-2">
+    <div>
       <Table<CargoDetails>
         dataSource={cargoDetails}
         columns={columns}

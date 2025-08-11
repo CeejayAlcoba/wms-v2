@@ -8,6 +8,7 @@ type InputFormikProps<T = unknown> = {
   type?: "text" | "email" | "password";
   placeholder?: string;
   askterisk?: boolean;
+  onChange?: (value: any) => void;
 } & InputProps;
 
 export default function InputFormik<T = unknown>({
@@ -16,9 +17,9 @@ export default function InputFormik<T = unknown>({
   type = "text",
   placeholder,
   askterisk = false,
+  onChange,
   ...rest
 }: InputFormikProps<T>) {
-  const AntInputComponent = type === "password" ? Input.Password : Input;
 
   return (
     <FastField name={name}>
@@ -31,9 +32,13 @@ export default function InputFormik<T = unknown>({
             {label}
             {askterisk && <span style={{ color: "red" }}>{" *"}</span>}
           </label>
-          <AntInputComponent
+          <Input
             {...field}
             {...rest}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              form.setFieldValue(name, e.target.value || null);
+              onChange && onChange(e.target.value);
+            }}
             onBlur={() => form.setFieldTouched(name, true)}
             type={type}
             placeholder={placeholder}

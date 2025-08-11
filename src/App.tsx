@@ -5,10 +5,15 @@ import SidebarProvider from "./contexts/Provider/SidebarProvider";
 import DocumentProvider from "./contexts/Provider/DocumentProvider";
 import { DrawerProvider } from "./contexts/Provider/DrawerProvider";
 import { AntConfigProvider } from "./contexts/Provider/AntConfigProvider";
+import { initDB } from "./services/indexDbService";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
 function App() {
+  useEffect(() => {
+   initDB();
+}, []);
   return (
     <>
       <QueryClientProvider client={queryClient}>

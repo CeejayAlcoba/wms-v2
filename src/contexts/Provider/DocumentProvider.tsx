@@ -30,26 +30,21 @@ const DocumentProvider = ({ children }: { children: React.ReactNode }) => {
     if (progress !== null) {
       fn(500);
     }
+    let newProgress = 0;
 
     const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = (prev ?? 0) + 10;
-
-        SweetAlertProgress({
-          progress: newProgress,
-          progressProps: {
-            title: "Preparing your document...",
-          },
-        });
-
-        if (newProgress >= 100) {
-          fn(0);
-          clearInterval(progressInterval);
-          setProgress(null);
-        }
-
-        return newProgress;
+      newProgress = (newProgress ?? 0) + 10;
+      SweetAlertProgress({
+        progress: newProgress,
+        progressProps: {
+          title: "Preparing your document...",
+        },
       });
+
+      if (newProgress >= 100) {
+        fn(0);
+        clearInterval(progressInterval);
+      }
     }, 100);
   };
 

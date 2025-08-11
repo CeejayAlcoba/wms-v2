@@ -1,6 +1,9 @@
-import type { CargoDetails } from "../tables/CargoDetails";
+
 import type { PickListDetailsRecord } from "../tables/PickListDetailsRecord";
+import type { ReportDTO } from "./ReportDTO";
+
 
 export type PickListDetailsRecordDTO = {
-  cargoDetails?: CargoDetails | null;
+  report?: ReportDTO | null;
 } & PickListDetailsRecord;
+

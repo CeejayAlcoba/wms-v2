@@ -96,7 +96,7 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<GoodsReceipt> label="Number" askterisk name="name" />
+        <InputFormik<GoodsReceipt> label="Reference Number" askterisk name="name" />
       </FormikProvider>
     </ModalComponent>
   );
