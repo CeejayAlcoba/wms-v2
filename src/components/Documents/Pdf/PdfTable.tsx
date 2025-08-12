@@ -1,12 +1,9 @@
-import { Button, Table, Tooltip, Space } from "antd";
-
-import useDocument from "../../../contexts/useDocument";
+import { Button, Table, Tooltip, Space, type ButtonProps } from "antd";
 import { FilePdfOutlined } from "@ant-design/icons";
-import TableDocumentDesign from "../TableDocumentDesign";
 
 export type DownloadPdfTableProps = {
   onDownload: () => void;
-};
+} & ButtonProps;
 
 const DownloadPdfTable = (props: DownloadPdfTableProps) => {
   const { onDownload } = props;
@@ -19,9 +16,9 @@ const DownloadPdfTable = (props: DownloadPdfTableProps) => {
           color="danger"
           onClick={() => onDownload()}
           icon={<FilePdfOutlined />}
+          {...props}
         />
       </Tooltip>
-      <TableDocumentDesign />
     </>
   );
 };

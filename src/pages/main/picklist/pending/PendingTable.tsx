@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import { PlusOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import TableComponent from "../../../../components/Table/TableComponent";
 import usePage from "../../../../hooks/usePage";
-
-import type { ReportFilterDTO } from "../../../../@types/DTOs/ReportFilterDTO";
-import type { ReportDTO } from "../../../../@types/DTOs/ReportDTO";
+import type { ReportPickListDTO } from "../../../../@types/DTOs/ReportPickListDTO";
 import { reportService } from "../../../../services/reportService";
 import dayjs from "dayjs";
 import { handleMoney } from "../../../../utils/handleMoney";
@@ -17,32 +15,37 @@ import AddPendingModal from "./AddPendingModal";
 import { EMPTY_PICKLIST_RECORD } from "../__constants__/EMPTY_PICKLIST_RECORD";
 import ShowPendingModal from "./ShowPendingModal";
 import FilterCard from "./FilterCard";
+import type { ReportPickListFilterDTO } from "../../../../@types/DTOs/ReportPickListFilterDTO";
+import TableTotalFooter from "../../../../components/Table/TableTotalFooter";
+import { TABLE_TOTAL_FOOTER } from "../../../../constants/TABLE_TOTAL_FOOTER";
 
 export default function PendingTable() {
   const [addPendingModalOpen, setAddPendingModalOpen] =
     useState<boolean>(false);
   const [showPendingModalOpen, setShowPendingModalOpen] =
     useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState<ReportDTO | null>(null);
-  const [search, setSearch] = useState<ReportFilterDTO>(EMPTY_FILTER);
+  const [selectedData, setSelectedData] = useState<ReportPickListDTO | null>(
+    null
+  );
+  const [search, setSearch] = useState<ReportPickListFilterDTO>(EMPTY_FILTER);
   const [pickListPendingRecords, setPickListPendingRecords] = useState<
     PickListDetailsRecordDTO[]
   >([]);
   const { title: pageTitle } = usePage();
 
   const {
-    data: inboundPicklists,
+    data: pickLists,
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["inboundPicklists", search],
+    queryKey: ["pickLists", search],
     queryFn: async () => {
-      return await reportService.GetAll(search as ReportFilterDTO);
+      return await reportService.PickListGetAll(search);
     },
     initialData: [],
   });
 
-  const handleClickAdd = (record: ReportDTO) => {
+  const handleClickAdd = (record: ReportPickListDTO) => {
     setSelectedData(record);
     setAddPendingModalOpen(true);
   };
@@ -57,21 +60,26 @@ export default function PendingTable() {
   };
 
   const handlePickListRecord = (values: PickListDetailsRecordDTO) => {
-    setPickListPendingRecords((prev) => [...prev, {...values, cargoDetailsId:values.report?.id}]);
+    setPickListPendingRecords((prev) => [
+      ...prev,
+      { ...values, cargoDetailsId: values.report?.id },
+    ]);
     setAddPendingModalOpen(false);
   };
 
-  const handleSearch = async (value: ReportFilterDTO) => {
+  const handleSearch = async (value: ReportPickListFilterDTO) => {
     await setSearch(value);
     await refetch();
   };
 
-  const handleRemoveRecord = async (value: ReportDTO|null) => {
-     const filteredRecords = pickListPendingRecords.filter(p=>p.report?.id != value?.id);
-     console.log(filteredRecords)
-     await indexDbService.deleteItem("pendingPickList",value?.id??0)
-     setPickListPendingRecords(filteredRecords);
-     refetch();
+  const handleRemoveRecord = async (value: ReportPickListDTO | null) => {
+    const filteredRecords = pickListPendingRecords.filter(
+      (p) => p.report?.id != value?.id
+    );
+    console.log(filteredRecords);
+    await indexDbService.deleteItem("pendingPickList", value?.id ?? 0);
+    setPickListPendingRecords(filteredRecords);
+    refetch();
   };
   const handleInitialPickListPendingRecord = async () => {
     const pendings = await indexDbService.getAllItems("pendingPickList");
@@ -82,7 +90,7 @@ export default function PendingTable() {
     handleInitialPickListPendingRecord();
   }, []);
 
-  const columns: TableProps<ReportDTO>["columns"] = [
+  const columns: TableProps<ReportPickListDTO>["columns"] = [
     {
       title: "Actual Check-in Date",
       dataIndex: "actualCheckInDate",
@@ -94,7 +102,7 @@ export default function PendingTable() {
       dataIndex: "icrReferenceNumber",
       key: "icrReferenceNumber",
     },
-     {
+    {
       title: "GR",
       dataIndex: "goodsReceipt",
       key: "goodsReceipt",
@@ -141,6 +149,11 @@ export default function PendingTable() {
       key: "balanceQuantity",
     },
     {
+      title: "Balance CBM",
+      dataIndex: "balanceCubicMeter",
+      key: "balanceCubicMeter",
+    },
+    {
       title: "Dimension",
       key: "dimension",
       render: (_, record) => {
@@ -156,18 +169,14 @@ export default function PendingTable() {
       dataIndex: "unitOfMeasurement",
       key: "unitOfMeasurement",
     },
-    {
-      title: "Balance Cubic Meter",
-      dataIndex: "balanceCubicMeter",
-      key: "balanceCubicMeter",
-    },
+
     {
       title: "Total Amount",
       dataIndex: "totalAmount",
       key: "totalAmount",
       render: (value) => handleMoney(value),
     },
-   
+
     {
       title: "Action",
       key: "action",
@@ -200,7 +209,7 @@ export default function PendingTable() {
         onCancel={handleClickCancel}
         selectedData={{
           ...EMPTY_PICKLIST_RECORD,
-          report:selectedData
+          report: selectedData,
         }}
         type="Add"
       />
@@ -208,7 +217,7 @@ export default function PendingTable() {
         open={showPendingModalOpen}
         picklistPendingRecords={pickListPendingRecords}
         onCancel={() => setShowPendingModalOpen(false)}
-        onRemoveRecord={(val)=>handleRemoveRecord(val)}
+        onRemoveRecord={(val) => handleRemoveRecord(val)}
         onAfterComplete={() => {
           refetch();
           setShowPendingModalOpen(false);
@@ -231,11 +240,17 @@ export default function PendingTable() {
         </Badge>
       </div>
 
-      <TableComponent<ReportDTO>
+      <TableComponent<ReportPickListDTO>
         headerTitle={pageTitle}
         columns={columns}
-        dataSource={inboundPicklists}
+        dataSource={pickLists}
         loading={isFetching}
+        footer={() => (
+          <TableTotalFooter<ReportPickListDTO>
+            data={pickLists}
+            values={TABLE_TOTAL_FOOTER}
+          />
+        )}
       />
     </>
   );

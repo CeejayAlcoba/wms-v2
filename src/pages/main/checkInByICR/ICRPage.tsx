@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { principalService } from "../../../services/principalService";
 import { useFormikContext } from "formik";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
+import { truckDetailsService } from "../../../services/truckDetailsService";
+import type { RefTruckDetails } from "../../../@types/tables/RefTruckDetails";
 
 export default function ICRPage() {
   const { setFieldValue } = useFormikContext<CheckInByICRDTO>();
@@ -25,9 +27,15 @@ export default function ICRPage() {
     },
     initialData: [],
   });
-  const { data: truckTypes } = useQuery({
-    queryKey: ["truckTypes"],
-    queryFn: async () => await truckTypeService.GetAll(),
+  const { data: truckDetails } = useQuery({
+    queryKey: ["truckDetails"],
+    queryFn: async () => {
+      const res = await truckDetailsService.GetAll();
+      return res?.map((r) => ({
+        id: r.id,
+        name: `${r.plateNumber} (Driver - ${r.driverName})`,
+      }));
+    },
     initialData: [],
   });
 
@@ -56,12 +64,12 @@ export default function ICRPage() {
         principalName={`${fieldName}.principalId`}
         productCategoryName={`${fieldName}.productCategoryId`}
       />
-      <SelectFormik<any, RefTruckType>
+      <SelectFormik<any, any>
         label="Truck Details"
         name={`${fieldName}.truckDetailsId`}
         keyValue="id"
         keyLabel="name"
-        option={truckTypes}
+        option={truckDetails}
       />
       <InputFormik<any> label="DR Number" name={`${fieldName}.drNumber`} />
     </div>

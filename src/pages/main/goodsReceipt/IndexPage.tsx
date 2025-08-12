@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Table from "./Table";
 import FilterCard from "./FilterCard";
 import type { FormikHelpers } from "formik";
+import { TAB_ITEMS } from "./__constants__/TAB_ITEMS";
 
 export type TabKey = "Pending" | "Completed";
 
@@ -34,16 +35,6 @@ export default function IndexPage() {
     initialData: [],
   });
 
-  const TAB_ITEMS: TabsProps["items"] = [
-    {
-      key: "Pending",
-      label: "Pending",
-    },
-    {
-      key: "Completed",
-      label: "Completed",
-    },
-  ];
   const handleTab = (key: string) => {
     setActiveKey(key as TabKey);
   };
@@ -59,8 +50,8 @@ export default function IndexPage() {
   };
   return (
     <>
-      <FilterCard onSearch={handleSearch} activeKey={activeKey} />
       <Tabs defaultActiveKey="1" items={TAB_ITEMS} onChange={handleTab} />
+      <FilterCard onSearch={handleSearch} activeKey={activeKey} />
       <Table
         bookingDetails={bookingDetails}
         refetch={refetch}

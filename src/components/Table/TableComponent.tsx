@@ -15,6 +15,7 @@ import PrintTable, {
 } from "../Documents/Print/PrintTable";
 import useDocument from "../../contexts/useDocument";
 import DownloadPdfTable from "../Documents/Pdf/PdfTable";
+import TableDocumentDesign from "../Documents/TableDocumentDesign";
 
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
@@ -104,12 +105,16 @@ export default function TableComponent<T extends object = any>(
             />
           )}
 
-          <DownloadPdfTable onDownload={handleOnDownloadPdf} />
-          <PrintTable onPrint={handleOnPrint} />
+          <DownloadPdfTable
+            onDownload={handleOnDownloadPdf}
+            loading={props.loading}
+          />
+          <PrintTable onPrint={handleOnPrint} loading={props.loading} />
 
           {add && (
             <Button
               {...add}
+              loading={props.loading}
               onClick={add.onClick}
               type="primary"
               icon={<PlusOutlined />}
@@ -126,6 +131,7 @@ export default function TableComponent<T extends object = any>(
         pagination={{ showQuickJumper: true, ...rest.pagination }}
         scroll={{ x: "max-content" }}
       />
+      <TableDocumentDesign {...rest} />
     </Card>
   );
 }

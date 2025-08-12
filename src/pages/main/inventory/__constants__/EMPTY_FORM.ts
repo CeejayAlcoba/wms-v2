@@ -1,11 +1,14 @@
-import type { ReportFilterDTO } from "../../../../@types/DTOs/ReportFilterDTO";
+import type { ReportInventoryFilterDTO } from "../../../../@types/DTOs/ReportInventoryFilterDTO";
 
-export const EMPTY_FORM: ReportFilterDTO = {
-  actualCheckInDate: null,
+export const EMPTY_FORM: ReportInventoryFilterDTO = {
+  actualCheckInDateFrom: null,
+  actualCheckInDateTo: null,
   icrReferenceNumber: null,
   principalId: null,
   productCategoryId: null,
   goodsReceiptId: null,
+  allowZeroBalance: false,
+  allowNullGoodIssue: false,
   id: null,
   name: null,
   description: null,
@@ -25,5 +28,4 @@ export const EMPTY_FORM: ReportFilterDTO = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
-  reportType:"INVENTORY"
 };

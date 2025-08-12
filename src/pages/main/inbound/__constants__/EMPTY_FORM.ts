@@ -1,7 +1,8 @@
-import type { ReportFilterDTO } from "../../../../@types/DTOs/ReportFilterDTO";
+import type { ReportInboundFilterDTO } from "../../../../@types/DTOs/ReportInboundFilterDTO";
 
-export const EMPTY_FORM: ReportFilterDTO = {
-  actualCheckInDate: null,
+export const EMPTY_FORM: ReportInboundFilterDTO = {
+  actualCheckInDateFrom: null,
+  actualCheckInDateTo: null,
   icrReferenceNumber: null,
   principalId: null,
   productCategoryId: null,

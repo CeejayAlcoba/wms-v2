@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, type ReactNode } from "react";
 import type { ColumnsType } from "antd/es/table";
 import { DocumentContext } from "../useDocument";
 import { useReactToPrint } from "react-to-print";
@@ -12,6 +12,7 @@ const DocumentProvider = ({ children }: { children: React.ReactNode }) => {
   const [progress, setProgress] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const [columns, setColumns] = useState<ColumnsType<any>>([]);
+  const [footer, setFooter] = useState<ReactNode>();
   const [title, setTitle] = useState<string>("");
   const contentRef = useRef(null);
 

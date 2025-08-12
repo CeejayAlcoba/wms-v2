@@ -64,7 +64,7 @@ export default function AddPendingModal(props: AddPendingModalProps) {
       cargoDetailsId: value.report?.id,
       id: value?.report?.id ?? 0,
     });
-    onAfterSave(value)
+    onAfterSave(value);
     formik.resetForm();
     formik.setSubmitting(false);
   };
@@ -78,7 +78,7 @@ export default function AddPendingModal(props: AddPendingModalProps) {
   const { getFieldProps, setFieldValue, values } = formik;
 
   useEffect(() => {
-    console.log(values)
+    console.log(values);
     const lengthCm = Number(getFieldProps(`report.lengthCm`).value || 0);
     const heightCm = Number(getFieldProps(`report.heightCm`).value || 0);
     const widthCm = Number(getFieldProps(`report.widthCm`).value || 0);
@@ -105,14 +105,16 @@ export default function AddPendingModal(props: AddPendingModalProps) {
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}
     >
-     {type == "Add" &&<Alert
-        message="Item will be added to Pending Picklist"
-        description="This item is not yet scheduled for pickup and will be added to the pending picklist. You can manage it later from the picklist section."
-        type="info"
-        showIcon
-        closable
-        className="mb-2"
-      />} 
+      {type == "Add" && (
+        <Alert
+          message="Item will be added to Pending Picklist"
+          description="This item is not yet scheduled for pickup and will be added to the pending picklist. You can manage it later from the picklist section."
+          type="info"
+          showIcon
+          closable
+          className="mb-2"
+        />
+      )}
       <FormikProvider value={formik}>
         <Card>
           <div className="row row-cols-lg-2 g-2">

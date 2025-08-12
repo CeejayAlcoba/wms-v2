@@ -7,7 +7,7 @@ import usePage from "../../../../hooks/usePage";
 import { pickListDetailsService } from "../../../../services/pickListDetailsService";
 import { useQuery } from "@tanstack/react-query";
 import SelectFormik from "../../../../components/Formik/SelectFormik";
-import {  Form,  } from "antd";
+import { Form } from "antd";
 import type { RefTruckDetails } from "../../../../@types/tables/RefTruckDetails";
 import { truckDetailsService } from "../../../../services/truckDetailsService";
 
@@ -20,7 +20,6 @@ type UpdateModalProps = {
 
 export default function UpdateModal(props: UpdateModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
-  const { title: pageTitle } = usePage();
 
   const { data: truckDetails } = useQuery({
     queryKey: ["truckDetails"],

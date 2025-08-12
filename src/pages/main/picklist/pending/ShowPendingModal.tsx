@@ -7,7 +7,7 @@ import type { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO";
-import type { ReportDTO } from "../../../../@types/DTOs/ReportDTO";
+import type { ReportPickListDTO } from "../../../../@types/DTOs/ReportPickListDTO";
 import usePage from "../../../../hooks/usePage";
 import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
 import type { PickListDetailsDTO } from "../../../../@types/DTOs/PickListDetailsDTO";
@@ -25,7 +25,7 @@ import TableComponent from "../../../../components/Table/TableComponent";
 type ShowPendingModalProps = {
   open: boolean;
   picklistPendingRecords: PickListDetailsRecordDTO[];
-  onRemoveRecord: (value: ReportDTO | null) => void;
+  onRemoveRecord: (value: ReportPickListDTO | null) => void;
   onCancel: () => void;
   onAfterComplete: () => void;
 };

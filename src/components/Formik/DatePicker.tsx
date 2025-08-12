@@ -1,10 +1,9 @@
 import { Field, type FieldProps } from "formik";
 import { Form, DatePicker } from "antd";
 import type { DatePickerProps } from "antd";
-import moment from "moment";
 import dayjs from "dayjs";
 
-type InputFormikProps<T = unknown> = {
+export type DatePickerFormikProps<T = unknown> = {
   name: keyof T & string;
   label?: string;
   askterisk?: boolean;
@@ -15,7 +14,7 @@ export default function DatePickerFormik<T = unknown>({
   label,
   askterisk = false,
   ...rest
-}: InputFormikProps<T>) {
+}: DatePickerFormikProps<T>) {
   return (
     <Field name={name}>
       {({ field, form, meta }: FieldProps) => (

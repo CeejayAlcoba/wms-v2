@@ -1,19 +1,12 @@
-import { Button, Table, Tooltip } from "antd";
+import { Button, Tooltip, type ButtonProps } from "antd";
 import { PrinterOutlined } from "@ant-design/icons";
-import TableDocumentDesign from "../TableDocumentDesign";
 
 export type PrintTableProps = {
   onPrint: () => void;
-};
+} & ButtonProps;
 
 const PrintTable = (props: PrintTableProps) => {
   const { onPrint } = props;
-
-  // useEffect(() => {
-  //   if (progress !== null && progress < 100) {
-  //     SweetAlertProgress({ progress });
-  //   }
-  // }, [progress]);
 
   return (
     <>
@@ -23,12 +16,9 @@ const PrintTable = (props: PrintTableProps) => {
           color="primary"
           onClick={() => onPrint()}
           icon={<PrinterOutlined />}
+          {...props}
         />
       </Tooltip>
-
-      <div className="d-none">
-        <TableDocumentDesign />
-      </div>
     </>
   );
 };

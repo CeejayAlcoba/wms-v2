@@ -63,7 +63,7 @@ export default function Table(props: {
     {
       title: "Action",
       key: "action",
-      fixed:"right",
+      fixed: "right",
       render: (_, record) => (
         <div className="d-flex gap-1">
           <Tooltip title="Add Good Receipt">
@@ -90,7 +90,7 @@ export default function Table(props: {
     {
       title: "Action",
       key: "action",
-       fixed:"right",
+      fixed: "right",
       render: (_, record) => (
         <div className="d-flex gap-1">
           <Tooltip title="Edit">
