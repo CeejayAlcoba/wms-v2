@@ -4,6 +4,7 @@ import {
   Card,
   Input,
   Table,
+  Typography,
   type ButtonProps,
   type InputProps,
 } from "antd";
@@ -24,6 +25,8 @@ export type TableComponentProps<T extends object = any> = TableProps<T> & {
   add?: ButtonProps;
   print?: PrintTableProps;
 };
+
+const { Text } = Typography;
 
 export default function TableComponent<T extends object = any>(
   props: TableComponentProps<T>
@@ -52,7 +55,7 @@ export default function TableComponent<T extends object = any>(
         {
           title: "#",
           key: "#",
-          render: (data, record, index) => index + 1,
+          render: (__, _, index) => index + 1,
         },
         ...newColumns,
       ];
@@ -62,8 +65,8 @@ export default function TableComponent<T extends object = any>(
       ...col,
       render: (data: any, record: T, index: number) =>
         col.render
-          ? col.render(data, record, index)
-          : data || <span className="text-secondary">N/A</span>,
+          ? col.render(data, record, index) ?? <Text type="secondary">N/A</Text>
+          : data || <Text type="secondary">N/A</Text>,
     }));
   };
 
@@ -88,12 +91,10 @@ export default function TableComponent<T extends object = any>(
   return (
     <Card>
       <div className="row align-items-center mb-3">
-        {/* Left side: title */}
         <div className="col-lg-6">
           {headerTitle && <h6 className="mb-0">{headerTitle}</h6>}
         </div>
 
-        {/* Right side: search + buttons */}
         <div className="col-lg-6 d-flex justify-content-end gap-2 flex-wrap">
           {search && (
             <Input

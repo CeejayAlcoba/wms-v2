@@ -12,7 +12,6 @@ const DocumentProvider = ({ children }: { children: React.ReactNode }) => {
   const [progress, setProgress] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const [columns, setColumns] = useState<ColumnsType<any>>([]);
-  const [footer, setFooter] = useState<ReactNode>();
   const [title, setTitle] = useState<string>("");
   const contentRef = useRef(null);
 
