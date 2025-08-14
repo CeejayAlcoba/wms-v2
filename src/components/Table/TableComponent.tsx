@@ -1,9 +1,15 @@
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  FilePdfOutlined,
+  PlusOutlined,
+  PrinterOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Card,
   Input,
   Table,
+  Tooltip,
   Typography,
   type ButtonProps,
   type InputProps,
@@ -11,19 +17,18 @@ import {
 import type { TableProps } from "antd/es/table";
 import { useMemo } from "react";
 import { debounce } from "lodash";
-import PrintTable, {
-  type PrintTableProps,
-} from "../Documents/Print/PrintTable";
 import useDocument from "../../contexts/useDocument";
-import DownloadPdfTable from "../Documents/Pdf/PdfTable";
-import TableDocumentDesign from "../Documents/TableDocumentDesign";
+import { usePrint } from "../../hooks/usePrint";
+import { usePDF } from "../../hooks/usePDF";
+import DocumentTable from "../Documents/DocumentTable";
 
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
   headerTitle?: string;
   search?: InputProps;
   add?: ButtonProps;
-  print?: PrintTableProps;
+  print?: ButtonProps;
+  pdf?: ButtonProps;
 };
 
 const { Text } = Typography;
@@ -36,11 +41,25 @@ export default function TableComponent<T extends object = any>(
     indexedColumn: true,
     ...props,
   };
-  const { headerTitle, search, indexedColumn, add, columns, print, ...rest } =
-    initialProps;
-  const { setTitle, setColumns, setData, handlePrint, handleDownloadPdf } =
-    useDocument();
+  const {
+    headerTitle,
+    search,
+    indexedColumn,
+    add,
+    print,
+    pdf,
+    columns,
+    ...rest
+  } = initialProps;
 
+  const {
+    setColumns,
+    setData,
+    handleDelay,
+    columns: docColumns,
+  } = useDocument();
+  const { handlePrint: onPrint, componentRef: refPrint } = usePrint();
+  const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF();
   const debouncedSearch = useMemo(
     () => debounce(search?.onChange ? search?.onChange : () => {}, 500),
     []
@@ -75,21 +94,32 @@ export default function TableComponent<T extends object = any>(
       (h) => h.title != "Action" && h.title != "#"
     );
   };
-  const handleOnPrint = () => {
-    setTitle(headerTitle ?? "");
-    setData([...(rest.dataSource ?? [])]);
-    setColumns(handleColumnDocument());
-    handlePrint();
+
+  const handlePrint = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    if (print?.onChange) {
+      print.onChange(e);
+    } else {
+      setData([...(rest.dataSource ?? [])]);
+    }
+    await handleDelay({
+      fn: () => onPrint(),
+    });
   };
-  const handleOnDownloadPdf = () => {
-    setTitle(headerTitle ?? "");
-    setData([...(rest.dataSource ?? [])]);
-    setColumns(handleColumnDocument());
-    handleDownloadPdf();
+  const handleDownloadPDF = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    if (pdf?.onChange) {
+      pdf.onChange(e);
+    } else {
+      setData([...(rest.dataSource ?? [])]);
+    }
+    await handleDelay({
+      fn: () => onDownloadPdf(headerTitle),
+    });
   };
 
   return (
-    <Card>
+    <Card style={{ margin: 0 }}>
       <div className="row align-items-center mb-3">
         <div className="col-lg-6">
           {headerTitle && <h6 className="mb-0">{headerTitle}</h6>}
@@ -106,11 +136,23 @@ export default function TableComponent<T extends object = any>(
             />
           )}
 
-          <DownloadPdfTable
-            onDownload={handleOnDownloadPdf}
-            loading={props.loading}
-          />
-          <PrintTable onPrint={handleOnPrint} loading={props.loading} />
+          <Tooltip title="Download PDF">
+            <Button
+              variant="outlined"
+              color="danger"
+              onClick={handleDownloadPDF}
+              icon={<FilePdfOutlined />}
+            />
+          </Tooltip>
+          <Tooltip title="Print">
+            <Button
+              loading={props.loading}
+              variant="outlined"
+              color="primary"
+              icon={<PrinterOutlined />}
+              onClick={handlePrint}
+            />
+          </Tooltip>
 
           {add && (
             <Button
@@ -129,10 +171,26 @@ export default function TableComponent<T extends object = any>(
       <Table<T>
         {...rest}
         columns={handleUpdateColumns()}
-        pagination={{ showQuickJumper: true, ...rest.pagination }}
+        pagination={{
+          showSizeChanger: true,
+          ...rest.pagination,
+        }}
         scroll={{ x: "max-content" }}
       />
-      <TableDocumentDesign {...rest} />
+      <DocumentTable<T>
+        ref={refPdf}
+        className="light-table"
+        headerTitle={headerTitle}
+        {...props}
+        columns={handleColumnDocument()}
+      />
+      <DocumentTable<T>
+        ref={refPrint}
+        className="light-table"
+        headerTitle={headerTitle}
+        {...props}
+        columns={handleColumnDocument()}
+      />
     </Card>
   );
 }

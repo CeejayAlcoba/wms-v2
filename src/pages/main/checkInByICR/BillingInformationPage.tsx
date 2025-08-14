@@ -5,7 +5,6 @@ import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import { PercentageOutlined } from "@ant-design/icons";
 import { useEffect, useState, type ReactNode } from "react";
 import ToggleText from "../../../components/Toggle/ToggleText";
-import { useNavigate } from "react-router-dom";
 import { Alert, Typography } from "antd";
 import SaveModal from "../billingStatement/SaveModal";
 import type { BillingStatement } from "../../../@types/tables/BillingStatement";
@@ -72,10 +71,10 @@ export default function BillingInformation() {
     setBillingStatement(billing);
   };
 
-  const handleAfterSave=()=>{
+  const handleAfterSave = () => {
     handleSetBilling();
     setOpenBillingModal(false);
-  }
+  };
 
   useEffect(() => {
     handleSetBilling();
@@ -93,9 +92,7 @@ export default function BillingInformation() {
         type="warning"
         message={
           <span>
-            This billing information will apply to the current cargo details
-            only. If you want to update the{" "}
-            <strong>principal billing statement</strong>,{" "}
+            If you want to change the principal billing information, please{" "}
             <Link onClick={() => setOpenBillingModal(true)}>click here</Link>.
           </span>
         }
@@ -103,13 +100,13 @@ export default function BillingInformation() {
         className="mb-3"
       />
 
-      {/* 🔧 Form Fields */}
       <div className="row row-cols-lg-2">
         <InputNumberFormik<any>
           askterisk
           label="Handling In Rate"
           name={`${fieldName}.handlingInRate`}
           className="col-lg"
+          disabled
         />
         <SelectFormik<any, BilltypeOptionProps>
           askterisk
@@ -119,6 +116,7 @@ export default function BillingInformation() {
           keyLabel="name"
           className="col-lg"
           option={billTypes}
+          disabled
         />
       </div>
 
@@ -127,6 +125,7 @@ export default function BillingInformation() {
           askterisk
           label="Handling Out Rate"
           name={`${fieldName}.handlingOutRate`}
+          disabled
         />
         <SelectFormik<any, BilltypeOptionProps>
           askterisk
@@ -135,6 +134,7 @@ export default function BillingInformation() {
           keyValue="id"
           keyLabel="name"
           option={billTypes}
+          disabled
         />
       </div>
 
@@ -143,6 +143,7 @@ export default function BillingInformation() {
           askterisk
           label="Storage Rate"
           name={`${fieldName}.storageRate`}
+          disabled
         />
         <SelectFormik<any, BilltypeOptionProps>
           askterisk
@@ -151,6 +152,7 @@ export default function BillingInformation() {
           keyValue="id"
           keyLabel="name"
           option={billTypes}
+          disabled
         />
       </div>
 
@@ -159,6 +161,7 @@ export default function BillingInformation() {
         addonAfter={<PercentageOutlined />}
         label="VAT"
         name={`${fieldName}.valueAddedTax`}
+        disabled
       />
     </>
   );

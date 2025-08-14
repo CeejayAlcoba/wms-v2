@@ -41,11 +41,6 @@ const DrawerLayout = () => {
     });
   };
 
-  const handleDarkModeToggle = (checked: boolean) => {
-    // Add dark mode logic here
-    console.log("Dark mode:", checked);
-  };
-
   return (
     <Drawer
       title={

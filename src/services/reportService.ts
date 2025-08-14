@@ -8,6 +8,9 @@ import type { ReportInboundFilterDTO } from "../@types/DTOs/ReportInboundFilterD
 import type { ReportInboundDTO } from "../@types/DTOs/ReportInboundDTO";
 import type { ReportCargoHistoryFilterDTO } from "../@types/DTOs/ReportCargoHistoryFilterDTO";
 import type { ReportCargoHistoryDTO } from "../@types/DTOs/ReportCargoHistoryDTO";
+import type { ReportOutboundFilterDTO } from "../@types/DTOs/ReportOutboundFilterDTO";
+import type { ReportOutboundDTO } from "../@types/DTOs/ReportOutboundDTO";
+import type { Pagination } from "../@types/pagination/Pagination";
 
 const path = "report";
 
@@ -44,7 +47,21 @@ function _reportService() {
     return data;
   };
 
-  return { InventoryGetAll, PickListGetAll, InboundGetAll, CargoHistoryGetAll };
+  const OutboundGetAll = async (filters: ReportOutboundFilterDTO) => {
+    const queryParams = objectToQueryParam(filters);
+    const { data } = await axiosInstance.get<Pagination<ReportOutboundDTO>>(
+      `${path}/outbound/list?${queryParams}`
+    );
+    return data;
+  };
+
+  return {
+    InventoryGetAll,
+    PickListGetAll,
+    InboundGetAll,
+    CargoHistoryGetAll,
+    OutboundGetAll,
+  };
 }
 
 export const reportService = _reportService();

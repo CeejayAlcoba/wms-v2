@@ -8,7 +8,6 @@ import { billingStatementService } from "../../../services/billingStatementServi
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { billingStatementSchema } from "../../../schemas/billingStatementSchema";
 import SelectFormik from "../../../components/Formik/SelectFormik";
-import type { MasterBillType } from "../../../@types/tables/MasterBillType";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
 import { principalService } from "../../../services/principalService";
 import { billTypeService } from "../../../services/billTypeService";
@@ -19,7 +18,7 @@ import ToggleText from "../../../components/Toggle/ToggleText";
 import type { ReactNode } from "react";
 
 type SaveModalProps = {
-  title?:string
+  title?: string;
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
@@ -27,12 +26,12 @@ type SaveModalProps = {
 };
 
 type BilltypeOptionProps = {
-   id:number,
-  name:ReactNode
+  id: number;
+  name: ReactNode;
 };
 
 export default function SaveModal(props: SaveModalProps) {
-  const { open, onAfterSave, onCancel, selectedData,title } = props;
+  const { open, onAfterSave, onCancel, selectedData, title } = props;
   const { title: pageTitle } = usePage();
 
   const { data: principals } = useQuery({
@@ -42,12 +41,19 @@ export default function SaveModal(props: SaveModalProps) {
   });
   const { data: billTypes } = useQuery({
     queryKey: ["billTypes"],
-    queryFn: async () =>{ 
-     const res = await billTypeService.GetAll()
-     return res?.map(r=>({
-        id:r.id,
-        name:<ToggleText data={r.name=="CBM"} falseProps={{style:{color:"green"}}}>{r.name}</ToggleText>
-      })) as BilltypeOptionProps[]
+    queryFn: async () => {
+      const res = await billTypeService.GetAll();
+      return res?.map((r) => ({
+        id: r.id,
+        name: (
+          <ToggleText
+            data={r.name == "CBM"}
+            falseProps={{ style: { color: "green" } }}
+          >
+            {r.name}
+          </ToggleText>
+        ),
+      })) as BilltypeOptionProps[];
     },
     initialData: [],
   });
@@ -106,6 +112,7 @@ export default function SaveModal(props: SaveModalProps) {
         />
         <div className="row row-cols-lg-2">
           <InputNumberFormik<BillingStatement>
+            prefix={"₱"}
             askterisk
             label="Handling In Rate"
             name="handlingInRate"
@@ -123,6 +130,7 @@ export default function SaveModal(props: SaveModalProps) {
         </div>
         <div className="row row-cols-lg-2">
           <InputNumberFormik<BillingStatement>
+            prefix={"₱"}
             askterisk
             label="Handling Out Rate"
             name="handlingOutRate"
@@ -138,6 +146,7 @@ export default function SaveModal(props: SaveModalProps) {
         </div>
         <div className="row row-cols-lg-2">
           <InputNumberFormik<BillingStatement>
+            prefix={"₱"}
             askterisk
             label="Storage Rate"
             name="storageRate"

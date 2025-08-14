@@ -1,10 +1,11 @@
-import { type ReactNode } from "react";
 import { Row, Col } from "antd";
+import type { ReactNode } from "react";
 
 export type GridListColumnsProps<T = any> = {
   key: keyof T;
-  label: string;
-  render?: (value?: any, record?: T, index?: number) => void;
+  label?: string;
+  title?: string;
+  render?: (value?: any, record?: T, index?: number) => ReactNode;
 }[];
 
 interface GridListProps<T = any> {
@@ -15,18 +16,32 @@ interface GridListProps<T = any> {
 }
 
 export function GridList<T = any>(props: GridListProps<T>) {
-  const { columns, data, cols = 3, gutter = 16 } = props;
+  const { columns, data, cols = 3, gutter = 3 } = props;
+
+  if (!data) return null;
+
+  const colWidth = Math.floor(12 / cols);
 
   return (
-    <Row gutter={gutter}>
-      {columns.map((col, index) => (
-        <Col span={24 / cols} key={String(col.key)}>
-          <strong>{col.label}: </strong>
-          {col?.render
-            ? (col.render(data[col.key], data, index) as ReactNode)
-            : (data[col.key] as ReactNode)}
-        </Col>
-      ))}
-    </Row>
+    <div className={`row row-cols-lg-${gutter}`}>
+      {columns.map((col, index) => {
+        if (col.title) {
+          return (
+            <div className={`col-${colWidth}`} key={`title-${index}`}>
+              <strong>{col.title}</strong>
+            </div>
+          );
+        }
+
+        const value = data[col.key] as ReactNode;
+
+        return (
+          <div className={`col-${colWidth}`} key={String(col.key)}>
+            {col.label && <strong>{col.label}: </strong>}
+            {col.render ? col.render(value, data, index) : value}
+          </div>
+        );
+      })}
+    </div>
   );
 }

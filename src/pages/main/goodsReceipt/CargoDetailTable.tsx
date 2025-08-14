@@ -1,10 +1,19 @@
 import { Table, type TableProps } from "antd";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
+import TableComponent from "../../../components/Table/TableComponent";
+import {
+  GridList,
+  type GridListColumnsProps,
+} from "../../../components/Grid/GridList";
+import type { BookingDetails } from "../../../@types/tables/BookingDetails";
+import dayjs from "dayjs";
+import type { BookingDetailsDTO } from "../../../@types/DTOs/BookingDetailsDTO";
 
 export default function CargoDetailTable(props: {
   cargoDetails: CargoDetails[];
+  record: BookingDetailsDTO;
 }) {
-  const { cargoDetails } = props;
+  const { cargoDetails, record } = props;
 
   const columns: TableProps<CargoDetails>["columns"] = [
     { title: "SKU Code", dataIndex: "skuCode", key: "skuCode" },
@@ -31,10 +40,36 @@ export default function CargoDetailTable(props: {
     { title: "Cubic Meter", dataIndex: "cubicMeter", key: "cubicMeter" },
     { title: "Total Amount", dataIndex: "totalAmount", key: "totalAmount" },
   ];
+  const titleColumns: GridListColumnsProps<BookingDetailsDTO> = [
+    {
+      key: "actualCheckInDate",
+      label: "Actual Check In Date",
+      render: (value) => dayjs(value).format("YYYY-MM-DD"),
+    },
+    {
+      key: "icrReferenceNumber",
+      label: "ICR",
+    },
+    {
+      key: "drNumber",
+      label: "DR",
+    },
+    {
+      key: "principal",
+      label: "Principal",
+    },
+    {
+      key: "productCategory",
+      label: "Product Category",
+    },
+  ];
   return (
     <div>
-      <Table<CargoDetails>
-        dataSource={cargoDetails}
+      <TableComponent<CargoDetails>
+        dataSource={cargoDetails.filter((c) => c.bookingDetailsId == record.id)}
+        title={() => (
+          <GridList<BookingDetailsDTO> columns={titleColumns} data={record} />
+        )}
         columns={columns}
         rowKey="id"
         scroll={{ x: "max-content" }}

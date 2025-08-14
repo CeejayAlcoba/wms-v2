@@ -6,6 +6,7 @@ export type ReportInventoryDTO = {
   balancePalleteCount?: number | null;
   actualCheckInDate?: string | null;
   icrReferenceNumber?: string | null;
+  drNumber?: string | null;
   principal?: string | null;
   productCategory?: string | null;
   unitOfMeasurement?: string | null;

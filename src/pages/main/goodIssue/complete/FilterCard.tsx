@@ -9,7 +9,6 @@ import { pickListDetailsService } from "../../../../services/pickListDetailsServ
 import SelectFormik from "../../../../components/Formik/SelectFormik";
 import { EMPTY_FORM } from "../__constants__/EMPTY_FORM";
 import type { GoodIssueDetails } from "../../../../@types/tables/GoodIssueDetails";
-import { goodsReceiptService } from "../../../../services/goodsReceiptService";
 import { SearchOutlined } from "@ant-design/icons";
 import { goodIssueDetailsService } from "../../../../services/goodIssueDetailsService";
 import InputFormik from "../../../../components/Formik/InputFormik";

@@ -58,31 +58,70 @@ export default function CargoHistoryTable(props: {
     },
   ];
 
-  const gridColums: GridListColumnsProps<ReportInventoryDTO> = [
+  const gridHeader: GridListColumnsProps<ReportInventoryDTO> = [
     {
       key: "actualCheckInDate",
       label: "Actual Check In Date",
       render: (value) => dayjs(value).format("YYYY-MM-DD"),
     },
     {
+      key: "proNumber",
+      label: "PRO No",
+    },
+    {
+      key: "balancePalleteCount",
+      label: "Balance Pallete",
+    },
+    {
       key: "icrReferenceNumber",
       label: "ICR",
+    },
+    {
+      key: "principal",
+      label: "Principal",
+    },
+    {
+      key: "balanceQuantity",
+      label: "Balance Quantity",
     },
     {
       key: "skuCode",
       label: "SKU",
     },
     {
-      key: "proNumber",
-      label: "PRO No",
+      key: "productCategory",
+      label: "Product Category",
     },
+    {
+      key: "balanceCubicMeter",
+      label: "Balance CBM",
+    },
+    {
+      key: "drNumber",
+      label: "DR",
+    },
+  ];
+
+  const gridFooter: GridListColumnsProps<ReportCargoHistoryDTO> = [
+    { key: "totalPickListPalleteCount", label: "Total PL Pallete" },
+    { key: "totalIssuedPalleteCount", label: "Total GI Pallete" },
+    { key: "totalPickListQuantity", label: "Total PL Quantity" },
+    { key: "totalIssuedQuantity", label: "Total GI Quantity" },
+    { key: "totalPickListCubicMeter", label: "Total PL CBM" },
+    { key: "totalIssuedCubicMeter", label: "Total GI CBM" },
   ];
 
   return (
     <div>
       <TableComponent<ReportCargoHistoryDTO>
         headerTitle="Inventory Logs"
-        title={() => <GridList data={record} columns={gridColums} cols={2} />}
+        title={() => (
+          <GridList<ReportInventoryDTO>
+            data={record}
+            columns={gridHeader}
+            cols={3}
+          />
+        )}
         dataSource={cargoHistories.filter((c) => c.id == record.id)}
         columns={columns}
         rowKey="id"
@@ -90,9 +129,10 @@ export default function CargoHistoryTable(props: {
         bordered
         pagination={false}
         footer={() => (
-          <TableTotalFooter<ReportCargoHistoryDTO>
-            data={cargoHistories}
-            values={CARGO_HISTORY_TOTAL_FOOTER}
+          <GridList<ReportCargoHistoryDTO>
+            data={cargoHistories?.[0]}
+            columns={gridFooter}
+            cols={2}
           />
         )}
       />

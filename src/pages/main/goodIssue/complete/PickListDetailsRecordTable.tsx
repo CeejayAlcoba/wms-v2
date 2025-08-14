@@ -6,12 +6,11 @@ import {
   GridList,
   type GridListColumnsProps,
 } from "../../../../components/Grid/GridList";
-import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
-import type { PickListDetailsGetDTO } from "../../../../@types/DTOs/PickListDetailsGetDTO";
+import type { GoodIssueDetails } from "../../../../@types/tables/GoodIssueDetails";
 
 export default function PickListDetailsRecordTable(props: {
   pickListRecords: PickListDetailsRecordGetDTO[];
-  record: PickListDetails;
+  record: GoodIssueDetails;
 }) {
   const { pickListRecords, record } = props;
 
@@ -56,34 +55,37 @@ export default function PickListDetailsRecordTable(props: {
     { title: "Pallet Count", dataIndex: "palleteCount", key: "palleteCount" },
   ];
 
-  const gridColumns: GridListColumnsProps<PickListDetailsGetDTO> = [
+  const gridColumns: GridListColumnsProps<GoodIssueDetails> = [
     {
-      key: "goodIssue",
+      key: "id",
       render: (value) => value && `GI-${value}`,
     },
     {
-      key: "id",
+      key: "ocrNumber",
+      render: (value) => value && `OCR : ${value}`,
+    },
+    {
+      key: "pickListDetailsId",
       render: (value) => `PL-${value}`,
     },
-
     {
-      key: "ocr",
-      render: (value) => value && `OCR : ${value}`,
+      key: "dofNumber",
+      render: (value) => value && `DOF : ${value}`,
     },
   ];
   return (
     <div>
       <TableComponent<PickListDetailsRecordGetDTO>
-        headerTitle="Picklist Details"
+        headerTitle="Good Issue"
         title={() => (
-          <GridList<PickListDetailsGetDTO>
+          <GridList<GoodIssueDetails>
             data={record}
             columns={gridColumns}
-            cols={1}
+            cols={2}
           />
         )}
         dataSource={pickListRecords?.filter(
-          (p) => p.pickListDetailsId == record?.id
+          (p) => p.pickListDetailsId == record?.pickListDetailsId
         )}
         columns={columns}
         rowKey="id"

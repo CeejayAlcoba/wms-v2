@@ -1,6 +1,6 @@
 import useDocument from "../../../contexts/useDocument";
-import PrintTable from "../../../components/Documents/Print/PrintTable";
-import DownloadPdfTable from "../../../components/Documents/Pdf/PdfTable";
+import PrintTable from "../../../components/Documents/Print/PrintButton";
+import DownloadPdfTable from "../../../components/Documents/Pdf/PdfButton";
 
 export default function TestPage() {
   const data = [

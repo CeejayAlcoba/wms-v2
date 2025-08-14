@@ -190,9 +190,8 @@ export default function CompleteTable(props: CompleteTableProps) {
         expandable={{
           expandedRowRender: (record) => (
             <PickListDetailsRecordTable
-              pickListRecords={pickListRecords.filter(
-                (c) => c.pickListDetailsId == record.id
-              )}
+              pickListRecords={pickListRecords}
+              record={record}
             />
           ),
           onExpand: handleExpand,

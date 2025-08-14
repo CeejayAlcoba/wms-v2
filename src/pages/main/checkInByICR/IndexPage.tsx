@@ -30,7 +30,7 @@ export default function IndexPage() {
       });
       formik.resetForm();
       setCurrentStep(0);
-      await indexDbService.deleteItem("checkInByICR",1)
+      await indexDbService.deleteItem("checkInByICR", 1);
     } catch {
       SweetAlert({
         title: "Error Occurs",

@@ -7,26 +7,26 @@ type StoreName = "checkInByICR" | "pendingPickList";
 export interface MyDB extends DBSchema {
   checkInByICR: {
     key: number;
-    value: CheckInByICRDTO & {id:number};
+    value: CheckInByICRDTO & { id: number };
   };
   pendingPickList: {
     key: number;
-    value: PickListDetailsRecordDTO & {id : number};
+    value: PickListDetailsRecordDTO & { id: number };
   };
 }
 
 let dbPromise: Promise<IDBPDatabase<MyDB>>;
 
 export function initDB() {
-  dbPromise = openDB<MyDB>('DB_WMS', 1, {
+  dbPromise = openDB<MyDB>("DB_WMS", 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains("checkInByICR")) {
-        db.createObjectStore('checkInByICR', { keyPath: 'id' });
+        db.createObjectStore("checkInByICR", { keyPath: "id" });
       }
 
-      if (!db.objectStoreNames.contains('pendingPickList')) {
-        db.createObjectStore('pendingPickList', {
-          keyPath: 'id',
+      if (!db.objectStoreNames.contains("pendingPickList")) {
+        db.createObjectStore("pendingPickList", {
+          keyPath: "id",
         });
       }
     },
@@ -68,7 +68,7 @@ export function _indexDbService() {
 
   const deleteItem = async (
     storeName: StoreName,
-    key: number | IDBKeyRange 
+    key: number | IDBKeyRange
   ): Promise<void> => {
     const db = await dbPromise;
     await db.delete(storeName, key);
@@ -113,16 +113,15 @@ export function _indexDbService() {
     }
   };
 
-const clearAllItems = async <K extends StoreName>(
+  const clearAllItems = async <K extends StoreName>(
     storeName: K
   ): Promise<void> => {
     const db = await dbPromise;
-    const tx = db.transaction(storeName, 'readwrite');
+    const tx = db.transaction(storeName, "readwrite");
     const store = tx.objectStore(storeName);
     await store.clear();
     await tx.done;
   };
-
 
   return {
     addItem,
@@ -133,7 +132,7 @@ const clearAllItems = async <K extends StoreName>(
     getItemsByFilter,
     getSingleItemByFilter,
     upsertItem,
-    clearAllItems
+    clearAllItems,
   };
 }
 

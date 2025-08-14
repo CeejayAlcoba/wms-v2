@@ -14,15 +14,15 @@ import { goodIssueDetailsService } from "../../../../services/goodIssueDetailsSe
 import type { GoodIssueDetails } from "../../../../@types/tables/GoodIssueDetails";
 import TableComponent from "../../../../components/Table/TableComponent";
 import usePage from "../../../../hooks/usePage";
-import PickListDetailsRecordTable from "../../picklist/complete/PickListDetailsRecordTable";
 import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
 import { pickListDetailsRecordService } from "../../../../services/pickListDetailsRecordService";
 import FilterCard from "./FilterCard";
 import { EMPTY_FORM } from "../__constants__/EMPTY_FORM";
+import PickListDetailsRecordTable from "./PickListDetailsRecordTable";
 
 export default function CompleteTable() {
   const [saveGoodIssueModal, setSaveGoodIssueModal] = useState<boolean>(false);
-    const [search, setSearch] = useState<GoodIssueDetails>(EMPTY_FORM);
+  const [search, setSearch] = useState<GoodIssueDetails>(EMPTY_FORM);
   const [selectedData, setSelectedData] = useState<GoodIssueDetails | null>(
     null
   );
@@ -35,14 +35,13 @@ export default function CompleteTable() {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["goodIssues",search],
+    queryKey: ["goodIssues", search],
     queryFn: async () => {
       return await goodIssueDetailsService.GetAll(search);
     },
     initialData: [],
   });
   const { title: pageTitle } = usePage();
-
 
   const handleClickEdit = (record: PickListDetails) => {
     setSelectedData(record);
@@ -143,7 +142,7 @@ export default function CompleteTable() {
         onAfterSave={handleAferSave}
         onCancel={handleCancel}
       />
-      <FilterCard onSearch={(val)=>setSearch(val)}/>
+      <FilterCard onSearch={(val) => setSearch(val)} />
       <TableComponent<GoodIssueDetails>
         indexedColumn={false}
         headerTitle={pageTitle}
@@ -154,9 +153,8 @@ export default function CompleteTable() {
         expandable={{
           expandedRowRender: (record) => (
             <PickListDetailsRecordTable
-              pickListRecords={pickListRecords.filter(
-                (c) => c.pickListDetailsId == record.pickListDetailsId
-              )}
+              pickListRecords={pickListRecords}
+              record={record}
             />
           ),
           onExpand: handleExpand,

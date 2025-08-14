@@ -11,7 +11,7 @@ import { INITIAL_COLUMNS } from "./__constants__/INITIAL_COLUMNS";
 import type { TabKey } from "./IndexPage";
 import SaveModal from "./SaveModal";
 
-export default function Table(props: {
+export default function PendingCompleteTable(props: {
   bookingDetails: BookingDetailsDTO[];
   refetch: () => void;
   isFetching: boolean;
@@ -19,7 +19,9 @@ export default function Table(props: {
 }) {
   const { bookingDetails, refetch, isFetching, activeKey } = props;
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState<BookingDetails | null>(null);
+  const [selectedData, setSelectedData] = useState<BookingDetailsDTO | null>(
+    null
+  );
 
   const [cargoDetails, setCargoDetails] = useState<CargoDetails[]>([]);
 
@@ -44,7 +46,7 @@ export default function Table(props: {
     refetch();
   };
 
-  const handleExpand = async (expanded: boolean, record: BookingDetails) => {
+  const handleExpand = async (expanded: boolean, record: BookingDetailsDTO) => {
     if (expanded) {
       const res = await cargoDetailsService.GetAll({
         bookingDetailsId: record.id,
@@ -116,15 +118,11 @@ export default function Table(props: {
         selectedData={selectedData}
         activeKey={activeKey}
       />
-      <TableComponent<BookingDetails>
-        rowKey={(data: BookingDetails) => data.id ?? 0}
+      <TableComponent<BookingDetailsDTO>
+        rowKey={(data: BookingDetailsDTO) => data.id ?? 0}
         expandable={{
           expandedRowRender: (record) => (
-            <CargoDetailTable
-              cargoDetails={cargoDetails.filter(
-                (c) => c.bookingDetailsId == record.id
-              )}
-            />
+            <CargoDetailTable cargoDetails={cargoDetails} record={record} />
           ),
           onExpand: handleExpand,
         }}
