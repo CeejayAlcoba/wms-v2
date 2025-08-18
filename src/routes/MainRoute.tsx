@@ -6,13 +6,15 @@ import {
 } from "react-router-dom";
 import MainLayout from "../pages/layouts/MainLayout";
 import useUser from "../contexts/useUser";
-import LoginPage from "../pages/auth/login/LoginPage";
 import PRIVATE_ROUTES from "./constants/PRIVATE_ROUTES";
 import { Suspense, useEffect, useState } from "react";
 import type { MasterSidebarMenuItem } from "../@types/tables/MasterSidebarMenuItem";
 import useSidebar from "../contexts/useSidebar";
 import LoadingScreenLayout from "../pages/layouts/LoadingScreenLayout";
 import { routeService } from "../services/routeService";
+import TestPage from "../pages/main/test/TestPage";
+import AuthPage from "../pages/auth/AuthPage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export default function MainRoute() {
   const { user } = useUser();
@@ -59,7 +61,9 @@ export default function MainRoute() {
             );
           })}
         </Route>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/test" element={<TestPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );

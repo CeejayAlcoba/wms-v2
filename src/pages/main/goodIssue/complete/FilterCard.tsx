@@ -1,5 +1,5 @@
 import { Button, Card } from "antd";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -53,34 +53,37 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <div className="row row-cols-lg-3">
-          <SelectFormik<GoodIssueDetails, any>
-            label="Good Issue #"
-            name="id"
-            keyValue="id"
-            keyLabel="name"
-            option={goodIssues}
-          />
-          <InputFormik<GoodIssueDetails> label="OCR #" name="ocrNumber" />
-          <SelectFormik<GoodIssueDetails, any>
-            label="Pick List #"
-            name="pickListDetailsId"
-            keyValue="id"
-            keyLabel="name"
-            option={picklists}
-          />
-          <InputFormik<GoodIssueDetails> label="DOF #" name="dofNumber" />
-          <InputFormik<GoodIssueDetails> label="Note" name="note" />
-        </div>
-        <div className="d-flex justify-content-end">
-          <Button
-            type="primary"
-            onClick={() => formik.submitForm()}
-            icon={<SearchOutlined />}
-          >
-            Search
-          </Button>
-        </div>
+        <Form>
+          <div className="row row-cols-lg-3">
+            <SelectFormik<GoodIssueDetails, any>
+              label="Good Issue #"
+              name="id"
+              keyValue="id"
+              keyLabel="name"
+              option={goodIssues}
+            />
+            <InputFormik<GoodIssueDetails> label="OCR #" name="ocrNumber" />
+            <SelectFormik<GoodIssueDetails, any>
+              label="Pick List #"
+              name="pickListDetailsId"
+              keyValue="id"
+              keyLabel="name"
+              option={picklists}
+            />
+            <InputFormik<GoodIssueDetails> label="DOF #" name="dofNumber" />
+            <InputFormik<GoodIssueDetails> label="Note" name="note" />
+          </div>
+          <div className="d-flex justify-content-end">
+            <Button
+              htmlType="submit"
+              type="primary"
+              onClick={() => formik.submitForm()}
+              icon={<SearchOutlined />}
+            >
+              Search
+            </Button>
+          </div>
+        </Form>
       </FormikProvider>
     </Card>
   );

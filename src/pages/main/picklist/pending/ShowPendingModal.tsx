@@ -1,5 +1,5 @@
 import type { ColumnsType } from "antd/es/table";
-import { FormikProvider, useFormik } from "formik";
+import { Form, FormikProvider, useFormik } from "formik";
 import { Button, Card, Popconfirm, Tooltip } from "antd";
 import dayjs from "dayjs";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -214,25 +214,30 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
       />
       <Card>
         <FormikProvider value={formik}>
-          <div className="row row-cols-lg-3">
-            <InputFormik<PickListDetails> label="DO number" name="dONumber" />
-            <InputFormik<PickListDetails>
-              label="Delivered To"
-              name="deliveredTo"
-            />
-            <InputFormik<PickListDetails> label="PO Number" name="pONumber" />
-            <InputFormik<PickListDetails> label="Pick Up By" name="pickUpBy" />
-            <InputFormik<PickListDetails> label="Remarks" name="remarks" />
-            <InputFormik<PickListDetails> label="Sold To" name="soldTo" />
-            <InputFormik<PickListDetails> label="Sales Man" name="salesMan" />
-            <SelectFormik<PickListDetails, RefTruckDetails>
-              label="Truck Plate Number"
-              name="truckDetailsId"
-              keyValue="id"
-              keyLabel="plateNumber"
-              option={[]}
-            />
-          </div>
+          <Form>
+            <div className="row row-cols-lg-3">
+              <InputFormik<PickListDetails> label="DO number" name="dONumber" />
+              <InputFormik<PickListDetails>
+                label="Delivered To"
+                name="deliveredTo"
+              />
+              <InputFormik<PickListDetails> label="PO Number" name="pONumber" />
+              <InputFormik<PickListDetails>
+                label="Pick Up By"
+                name="pickUpBy"
+              />
+              <InputFormik<PickListDetails> label="Remarks" name="remarks" />
+              <InputFormik<PickListDetails> label="Sold To" name="soldTo" />
+              <InputFormik<PickListDetails> label="Sales Man" name="salesMan" />
+              <SelectFormik<PickListDetails, RefTruckDetails>
+                label="Truck Plate Number"
+                name="truckDetailsId"
+                keyValue="id"
+                keyLabel="plateNumber"
+                option={[]}
+              />
+            </div>
+          </Form>
         </FormikProvider>
       </Card>
       <TableComponent dataSource={records} columns={columns} rowKey="id" />;

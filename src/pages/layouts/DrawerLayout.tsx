@@ -29,6 +29,7 @@ const DrawerLayout = () => {
       timer: undefined,
     }).then((result) => {
       if (result.isConfirmed) {
+        closeDrawer()
         SweetAlert({
           title: "Logged out",
           text: "You have been successfully logged out.",
@@ -39,11 +40,6 @@ const DrawerLayout = () => {
         navigate("/login");
       }
     });
-  };
-
-  const handleDarkModeToggle = (checked: boolean) => {
-    // Add dark mode logic here
-    console.log("Dark mode:", checked);
   };
 
   return (
@@ -65,7 +61,7 @@ const DrawerLayout = () => {
       onClose={closeDrawer}
       open={isDrawerOpen}
     >
-      {/* Divider & Dark Mode Toggle */}
+
       <Divider />
       <Space
         align="center"
@@ -76,7 +72,7 @@ const DrawerLayout = () => {
         <Switch onChange={toggleTheme} defaultChecked={isDarkMode} />
       </Space>
 
-      {/* Divider & Logout */}
+
       <Divider />
       <Button
         type="primary"

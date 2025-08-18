@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
@@ -63,9 +63,11 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<RefPrincipal> label="Name" askterisk name="name" />
-        <InputFormik<RefPrincipal> label="Other Name" name="otherName" />
-        <InputFormik<RefPrincipal> label="Address" askterisk name="address" />
+        <Form>
+          <InputFormik<RefPrincipal> label="Name" askterisk name="name" />
+          <InputFormik<RefPrincipal> label="Other Name" name="otherName" />
+          <InputFormik<RefPrincipal> label="Address" askterisk name="address" />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

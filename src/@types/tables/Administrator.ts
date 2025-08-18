@@ -1,10 +1,9 @@
 export type Administrator = {
-  id?: number;
-  username?: string;
-  hashedPassword?: string;
-  salt?: string;
-  firstName?: string;
-  lastName?: string;
-  employeeNumber?: string;
-  birthday?: Date;
+  id?: number | null;
+  username?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  employeeNumber?: string | null;
+  birthday?: Date | null;
+  isApproved?: boolean | null;
 };

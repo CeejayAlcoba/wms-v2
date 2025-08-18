@@ -7,7 +7,11 @@ export default function ModalComponent(props: ModalComponentProps) {
     maskClosable: false,
   };
   return (
-    <Modal {...initialProps} {...props}>
+    <Modal
+      {...initialProps}
+      {...props}
+      okButtonProps={{ ...props.okButtonProps, htmlType: "submit" }}
+    >
       {props.children}
     </Modal>
   );

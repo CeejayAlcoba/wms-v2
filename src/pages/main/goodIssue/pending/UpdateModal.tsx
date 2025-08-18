@@ -3,11 +3,10 @@ import type { PickListDetails } from "../../../../@types/tables/PickListDetails"
 import { FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../../components/Formik/InputFormik";
 import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
-import usePage from "../../../../hooks/usePage";
 import { pickListDetailsService } from "../../../../services/pickListDetailsService";
 import { useQuery } from "@tanstack/react-query";
 import SelectFormik from "../../../../components/Formik/SelectFormik";
-import {  Form,  } from "antd";
+import { Form } from "antd";
 import type { RefTruckDetails } from "../../../../@types/tables/RefTruckDetails";
 import { truckDetailsService } from "../../../../services/truckDetailsService";
 
@@ -20,7 +19,6 @@ type UpdateModalProps = {
 
 export default function UpdateModal(props: UpdateModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
-  const { title: pageTitle } = usePage();
 
   const { data: truckDetails } = useQuery({
     queryKey: ["truckDetails"],
@@ -63,6 +61,7 @@ export default function UpdateModal(props: UpdateModalProps) {
       title={`${selectedData ? "Update" : "Add"} PL-${selectedData?.id}`}
       open={open}
       onOk={() => formik.submitForm()}
+      okButtonProps={{ htmlType: "submit" }}
       okText={selectedData ? "Update" : "Add"}
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}

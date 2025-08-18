@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { MasterBillType } from "../../../@types/tables/MasterBillType";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
@@ -56,6 +56,7 @@ export default function SaveModal(props: SaveModalProps) {
   return (
     <ModalComponent
       title={`${selectedData ? "Update" : "Add"} ${pageTitle}`}
+      okButtonProps={{ htmlType: "submit" }}
       open={open}
       onOk={() => formik.submitForm()}
       okText={selectedData ? "Update" : "Add"}
@@ -63,7 +64,9 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<MasterBillType> label="Name" askterisk name="name" />
+        <Form>
+          <InputFormik<MasterBillType> label="Name" askterisk name="name" />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

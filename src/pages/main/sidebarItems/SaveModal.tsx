@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { MasterSidebarMenuItem } from "../../../@types/tables/MasterSidebarMenuItem";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
@@ -95,39 +95,41 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik label="Name" askterisk name="name" />
-        <SelectFormik<MasterSidebarMenuItem, any>
-          label="Sidebar Menu"
-          name="sidebarMenuId"
-          keyValue="id"
-          keyLabel="name"
-          option={sidebarMenus}
-        />
-        <InputFormik<MasterSidebarMenuItem>
-          label="Key Name"
-          askterisk
-          name="keyName"
-        />
-        <SelectFormik<MasterSidebarMenuItem, any>
-          label="Icon"
-          name="antIconId"
-          keyValue="value"
-          keyLabel="label"
-          option={antIcons}
-        />
-        <InputFormik<MasterSidebarMenuItem>
-          label="Path"
-          askterisk
-          name="path"
-        />
-        <CheckboxFormik<MasterSidebarMenuItem>
-          label="Visible to sidebar"
-          name="isVisible"
-        />
-        <CheckboxFormik<MasterSidebarMenuItem>
-          label="Accessible to any role"
-          name="isAccessibleToAnyRole"
-        />
+        <Form>
+          <InputFormik label="Name" askterisk name="name" />
+          <SelectFormik<MasterSidebarMenuItem, any>
+            label="Sidebar Menu"
+            name="sidebarMenuId"
+            keyValue="id"
+            keyLabel="name"
+            option={sidebarMenus}
+          />
+          <InputFormik<MasterSidebarMenuItem>
+            label="Key Name"
+            askterisk
+            name="keyName"
+          />
+          <SelectFormik<MasterSidebarMenuItem, any>
+            label="Icon"
+            name="antIconId"
+            keyValue="value"
+            keyLabel="label"
+            option={antIcons}
+          />
+          <InputFormik<MasterSidebarMenuItem>
+            label="Path"
+            askterisk
+            name="path"
+          />
+          <CheckboxFormik<MasterSidebarMenuItem>
+            label="Visible to sidebar"
+            name="isVisible"
+          />
+          <CheckboxFormik<MasterSidebarMenuItem>
+            label="Accessible to any role"
+            name="isAccessibleToAnyRole"
+          />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

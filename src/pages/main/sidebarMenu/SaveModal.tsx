@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { MasterSidebarMenu } from "../../../@types/tables/MasterSidebarMenu";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
@@ -85,14 +85,16 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<MasterSidebarMenu> label="Name" askterisk name="name" />
-        <SelectFormik<MasterSidebarMenu, any>
-          label="Icon"
-          name="antIconId"
-          keyValue="value"
-          keyLabel="label"
-          option={antIcons}
-        />
+        <Form>
+          <InputFormik<MasterSidebarMenu> label="Name" askterisk name="name" />
+          <SelectFormik<MasterSidebarMenu, any>
+            label="Icon"
+            name="antIconId"
+            keyValue="value"
+            keyLabel="label"
+            option={antIcons}
+          />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

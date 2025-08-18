@@ -1,5 +1,5 @@
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import usePage from "../../../../hooks/usePage";
 import { useQuery } from "@tanstack/react-query";
 import { unitOfMeasurementService } from "../../../../services/unitOfMeasurementService";
@@ -64,7 +64,7 @@ export default function AddPendingModal(props: AddPendingModalProps) {
       cargoDetailsId: value.report?.id,
       id: value?.report?.id ?? 0,
     });
-    onAfterSave(value)
+    onAfterSave(value);
     formik.resetForm();
     formik.setSubmitting(false);
   };
@@ -78,7 +78,7 @@ export default function AddPendingModal(props: AddPendingModalProps) {
   const { getFieldProps, setFieldValue, values } = formik;
 
   useEffect(() => {
-    console.log(values)
+    console.log(values);
     const lengthCm = Number(getFieldProps(`report.lengthCm`).value || 0);
     const heightCm = Number(getFieldProps(`report.heightCm`).value || 0);
     const widthCm = Number(getFieldProps(`report.widthCm`).value || 0);
@@ -105,109 +105,113 @@ export default function AddPendingModal(props: AddPendingModalProps) {
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}
     >
-     {type == "Add" &&<Alert
-        message="Item will be added to Pending Picklist"
-        description="This item is not yet scheduled for pickup and will be added to the pending picklist. You can manage it later from the picklist section."
-        type="info"
-        showIcon
-        closable
-        className="mb-2"
-      />} 
+      {type == "Add" && (
+        <Alert
+          message="Item will be added to Pending Picklist"
+          description="This item is not yet scheduled for pickup and will be added to the pending picklist. You can manage it later from the picklist section."
+          type="info"
+          showIcon
+          closable
+          className="mb-2"
+        />
+      )}
       <FormikProvider value={formik}>
-        <Card>
-          <div className="row row-cols-lg-2 g-2">
+        <Form>
+          <Card>
+            <div className="row row-cols-lg-2 g-2">
+              <div>
+                <label>
+                  <strong>SKU:</strong> {values.report?.skuCode}
+                </label>
+              </div>
+              <div>
+                <label>
+                  <strong>PRO No:</strong> {values.report?.proNumber}
+                </label>
+              </div>
+              <div>
+                <label>
+                  <strong>Balance Pallete:</strong>{" "}
+                  {handleRoundOff(
+                    (values.report?.balancePalleteCount ?? 0) -
+                      (values?.palleteCount ?? 0)
+                  ) ?? 0}
+                </label>
+              </div>
+              <div>
+                <label>
+                  <strong>Balance Quantity:</strong>{" "}
+                  {handleRoundOff(
+                    (values.report?.balanceQuantity ?? 0) -
+                      (values?.quantity ?? 0)
+                  ) ?? 0}
+                </label>
+              </div>
+              <div>
+                <label>
+                  <strong>Balance CBM:</strong>{" "}
+                  {handleRoundOff(
+                    (values.report?.balanceCubicMeter ?? 0) -
+                      (values?.cubicMeter ?? 0)
+                  ) ?? 0}
+                </label>
+              </div>
+              <div>
+                <label>
+                  <strong>Dimension:</strong> {values.report?.lengthCm} x{" "}
+                  {values.report?.widthCm} x {values.report?.heightCm} cm
+                </label>
+              </div>
+            </div>
+          </Card>
+          <div className="row row-cols-lg-2 mt-4">
             <div>
-              <label>
-                <strong>SKU:</strong> {values.report?.skuCode}
-              </label>
+              <DatePickerFormik<PickListDetailsRecord>
+                label="Pull Out Date"
+                name="pullOutDate"
+                askterisk
+              />
+              <DatePickerFormik<PickListDetailsRecord>
+                label="Pull Out Date Recieved"
+                name="pullOutDateRecieved"
+                askterisk
+              />
+              <DatePickerFormik<PickListDetailsRecord>
+                label="Delivery Due Date"
+                name="deliveryDueDate"
+                askterisk
+              />
+              <SelectFormik<any, RefUnitOfMeasurement>
+                label="Unit of Measurement"
+                name="report.unitOfMeasurementId"
+                keyValue="id"
+                keyLabel="name"
+                option={unitOfMeasurements}
+                askterisk
+                disabled
+              />
             </div>
             <div>
-              <label>
-                <strong>PRO No:</strong> {values.report?.proNumber}
-              </label>
-            </div>
-            <div>
-              <label>
-                <strong>Balance Pallete:</strong>{" "}
-                {handleRoundOff(
-                  (values.report?.balancePalleteCount ?? 0) -
-                    (values?.palleteCount ?? 0)
-                ) ?? 0}
-              </label>
-            </div>
-            <div>
-              <label>
-                <strong>Balance Quantity:</strong>{" "}
-                {handleRoundOff(
-                  (values.report?.balanceQuantity ?? 0) -
-                    (values?.quantity ?? 0)
-                ) ?? 0}
-              </label>
-            </div>
-            <div>
-              <label>
-                <strong>Balance CBM:</strong>{" "}
-                {handleRoundOff(
-                  (values.report?.balanceCubicMeter ?? 0) -
-                    (values?.cubicMeter ?? 0)
-                ) ?? 0}
-              </label>
-            </div>
-            <div>
-              <label>
-                <strong>Dimension:</strong> {values.report?.lengthCm} x{" "}
-                {values.report?.widthCm} x {values.report?.heightCm} cm
-              </label>
+              <InputNumberFormik<PickListDetailsRecord>
+                label="Quantity"
+                name="quantity"
+                min={0}
+                askterisk
+              />
+              <InputNumberFormik<PickListDetailsRecord>
+                label="Pallete Count"
+                name="palleteCount"
+                min={0}
+              />
+              <InputNumberFormik<PickListDetailsRecord>
+                label="Cubic Meter"
+                name="cubicMeter"
+                disabled
+                askterisk
+              />
             </div>
           </div>
-        </Card>
-        <div className="row row-cols-lg-2 mt-4">
-          <div>
-            <DatePickerFormik<PickListDetailsRecord>
-              label="Pull Out Date"
-              name="pullOutDate"
-              askterisk
-            />
-            <DatePickerFormik<PickListDetailsRecord>
-              label="Pull Out Date Recieved"
-              name="pullOutDateRecieved"
-              askterisk
-            />
-            <DatePickerFormik<PickListDetailsRecord>
-              label="Delivery Due Date"
-              name="deliveryDueDate"
-              askterisk
-            />
-            <SelectFormik<any, RefUnitOfMeasurement>
-              label="Unit of Measurement"
-              name="report.unitOfMeasurementId"
-              keyValue="id"
-              keyLabel="name"
-              option={unitOfMeasurements}
-              askterisk
-              disabled
-            />
-          </div>
-          <div>
-            <InputNumberFormik<PickListDetailsRecord>
-              label="Quantity"
-              name="quantity"
-              min={0}
-              askterisk
-            />
-            <InputNumberFormik<PickListDetailsRecord>
-              label="Pallete Count"
-              name="palleteCount"
-              min={0}
-            />
-            <InputNumberFormik<PickListDetailsRecord>
-              label="Cubic Meter"
-              name="cubicMeter"
-              disabled
-              askterisk
-            />
-          </div>
-        </div>
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

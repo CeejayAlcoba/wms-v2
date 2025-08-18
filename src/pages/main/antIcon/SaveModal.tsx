@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { MasterAntIcon } from "../../../@types/tables/MasterAntIcon";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import AntIcon from "../../../components/AntIcon/AntIcon";
 import { antIconSchema } from "../../../schemas/antIconSchema";
@@ -58,20 +58,23 @@ export default function SaveModal(props: SaveModalProps) {
       title={`${selectedData ? "Update" : "Add"} ${pageTitle}`}
       open={open}
       onOk={() => formik.submitForm()}
+      okButtonProps={{htmlType:"submit"}}
       okText={selectedData ? "Update" : "Add"}
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <div className="d-flex justify-content-center">
-          <AntIcon
-            icon={formik.values.name ?? ""}
-            size={40}
-            className="p-2 border border-gray"
-          />
-        </div>
+        <Form>
+          <div className="d-flex justify-content-center">
+            <AntIcon
+              icon={formik.values.name ?? ""}
+              size={40}
+              className="p-2 border border-gray"
+            />
+          </div>
 
-        <InputFormik<MasterAntIcon> label="Name" askterisk name="name" />
+          <InputFormik<MasterAntIcon> label="Name" askterisk name="name" />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

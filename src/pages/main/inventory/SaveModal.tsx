@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
@@ -97,92 +97,94 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <div className="row row-cols-lg-4">
-          <InputFormik<CargoDetails>
-            label="SKU Code"
-            name="skuCode"
-            askterisk
-          />
-          <InputFormik<CargoDetails>
-            label="PRO Number"
-            name="proNumber"
-            askterisk
-          />
-          <InputFormik<CargoDetails>
-            label="Description"
-            name="description"
-            askterisk
-          />
-          <InputFormik<CargoDetails>
-            label="Delivery Note"
-            name="deliveryNote"
-          />
-          <SelectFormik<CargoDetails, RefUnitOfMeasurement>
-            label="Unit of Measurement"
-            name="unitOfMeasurementId"
-            keyValue="id"
-            keyLabel="name"
-            option={unitOfMeasurements}
-            askterisk
-          />
-          <InputFormik<CargoDetails> label="Batch No" name="batchNo" />
-          <DatePickerFormik<CargoDetails>
-            label="Expiration Date"
-            name="expirationDate"
-            askterisk
-          />
-          <InputFormik<CargoDetails>
-            label="Pallete Count"
-            name="palleteCount"
-            askterisk
-          />
-          <InputFormik<CargoDetails>
-            label="Quantity"
-            name="quantity"
-            askterisk
-          />
-          <InputNumberFormik<CargoDetails>
-            label="Length"
-            name="lengthCm"
-            addonAfter="cm"
-            askterisk
-          />
-          <InputNumberFormik<CargoDetails>
-            label="Height"
-            name="heightCm"
-            addonAfter="cm"
-            askterisk
-          />
-          <InputNumberFormik<CargoDetails>
-            label="Width"
-            name="widthCm"
-            addonAfter="cm"
-            askterisk
-          />
-          <InputNumberFormik<CargoDetails>
-            label="Cubic Meter"
-            name="cubicMeter"
-            disabled
-            askterisk
-          />
-          <InputFormik<CargoDetails>
-            label="Customer Name"
-            name="customerName"
-          />
-          <SelectFormik<CargoDetails, ShelfDetails>
-            label="Bin Location"
-            name="shelfDetailsId"
-            keyValue="id"
-            keyLabel="name"
-            option={[]}
-          />
-          <InputFormik<CargoDetails>
-            prefix="₱"
-            label="Total Amount"
-            name="totalAmount"
-            askterisk
-          />
-        </div>
+        <Form>
+          <div className="row row-cols-lg-4">
+            <InputFormik<CargoDetails>
+              label="SKU Code"
+              name="skuCode"
+              askterisk
+            />
+            <InputFormik<CargoDetails>
+              label="PRO Number"
+              name="proNumber"
+              askterisk
+            />
+            <InputFormik<CargoDetails>
+              label="Description"
+              name="description"
+              askterisk
+            />
+            <InputFormik<CargoDetails>
+              label="Delivery Note"
+              name="deliveryNote"
+            />
+            <SelectFormik<CargoDetails, RefUnitOfMeasurement>
+              label="Unit of Measurement"
+              name="unitOfMeasurementId"
+              keyValue="id"
+              keyLabel="name"
+              option={unitOfMeasurements}
+              askterisk
+            />
+            <InputFormik<CargoDetails> label="Batch No" name="batchNo" />
+            <DatePickerFormik<CargoDetails>
+              label="Expiration Date"
+              name="expirationDate"
+              askterisk
+            />
+            <InputFormik<CargoDetails>
+              label="Pallete Count"
+              name="palleteCount"
+              askterisk
+            />
+            <InputFormik<CargoDetails>
+              label="Quantity"
+              name="quantity"
+              askterisk
+            />
+            <InputNumberFormik<CargoDetails>
+              label="Length"
+              name="lengthCm"
+              addonAfter="cm"
+              askterisk
+            />
+            <InputNumberFormik<CargoDetails>
+              label="Height"
+              name="heightCm"
+              addonAfter="cm"
+              askterisk
+            />
+            <InputNumberFormik<CargoDetails>
+              label="Width"
+              name="widthCm"
+              addonAfter="cm"
+              askterisk
+            />
+            <InputNumberFormik<CargoDetails>
+              label="Cubic Meter"
+              name="cubicMeter"
+              disabled
+              askterisk
+            />
+            <InputFormik<CargoDetails>
+              label="Customer Name"
+              name="customerName"
+            />
+            <SelectFormik<CargoDetails, ShelfDetails>
+              label="Bin Location"
+              name="shelfDetailsId"
+              keyValue="id"
+              keyLabel="name"
+              option={[]}
+            />
+            <InputFormik<CargoDetails>
+              prefix="₱"
+              label="Total Amount"
+              name="totalAmount"
+              askterisk
+            />
+          </div>
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

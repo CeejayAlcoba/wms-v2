@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { CurrentStepContext } from "./__contexts__/useCurrentStep";
 import { CHECK_IN_STEPS } from "./__constants__/CHECK_IN_STEPS";
 import WizardButton from "./WizardButton";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { checkInByICRSchema } from "../../../schemas/checkInByICRSchema";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
@@ -30,7 +30,7 @@ export default function IndexPage() {
       });
       formik.resetForm();
       setCurrentStep(0);
-      await indexDbService.deleteItem("checkInByICR",1)
+      await indexDbService.deleteItem("checkInByICR", 1);
     } catch {
       SweetAlert({
         title: "Error Occurs",
@@ -78,15 +78,17 @@ export default function IndexPage() {
 
   return (
     <FormikProvider value={formik}>
-      <CurrentStepContext value={{ currentStep, handlePrev, handleNext }}>
-        <div className="row gap-4">
-          <Steps current={currentStep} items={CHECK_IN_STEPS} />
-          <Card title={handleStep().title}>{handleStep().componentPage}</Card>
-          <div className="d-flex justify-content-end">
-            <WizardButton />
+      <Form>
+        <CurrentStepContext value={{ currentStep, handlePrev, handleNext }}>
+          <div className="row gap-4">
+            <Steps current={currentStep} items={CHECK_IN_STEPS} />
+            <Card title={handleStep().title}>{handleStep().componentPage}</Card>
+            <div className="d-flex justify-content-end">
+              <WizardButton />
+            </div>
           </div>
-        </div>
-      </CurrentStepContext>
+        </CurrentStepContext>
+      </Form>
     </FormikProvider>
   );
 }

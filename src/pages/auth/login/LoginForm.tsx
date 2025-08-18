@@ -1,17 +1,24 @@
 import React from "react";
-
 import logo from "../../../assets/afreight-logo.png";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import type { LoginDTO } from "../../../@types/DTOs/LoginDTO";
-import { Button, Card } from "antd";
-import { ArrowRightOutlined } from "@ant-design/icons";
+import { Alert, Button, Card, Divider, Typography, Space } from "antd";
+import {
+  ArrowRightOutlined,
+  UserOutlined,
+  LockOutlined,
+} from "@ant-design/icons";
 import InputFormik from "../../../components/Formik/InputFormik";
+import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
 import { loginSchema } from "../../../schemas/loginSchema";
 import { TOKEN_KEY, USER_KEY } from "../../../constants/LOCAL_STORAGE_KEYS";
 import useUser from "../../../contexts/useUser";
 import { authService } from "../../../services/authService";
 import { useNavigate } from "react-router-dom";
-import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
+import { useAuthFormTypeContext } from "../../../contexts/useAuthFormTypeContext";
+import HeaderForm from "../HeaderForm";
+
+const { Title, Text } = Typography;
 
 const emptyForm: LoginDTO = {
   username: null,
@@ -21,6 +28,8 @@ const emptyForm: LoginDTO = {
 export const LoginForm: React.FC = () => {
   const { setUser } = useUser();
   const navigate = useNavigate();
+  const { setType } = useAuthFormTypeContext();
+
   const handleLogIn = async (
     values: LoginDTO,
     formikHelpers: FormikHelpers<LoginDTO>
@@ -35,6 +44,7 @@ export const LoginForm: React.FC = () => {
       formikHelpers.setStatus(error?.response?.data || "Login failed.");
     }
   };
+
   const formik = useFormik({
     validationSchema: loginSchema,
     initialValues: emptyForm,
@@ -42,44 +52,66 @@ export const LoginForm: React.FC = () => {
   });
 
   return (
-    <div className="d-flex justify-content-center align-items-center w-100">
-      <Card className="p-2" style={{ height: "70%", width: "50%" }}>
-        <div className="d-flex justify-content-center mb-2">
-          <img src={logo} alt="truck-delivery" style={{ width: "75%" }} />
+    <div
+      className="d-flex justify-content-center align-items-center w-100"
+      style={{ minHeight: "100vh" }}
+    >
+      <Card
+        style={{
+          width: 380,
+          borderRadius: 12,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+        }}
+      >
+        <div className="text-center mb-4">
+          <img src={logo} alt="Logo" style={{ height: 70, marginBottom: 12 }} />
+          <Title level={3}>Welcome Back</Title>
+          <Text type="secondary">Please login to continue</Text>
         </div>
+
         <FormikProvider value={formik}>
           <Form>
-            <InputFormik<LoginDTO>
-              askterisk
-              name="username"
-              label="Username"
-              onChange={() => formik.setStatus(null)}
-            />
-            <InputPasswordFormik<LoginDTO>
-              askterisk
-              label="Password"
-              type="password"
-              name="password"
-              onChange={() => formik.setStatus(null)}
-            />
-            {formik.status && (
-              <div className="text-danger mb-2 text-center">
-                {formik.status}
-              </div>
-            )}
-            <Button
-              htmlType="submit"
-              type="primary"
-              onClick={formik.submitForm}
-              loading={formik.isSubmitting}
-              className="w-100"
-              size="large"
-              icon={<ArrowRightOutlined />}
-            >
-              Login
-            </Button>
+            <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+              <InputFormik<LoginDTO>
+                askterisk
+                name="username"
+                label="Username"
+                prefix={<UserOutlined />}
+                onChange={() => formik.setStatus(null)}
+              />
+              <InputPasswordFormik<LoginDTO>
+                askterisk
+                name="password"
+                label="Password"
+                prefix={<LockOutlined />}
+                onChange={() => formik.setStatus(null)}
+              />
+              {formik.status && (
+                <Alert type="error" message={formik.status} showIcon />
+              )}
+
+              <Button
+                htmlType="submit"
+                type="primary"
+                loading={formik.isSubmitting}
+                className="w-100"
+                size="large"
+                icon={<ArrowRightOutlined />}
+              >
+                Login
+              </Button>
+            </Space>
           </Form>
         </FormikProvider>
+
+        <Divider plain>or</Divider>
+
+        <div className="text-center">
+          <Text type="secondary">Don’t have an account?</Text>
+          <Button type="link" onClick={() => setType("signup")}>
+            Sign Up
+          </Button>
+        </div>
       </Card>
     </div>
   );

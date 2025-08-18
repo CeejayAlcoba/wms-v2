@@ -1,4 +1,4 @@
-import truckDelivery from "../../../assets/truck-delivery.gif";
+import truckDelivery from "../../assets/truck-delivery.gif";
 export default function SideDesign() {
   return (
     <>

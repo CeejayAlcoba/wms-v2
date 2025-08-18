@@ -70,13 +70,21 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     key: "PickList",
     element: lazy(() => import("../../pages/main/picklist/IndexPage")),
   },
-   {
+  {
     key: "GoodIssue",
     element: lazy(() => import("../../pages/main/goodIssue/IndexPage")),
   },
-   {
+  {
     key: "Inventory",
     element: lazy(() => import("../../pages/main/inventory/IndexPage")),
+  },
+  {
+    key: "Users",
+    element: lazy(() => import("../../pages/main/users/IndexPage")),
+  },
+  {
+    key: "Role",
+    element: lazy(() => import("../../pages/main/role/IndexPage")),
   },
   {
     key: "Test",

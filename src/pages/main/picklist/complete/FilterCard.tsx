@@ -1,5 +1,5 @@
 import { Button, Card } from "antd";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 
@@ -57,16 +57,18 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <div className="row row-cols-lg-1">
-          <SelectFormik<PickListDetails, any>
-            label="Pick List No"
-            name="id"
-            keyValue="id"
-            keyLabel="name"
-            option={pickListDetails}
-            onChange={handleChange}
-          />
-        </div>
+        <Form>
+          <div className="row row-cols-lg-1">
+            <SelectFormik<PickListDetails, any>
+              label="Pick List No"
+              name="id"
+              keyValue="id"
+              keyLabel="name"
+              option={pickListDetails}
+              onChange={handleChange}
+            />
+          </div>
+        </Form>
       </FormikProvider>
     </Card>
   );

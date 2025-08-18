@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { RefTruckDetails } from "../../../@types/tables/RefTruckDetails";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
@@ -73,15 +73,20 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<RefTruckDetails> label="Plate Number" name="plateNumber" />
-        <InputFormik<RefTruckDetails> label="Driver Name" name="driverName" />
-        <SelectFormik<RefTruckDetails, RefTruckType>
-          label="Truck type"
-          name="truckTypeId"
-          keyValue="id"
-          keyLabel="name"
-          option={truckTypes}
-        />
+        <Form>
+          <InputFormik<RefTruckDetails>
+            label="Plate Number"
+            name="plateNumber"
+          />
+          <InputFormik<RefTruckDetails> label="Driver Name" name="driverName" />
+          <SelectFormik<RefTruckDetails, RefTruckType>
+            label="Truck type"
+            name="truckTypeId"
+            keyValue="id"
+            keyLabel="name"
+            option={truckTypes}
+          />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { RefCargoType } from "../../../@types/tables/RefCargoType";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
@@ -58,12 +58,15 @@ export default function SaveModal(props: SaveModalProps) {
       title={`${selectedData ? "Update" : "Add"} ${pageTitle}`}
       open={open}
       onOk={() => formik.submitForm()}
+      okButtonProps={{ htmlType: "submit" }}
       okText={selectedData ? "Update" : "Add"}
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<RefCargoType> label="Name" askterisk name="name" />
+        <Form>
+          <InputFormik<RefCargoType> label="Name" askterisk name="name" />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

@@ -82,6 +82,7 @@ export default function WizardButton() {
       {currentStep === CHECK_IN_STEPS.length - 1 && (
         <Button
           type="primary"
+          htmlType="submit"
           icon={<CheckOutlined />}
           onClick={() => handleClickButton("Submit")}
           loading={isSubmitting}

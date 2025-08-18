@@ -1,5 +1,5 @@
 import { Button, Card } from "antd";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import { SearchOutlined } from "@ant-design/icons";
 import SelectFormik from "../../../components/Formik/SelectFormik";
@@ -54,60 +54,63 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <div className="row row-cols-lg-2">
-          <DatePickerFormik<BookingDetails>
-            label="Actual Check In Date"
-            name="actualCheckInDate"
-          />
-          <PrincipalProductSelect<BookingDetails>
-            principalName="Principal"
-            productCategoryName="productCategoryId"
-          />
-          <SelectFormik<BookingDetails, RefCargoType>
-            label="Cargo Type"
-            name="cargoTypeId"
-            keyValue="id"
-            keyLabel="name"
-            option={cargoTypes}
-          />
-          <InputFormik<BookingDetails> label="DR No" name="drNumber" />
-          <InputFormik<BookingDetails>
-            label="ICR No"
-            name="icrReferenceNumber"
-          />
-          <SelectFormik<BookingDetails, RefPalleteGroup>
-            label="Pallete Group"
-            name="palleteGroupId"
-            keyValue="id"
-            keyLabel="name"
-            option={[]}
-          />
-          <SelectFormik<BookingDetails, RefTruckDetails>
-            label="Truck Plate Number"
-            name="truckDetailsId"
-            keyValue="id"
-            keyLabel="plateNumber"
-            option={truckDetails}
-          />
-          {activeKey == "Completed" && (
-            <SelectFormik<BookingDetails, GoodsReceipt>
-              label="Good Receipt"
-              name="goodsReceiptId"
+        <Form>
+          <div className="row row-cols-lg-2">
+            <DatePickerFormik<BookingDetails>
+              label="Actual Check In Date"
+              name="actualCheckInDate"
+            />
+            <PrincipalProductSelect<BookingDetails>
+              principalName="Principal"
+              productCategoryName="productCategoryId"
+            />
+            <SelectFormik<BookingDetails, RefCargoType>
+              label="Cargo Type"
+              name="cargoTypeId"
               keyValue="id"
               keyLabel="name"
-              option={goodsReceipts}
+              option={cargoTypes}
             />
-          )}
-        </div>
-        <div className="d-flex justify-content-end">
-          <Button
-            type="primary"
-            onClick={() => formik.submitForm()}
-            icon={<SearchOutlined />}
-          >
-            Search
-          </Button>
-        </div>
+            <InputFormik<BookingDetails> label="DR No" name="drNumber" />
+            <InputFormik<BookingDetails>
+              label="ICR No"
+              name="icrReferenceNumber"
+            />
+            <SelectFormik<BookingDetails, RefPalleteGroup>
+              label="Pallete Group"
+              name="palleteGroupId"
+              keyValue="id"
+              keyLabel="name"
+              option={[]}
+            />
+            <SelectFormik<BookingDetails, RefTruckDetails>
+              label="Truck Plate Number"
+              name="truckDetailsId"
+              keyValue="id"
+              keyLabel="plateNumber"
+              option={truckDetails}
+            />
+            {activeKey == "Completed" && (
+              <SelectFormik<BookingDetails, GoodsReceipt>
+                label="Good Receipt"
+                name="goodsReceiptId"
+                keyValue="id"
+                keyLabel="name"
+                option={goodsReceipts}
+              />
+            )}
+          </div>
+          <div className="d-flex justify-content-end">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => formik.submitForm()}
+              icon={<SearchOutlined />}
+            >
+              Search
+            </Button>
+          </div>
+        </Form>
       </FormikProvider>
     </Card>
   );

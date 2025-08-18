@@ -7,13 +7,14 @@ import { DrawerProvider } from "./contexts/Provider/DrawerProvider";
 import { AntConfigProvider } from "./contexts/Provider/AntConfigProvider";
 import { initDB } from "./services/indexDbService";
 import { useEffect } from "react";
+import AuthFromTypeProvider from "./contexts/Provider/AuthFromTypeProvider";
 
 const queryClient = new QueryClient();
 
 function App() {
   useEffect(() => {
-   initDB();
-}, []);
+    initDB();
+  }, []);
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -22,7 +23,9 @@ function App() {
             <SidebarProvider>
               <DocumentProvider>
                 <DrawerProvider>
-                  <MainRoute />
+                  <AuthFromTypeProvider>
+                    <MainRoute />
+                  </AuthFromTypeProvider>
                 </DrawerProvider>
               </DocumentProvider>
             </SidebarProvider>

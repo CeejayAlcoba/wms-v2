@@ -1,5 +1,5 @@
 import { Button, Card } from "antd";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import type { BillingStatement } from "../../../@types/tables/BillingStatement";
 import { PercentageOutlined, SearchOutlined } from "@ant-design/icons";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
@@ -34,30 +34,33 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <div className="row row-cols-lg-2">
-          <SelectFormik<BillingStatement, RefPrincipal>
-            label="Principal"
-            name="principalId"
-            keyValue="id"
-            keyLabel="name"
-            option={principals}
-          />
-          <InputNumberFormik<BillingStatement>
-            addonAfter={<PercentageOutlined />}
-            label="VAT"
-            name="valueAddedTax"
-          />
-        </div>
+        <Form>
+          <div className="row row-cols-lg-2">
+            <SelectFormik<BillingStatement, RefPrincipal>
+              label="Principal"
+              name="principalId"
+              keyValue="id"
+              keyLabel="name"
+              option={principals}
+            />
+            <InputNumberFormik<BillingStatement>
+              addonAfter={<PercentageOutlined />}
+              label="VAT"
+              name="valueAddedTax"
+            />
+          </div>
 
-        <div className="d-flex justify-content-end">
-          <Button
-            type="primary"
-            onClick={() => formik.submitForm()}
-            icon={<SearchOutlined />}
-          >
-            Search
-          </Button>
-        </div>
+          <div className="d-flex justify-content-end">
+            <Button
+              htmlType="submit"
+              type="primary"
+              onClick={() => formik.submitForm()}
+              icon={<SearchOutlined />}
+            >
+              Search
+            </Button>
+          </div>
+        </Form>
       </FormikProvider>
     </Card>
   );

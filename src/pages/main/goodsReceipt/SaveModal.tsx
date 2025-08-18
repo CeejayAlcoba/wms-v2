@@ -1,4 +1,4 @@
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import type { GoodsReceipt } from "../../../@types/tables/GoodsReceipt";
 import { goodsReceiptService } from "../../../services/goodsReceiptService";
@@ -96,7 +96,13 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <InputFormik<GoodsReceipt> label="Reference Number" askterisk name="name" />
+        <Form>
+          <InputFormik<GoodsReceipt>
+            label="Reference Number"
+            askterisk
+            name="name"
+          />
+        </Form>
       </FormikProvider>
     </ModalComponent>
   );

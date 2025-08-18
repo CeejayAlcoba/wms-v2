@@ -1,5 +1,5 @@
 import { Button, Card } from "antd";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import InputFormik from "../../../components/Formik/InputFormik";
 import type { MasterSidebarMenu } from "../../../@types/tables/MasterSidebarMenu";
@@ -45,32 +45,35 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <div className="row row-cols-lg-2">
-          <InputFormik<MasterSidebarMenu>
-            label="Name"
-            askterisk
-            name="name"
-            className="col-sm"
-          />
-          <SelectFormik<MasterSidebarMenu, any>
-            label="Icon"
-            askterisk
-            name="antIconId"
-            keyValue="value"
-            keyLabel="label"
-            className="col-sm"
-            option={antIcons}
-          />
-        </div>
-        <div className="d-flex justify-content-end">
-          <Button
-            type="primary"
-            onClick={() => formik.submitForm()}
-            icon={<SearchOutlined />}
-          >
-            Search
-          </Button>
-        </div>
+        <Form>
+          <div className="row row-cols-lg-2">
+            <InputFormik<MasterSidebarMenu>
+              label="Name"
+              askterisk
+              name="name"
+              className="col-sm"
+            />
+            <SelectFormik<MasterSidebarMenu, any>
+              label="Icon"
+              askterisk
+              name="antIconId"
+              keyValue="value"
+              keyLabel="label"
+              className="col-sm"
+              option={antIcons}
+            />
+          </div>
+          <div className="d-flex justify-content-end">
+            <Button
+              htmlType="submit"
+              type="primary"
+              onClick={() => formik.submitForm()}
+              icon={<SearchOutlined />}
+            >
+              Search
+            </Button>
+          </div>
+        </Form>
       </FormikProvider>
     </Card>
   );
