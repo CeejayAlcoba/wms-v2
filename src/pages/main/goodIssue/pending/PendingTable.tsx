@@ -53,7 +53,7 @@ export default function PendingTable() {
     refetch();
   };
 
-  const renderAction = (value: any, record: PickListDetails) => (
+  const renderAction = (_: any, record: PickListDetails) => (
     <div className="d-flex gap-1">
       <Tooltip title="Edit">
         <Button

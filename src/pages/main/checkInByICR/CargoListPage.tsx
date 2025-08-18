@@ -171,7 +171,7 @@ function CargoForm(props: { arrayName: string; index: number }) {
         askterisk
         disabled
       />
-      <InputNumberFormik<any>
+      <InputFormik<any>
         label="Customer Name"
         name={`${arrayName}.customerName`}
       />

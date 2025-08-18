@@ -4,7 +4,7 @@ import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { useQuery } from "@tanstack/react-query";
-import type { ReportFilterDTO } from "../../../../@types/DTOs/ReportFilterDTO";
+import type { ReportPickListFilterDTO } from "../../../../@types/DTOs/ReportPickListFilterDTO";
 import { EMPTY_FILTER } from "../__constants__/EMPTY_FILTER";
 import { goodsReceiptService } from "../../../../services/goodsReceiptService";
 import DatePickerFormik from "../../../../components/Formik/DatePicker";
@@ -13,11 +13,13 @@ import PrincipalProductSelect from "../../../../components/Select/PrincipalCateg
 import SelectFormik from "../../../../components/Formik/SelectFormik";
 import type { GoodsReceipt } from "../../../../@types/tables/GoodsReceipt";
 import type { ShelfDetails } from "../../../../@types/tables/ShelfDetails";
+import DateRangePickerFormik from "../../../../components/Formik/DateRanegPicker";
+import SwitchFormik from "../../../../components/Formik/SwitchFormik";
 
 export type FilterCardProps = {
   onSearch: (
-    values: ReportFilterDTO,
-    formikHelpers: FormikHelpers<ReportFilterDTO>
+    values: ReportPickListFilterDTO,
+    formikHelpers: FormikHelpers<ReportPickListFilterDTO>
   ) => void | Promise<any>;
 };
 
@@ -40,51 +42,65 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <Form>
-          <div className="row row-cols-lg-4">
-            <DatePickerFormik<ReportFilterDTO>
-              label="Actual Check-in Date"
-              name="actualCheckInDate"
-            />
-
-            <InputFormik<ReportFilterDTO>
-              label="ICR Reference Number"
-              name="icrReferenceNumber"
-              askterisk
-            />
-            <PrincipalProductSelect
-              principalName="principalId"
-              productCategoryName="productCategoryId"
-            />
-            <SelectFormik<ReportFilterDTO, GoodsReceipt>
-              label="Goods Receipt"
-              name="goodsReceiptId"
-              keyValue="id"
-              keyLabel="name"
-              option={goodsReceipts}
-            />
-            <InputFormik<ReportFilterDTO> label="SKU Code" name="skuCode" />
-            <InputFormik<ReportFilterDTO> label="PRO Number" name="proNumber" />
-            <InputFormik<ReportFilterDTO> label="Batch No" name="batchNo" />
-            <SelectFormik<ReportFilterDTO, ShelfDetails>
-              label="Bin Location"
-              name="shelfDetailsId"
-              keyValue="id"
-              keyLabel="name"
-              option={[]}
-            />
-          </div>
-          <div className="d-flex justify-content-end">
-            <Button
-              htmlType="submit"
-              type="primary"
-              onClick={() => formik.submitForm()}
-              icon={<SearchOutlined />}
-            >
-              Search
-            </Button>
-          </div>
-        </Form>
+        <div className="row row-cols-lg-3">
+          <DateRangePickerFormik<ReportPickListFilterDTO>
+            dateFromProps={{
+              label: "Actual Check-in Date",
+              name: "actualCheckInDateFrom",
+            }}
+            dateToProps={{
+              name: "actualCheckInDateTo",
+            }}
+          />
+          <InputFormik<ReportPickListFilterDTO>
+            label="ICR Reference Number"
+            name="icrReferenceNumber"
+            askterisk
+          />
+          <PrincipalProductSelect
+            principalName="principalId"
+            productCategoryName="productCategoryId"
+          />
+          <SelectFormik<ReportPickListFilterDTO, GoodsReceipt>
+            label="Goods Receipt"
+            name="goodsReceiptId"
+            keyValue="id"
+            keyLabel="name"
+            option={goodsReceipts}
+          />
+          <InputFormik<ReportPickListFilterDTO>
+            label="SKU Code"
+            name="skuCode"
+          />
+          <InputFormik<ReportPickListFilterDTO>
+            label="PRO Number"
+            name="proNumber"
+          />
+          <InputFormik<ReportPickListFilterDTO>
+            label="Batch No"
+            name="batchNo"
+          />
+          <SelectFormik<ReportPickListFilterDTO, ShelfDetails>
+            label="Bin Location"
+            name="shelfDetailsId"
+            keyValue="id"
+            keyLabel="name"
+            option={[]}
+          />
+          <SwitchFormik<ReportPickListFilterDTO>
+            label="Show Zero Balances"
+            name="allowZeroBalance"
+          />
+        </div>
+        <div className="d-flex justify-content-end">
+          <Button
+            type="primary"
+            onClick={() => formik.submitForm()}
+            icon={<SearchOutlined />}
+          >
+            Search
+          </Button>
+        </div>
       </FormikProvider>
     </Card>
   );

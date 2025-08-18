@@ -7,36 +7,42 @@ import usePage from "../../../hooks/usePage";
 import FilterCard from "./FilterCard";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
-import type { ReportFilterDTO } from "../../../@types/DTOs/ReportFilterDTO";
+import type { ReportInventoryFilterDTO } from "../../../@types/DTOs/ReportInventoryFilterDTO";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import SaveModal from "./SaveModal";
 import { reportService } from "../../../services/reportService";
 import dayjs from "dayjs";
 import { handleMoney } from "../../../utils/handleMoney";
 import { cargoDetailsService } from "../../../services/cargoDetailsService";
-import type { ReportDTO } from "../../../@types/DTOs/ReportDTO";
+import type { ReportInventoryDTO } from "../../../@types/DTOs/ReportInventoryDTO";
+import TableTotalFooter from "../../../components/Table/TableTotalFooter";
+import { TABLE_TOTAL_FOOTER } from "../../../constants/TABLE_TOTAL_FOOTER";
+import CargoHistoryTable from "./CargoHistoryTable";
+import type { ReportCargoHistoryDTO } from "../../../@types/DTOs/ReportCargoHistoryDTO";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<CargoDetails | null>(null);
-  const [search, setSearch] = useState<ReportFilterDTO>(EMPTY_FORM);
+  const [search, setSearch] = useState<ReportInventoryFilterDTO>(EMPTY_FORM);
+  const [cargoHistories, setCargoHistories] = useState<ReportCargoHistoryDTO[]>(
+    []
+  );
 
   const { title: pageTitle } = usePage();
 
   const {
-    data: reports,
+    data: inventories,
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["reports", search],
-    queryFn: async ({ queryKey }) => {
-      const [, searchParam] = queryKey;
-      return await reportService.GetAll(searchParam as ReportDTO);
+    queryKey: ["inventories", search],
+    queryFn: async () => {
+      return await reportService.InventoryGetAll(search);
     },
     initialData: [],
   });
 
-  const handleClickEdit = (record: ReportDTO) => {
+  const handleClickEdit = (record: ReportInventoryDTO) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
@@ -46,7 +52,7 @@ export default function IndexPage() {
     setSaveModalOpen(false);
   };
 
-  const handleDelete = async (record: ReportDTO) => {
+  const handleDelete = async (record: ReportInventoryDTO) => {
     if (!record.id) throw new Error("Id is null");
     await cargoDetailsService.Delete(record.id);
     await refetch();
@@ -61,12 +67,26 @@ export default function IndexPage() {
     refetch();
   };
 
-  const handleSearch = async (value: ReportFilterDTO) => {
+  const handleSearch = async (value: ReportInventoryFilterDTO) => {
     await setSearch(value);
     await refetch();
   };
+  const handleExpand = async (
+    expanded: boolean,
+    record: ReportInventoryDTO
+  ) => {
+    if (expanded) {
+      const res = await reportService.CargoHistoryGetAll({
+        id: record.id,
+      });
+      setCargoHistories((prev) => [...prev, ...res]);
+    } else {
+      const filteredCargo = cargoHistories.filter((c) => c.id !== record.id);
+      setCargoHistories(filteredCargo);
+    }
+  };
 
-  const columns: TableProps<ReportDTO>["columns"] = [
+  const columns: TableProps<ReportInventoryDTO>["columns"] = [
     {
       title: "Actual Check-in Date",
       dataIndex: "actualCheckInDate",
@@ -119,6 +139,11 @@ export default function IndexPage() {
       key: "balanceQuantity",
     },
     {
+      title: "Balance CBM",
+      dataIndex: "balanceCubicMeter",
+      key: "balanceCubicMeter",
+    },
+    {
       title: "Dimension",
       key: "dimension",
       render: (_, record) => {
@@ -134,11 +159,7 @@ export default function IndexPage() {
       dataIndex: "unitOfMeasurement",
       key: "unitOfMeasurement",
     },
-    {
-      title: "Balance CBM",
-      dataIndex: "balanceCubicMeter",
-      key: "balanceCubicMeter",
-    },
+
     {
       title: "Total Amount",
       dataIndex: "totalAmount",
@@ -150,12 +171,6 @@ export default function IndexPage() {
       dataIndex: "goodsReceipt",
       key: "goodsReceipt",
     },
-    {
-      title: "OCR",
-      dataIndex: "ocrNumber",
-      key: "ocrNumber",
-    },
-
     {
       title: "Action",
       key: "action",
@@ -199,11 +214,27 @@ export default function IndexPage() {
         selectedData={selectedData}
       />
       <FilterCard onSearch={handleSearch} />
-      <TableComponent<ReportDTO>
+      <TableComponent<ReportInventoryDTO>
+        rowKey="id"
         headerTitle={pageTitle}
         columns={columns}
-        dataSource={reports}
+        dataSource={inventories}
         loading={isFetching}
+        expandable={{
+          expandedRowRender: (record) => (
+            <CargoHistoryTable
+              cargoHistories={cargoHistories}
+              record={record}
+            />
+          ),
+          onExpand: handleExpand,
+        }}
+        footer={() => (
+          <TableTotalFooter<ReportInventoryDTO>
+            data={inventories}
+            values={TABLE_TOTAL_FOOTER}
+          />
+        )}
       />
     </>
   );

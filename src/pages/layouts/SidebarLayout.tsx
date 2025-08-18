@@ -23,10 +23,10 @@ export default function SidebarLayout() {
           key: i?.path || "",
           icon: <AntIcon icon={i?.antIcon || ""} />,
           onClick: () => {
-            if(windowWidth <= 768){
-                setCollapsed(false);
+            if (windowWidth <= 768) {
+              setCollapsed(false);
             }
-              
+
             navigate(i.path ?? "");
           },
         };
@@ -62,14 +62,18 @@ export default function SidebarLayout() {
       >
         <Menu
           mode="inline"
-          theme="dark"
           defaultSelectedKeys={[location.pathname]}
           items={sidebarMenus}
         />
       </Drawer>
     );
   return (
-    <Sider trigger={null} collapsible collapsed={collapsed} className="overflow-auto">
+    <Sider
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      className="overflow-auto"
+    >
       <div className="demo-logo-vertical" />
       {loading ? (
         <div

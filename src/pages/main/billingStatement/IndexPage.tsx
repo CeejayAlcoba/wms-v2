@@ -92,7 +92,7 @@ export default function IndexPage() {
             data={record.handlingInBillType == "CBM"}
             falseProps={{ style: { color: "green" } }}
           >
-            {value} / {record.handlingInBillType}
+            ₱ {value} / {record.handlingInBillType}
           </ToggleText>
         </span>
       ),
@@ -107,7 +107,7 @@ export default function IndexPage() {
             data={record.handlingOutBillType == "CBM"}
             falseProps={{ style: { color: "green" } }}
           >
-            {value} /{record.handlingOutBillType}
+            ₱ {value} /{record.handlingOutBillType}
           </ToggleText>
         </span>
       ),
@@ -122,7 +122,7 @@ export default function IndexPage() {
             data={record.storageBillType == "CBM"}
             falseProps={{ style: { color: "green" } }}
           >
-            {value} / {record.storageBillType}
+            ₱ {value} / {record.storageBillType}
           </ToggleText>
         </span>
       ),

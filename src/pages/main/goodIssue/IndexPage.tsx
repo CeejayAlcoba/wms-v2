@@ -1,5 +1,5 @@
-import {  Tabs } from "antd";
-import {  useState } from "react";
+import { Tabs } from "antd";
+import { useState } from "react";
 import { TAB_ITEMS } from "./__constants__/TAB_ITEMS";
 import PendingTable from "./pending/PendingTable";
 import CompleteTable from "./complete/CompleTable";
@@ -20,16 +20,8 @@ export default function IndexPage() {
         items={TAB_ITEMS}
         onChange={handleTab}
         activeKey={activeKey}
-        className="position-sticky"
       />
-      <div
-        style={{
-          height: "70vh",
-          overflow: "auto",
-        }}
-      >
-        {activeKey == "Pending" ? <PendingTable /> : <CompleteTable />}
-      </div>
+      {activeKey == "Pending" ? <PendingTable /> : <CompleteTable />}
     </>
   );
 }

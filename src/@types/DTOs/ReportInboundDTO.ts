@@ -1,14 +1,14 @@
 import type { CargoDetails } from "../tables/CargoDetails";
 
-export type ReportDTO = {
-  actualCheckInDate?: Date | null;
+export type ReportInboundDTO = {
+  actualCheckInDate?: string | null;
   icrReferenceNumber?: string | null;
   principal?: string | null;
   productCategory?: string | null;
   unitOfMeasurement?: string | null;
+  binLocation?: string | null;
   goodsReceipt?: string | null;
-  ocrNumber?: string | null;
-  balanceCubicMeter?: number | null;
-  balanceQuantity?: number | null;
-  balancePalleteCount?: number | null;
+  totalCubicMeter?: number | null;
+  totalQuantity?: number | null;
+  totalPalleteCount?: number | null;
 } & CargoDetails;

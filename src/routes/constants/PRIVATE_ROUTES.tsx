@@ -78,6 +78,10 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     key: "Inventory",
     element: lazy(() => import("../../pages/main/inventory/IndexPage")),
   },
+   {
+    key: "Outbound",
+    element: lazy(() => import("../../pages/main/outbound/IndexPage")),
+  },
   {
     key: "Users",
     element: lazy(() => import("../../pages/main/users/IndexPage")),

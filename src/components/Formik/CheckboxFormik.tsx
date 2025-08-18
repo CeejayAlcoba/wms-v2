@@ -2,7 +2,7 @@ import { Field, type FieldProps } from "formik";
 import { Form, Checkbox } from "antd";
 import type { CheckboxProps } from "antd";
 
-type InputFormikProps<T = unknown> = {
+type CheckboxFormikProps<T = unknown> = {
   name: keyof T & string;
   label?: string;
   askterisk?: boolean;
@@ -14,7 +14,7 @@ export default function CheckboxFormik<T = unknown>({
   type = "text",
   askterisk = false,
   ...rest
-}: InputFormikProps<T>) {
+}: CheckboxFormikProps<T>) {
   return (
     <Field name={name}>
       {({ field, meta, form }: FieldProps) => (

@@ -26,28 +26,34 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
   ) => {
     try {
       formik.setSubmitting(true);
-      const newValue: GoodIssueDetails={
-        pickListDetailsId : selectedData?.pickListDetailsId,
-        ...values
-      }
-      console.log(newValue)
+      const newValue: GoodIssueDetails = {
+        pickListDetailsId: selectedData?.pickListDetailsId,
+        ...values,
+      };
+      let goodIssue: Partial<GoodIssueDetails> = {};
       if (newValue?.id) {
-        await goodIssueDetailsService.Update(newValue.id ?? 0, newValue);
+        goodIssue = await goodIssueDetailsService.Update(
+          newValue.id ?? 0,
+          newValue
+        );
       } else {
-        await goodIssueDetailsService.Add(newValue);
+        goodIssue = await goodIssueDetailsService.Add(newValue);
       }
 
       SweetAlert({
-        title: `Successfully ${selectedData ? "updated" : "added"}`,
+        title: `GI-${goodIssue?.id}`,
+        text: `Successfully ${selectedData?.id ? "updated" : "added"}`,
+        timer: undefined,
+        showConfirmButton: true,
       });
       formik.resetForm();
       onAfterSave();
-    } catch(e:any) {
-      let ex:AxiosError = e;
-       SweetAlert({
-        icon:"error",
-        timer:undefined,
-        showConfirmButton:true,
+    } catch (e: any) {
+      let ex: AxiosError = e;
+      SweetAlert({
+        icon: "error",
+        timer: undefined,
+        showConfirmButton: true,
         title: ex.response?.data ?? "Error occurs.",
       });
     } finally {
@@ -69,7 +75,9 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
   return (
     <ModalComponent
       width={1000}
-      title={`${selectedData?.id ? `Update` : "Add"} ${pageTitle}#${selectedData?.id}  (PL-${selectedData?.pickListDetailsId})`}
+      title={`${selectedData?.id ? `Update` : "Add"} ${pageTitle}${
+        selectedData?.id ? `#${selectedData?.id}` : ""
+      }  (PL-${selectedData?.pickListDetailsId})`}
       open={open}
       onOk={() => formik.submitForm()}
       okText={selectedData?.id ? "Update" : "Add"}

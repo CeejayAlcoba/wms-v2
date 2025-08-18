@@ -7,19 +7,21 @@ import usePage from "../../../hooks/usePage";
 import FilterCard from "./FilterCard";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
-import type { ReportFilterDTO } from "../../../@types/DTOs/ReportFilterDTO";
+import type { ReportInboundFilterDTO } from "../../../@types/DTOs/ReportInboundFilterDTO";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import SaveModal from "./SaveModal";
-import {  reportService } from "../../../services/reportService";
+import { reportService } from "../../../services/reportService";
 import dayjs from "dayjs";
 import { handleMoney } from "../../../utils/handleMoney";
 import { cargoDetailsService } from "../../../services/cargoDetailsService";
-import type { ReportDTO } from "../../../@types/DTOs/ReportDTO";
+import type { ReportInboundDTO } from "../../../@types/DTOs/ReportInboundDTO";
+import TableTotalFooter from "../../../components/Table/TableTotalFooter";
+import { TABLE_TOTAL_FOOTER } from "../../../constants/TABLE_TOTAL_FOOTER";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<CargoDetails | null>(null);
-  const [search, setSearch] = useState<ReportFilterDTO>(EMPTY_FORM);
+  const [search, setSearch] = useState<ReportInboundFilterDTO>(EMPTY_FORM);
 
   const { title: pageTitle } = usePage();
 
@@ -29,14 +31,13 @@ export default function IndexPage() {
     isFetching,
   } = useQuery({
     queryKey: ["reports", search],
-    queryFn: async ({ queryKey }) => {
-      const [, searchParam] = queryKey;
-      return await reportService.GetAll(searchParam as ReportDTO);
+    queryFn: async () => {
+      return await reportService.InboundGetAll(search);
     },
     initialData: [],
   });
 
-  const handleClickEdit = (record: ReportDTO) => {
+  const handleClickEdit = (record: ReportInboundDTO) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
@@ -46,7 +47,7 @@ export default function IndexPage() {
     setSaveModalOpen(false);
   };
 
-  const handleDelete = async (record: ReportDTO) => {
+  const handleDelete = async (record: ReportInboundDTO) => {
     if (!record.id) throw new Error("Id is null");
     await cargoDetailsService.Delete(record.id);
     await refetch();
@@ -61,12 +62,12 @@ export default function IndexPage() {
     refetch();
   };
 
-  const handleSearch = async (value: ReportFilterDTO) => {
+  const handleSearch = async (value: ReportInboundFilterDTO) => {
     await setSearch(value);
     await refetch();
   };
 
-  const columns: TableProps<ReportDTO>["columns"] = [
+  const columns: TableProps<ReportInboundDTO>["columns"] = [
     {
       title: "Actual Check-in Date",
       dataIndex: "actualCheckInDate",
@@ -119,6 +120,11 @@ export default function IndexPage() {
       key: "quantity",
     },
     {
+      title: "CBM",
+      dataIndex: "cubicMeter",
+      key: "cubicMeter",
+    },
+    {
       title: "Dimension",
       key: "dimension",
       render: (_, record) => {
@@ -134,11 +140,7 @@ export default function IndexPage() {
       dataIndex: "unitOfMeasurement",
       key: "unitOfMeasurement",
     },
-    {
-      title: "Cubic Meter",
-      dataIndex: "cubicMeter",
-      key: "cubicMeter",
-    },
+
     {
       title: "Total Amount",
       dataIndex: "totalAmount",
@@ -194,11 +196,17 @@ export default function IndexPage() {
         selectedData={selectedData}
       />
       <FilterCard onSearch={handleSearch} />
-      <TableComponent<ReportDTO>
+      <TableComponent<ReportInboundDTO>
         headerTitle={pageTitle}
         columns={columns}
         dataSource={reports}
         loading={isFetching}
+        footer={() => (
+          <TableTotalFooter<ReportInboundDTO>
+            data={reports}
+            values={TABLE_TOTAL_FOOTER}
+          />
+        )}
       />
     </>
   );

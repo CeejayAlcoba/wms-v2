@@ -40,7 +40,7 @@ export default function SaveModal(props: SaveModalProps) {
   });
   const { data: billTypes } = useQuery({
     queryKey: ["billTypes"],
-    queryFn: async () => {
+   queryFn: async () => {
       const res = await billTypeService.GetAll();
       return res?.map((r) => ({
         id: r.id,
@@ -102,69 +102,67 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <Form>
-          <SelectFormik<BillingStatement, RefPrincipal>
-            askterisk
-            label="Principal"
-            name="principalId"
-            keyValue="id"
-            keyLabel="name"
-            option={principals}
-          />
-          <div className="row row-cols-lg-2">
-            <InputNumberFormik<BillingStatement>
-              askterisk
-              label="Handling In Rate"
-              name="handlingInRate"
-              className="col-lg"
-            />
-            <SelectFormik<BillingStatement, BilltypeOptionProps>
-              askterisk
-              label="/ Per"
-              name="handlingInBillTypeId"
-              keyValue="id"
-              keyLabel="name"
-              className="col-lg"
-              option={billTypes}
-            />
-          </div>
-          <div className="row row-cols-lg-2">
-            <InputNumberFormik<BillingStatement>
-              askterisk
-              label="Handling Out Rate"
-              name="handlingOutRate"
-            />
-            <SelectFormik<BillingStatement, BilltypeOptionProps>
-              askterisk
-              label="/ Per"
-              name="handlingOutBillTypeId"
-              keyValue="id"
-              keyLabel="name"
-              option={billTypes}
-            />
-          </div>
-          <div className="row row-cols-lg-2">
-            <InputNumberFormik<BillingStatement>
-              askterisk
-              label="Storage Rate"
-              name="storageRate"
-            />
-            <SelectFormik<BillingStatement, BilltypeOptionProps>
-              askterisk
-              label="/ Per"
-              name="storageBillTypeId"
-              keyValue="id"
-              keyLabel="name"
-              option={billTypes}
-            />
-          </div>
+        <SelectFormik<BillingStatement, RefPrincipal>
+          askterisk
+          label="Principal"
+          name="principalId"
+          keyValue="id"
+          keyLabel="name"
+          option={principals}
+        />
+        <div className="row row-cols-lg-2">
           <InputNumberFormik<BillingStatement>
             askterisk
-            addonAfter={<PercentageOutlined />}
-            label="VAT"
-            name="valueAddedTax"
+            label="Handling In Rate"
+            name="handlingInRate"
+            className="col-lg"
           />
-        </Form>
+          <SelectFormik<BillingStatement, BilltypeOptionProps>
+            askterisk
+            label="/ Per"
+            name="handlingInBillTypeId"
+            keyValue="id"
+            keyLabel="name"
+            className="col-lg"
+            option={billTypes}
+          />
+        </div>
+        <div className="row row-cols-lg-2">
+          <InputNumberFormik<BillingStatement>
+            askterisk
+            label="Handling Out Rate"
+            name="handlingOutRate"
+          />
+          <SelectFormik<BillingStatement, BilltypeOptionProps>
+            askterisk
+            label="/ Per"
+            name="handlingOutBillTypeId"
+            keyValue="id"
+            keyLabel="name"
+            option={billTypes}
+          />
+        </div>
+        <div className="row row-cols-lg-2">
+          <InputNumberFormik<BillingStatement>
+            askterisk
+            label="Storage Rate"
+            name="storageRate"
+          />
+          <SelectFormik<BillingStatement, BilltypeOptionProps>
+            askterisk
+            label="/ Per"
+            name="storageBillTypeId"
+            keyValue="id"
+            keyLabel="name"
+            option={billTypes}
+          />
+        </div>
+        <InputNumberFormik<BillingStatement>
+          askterisk
+          addonAfter={<PercentageOutlined />}
+          label="VAT"
+          name="valueAddedTax"
+        />
       </FormikProvider>
     </ModalComponent>
   );

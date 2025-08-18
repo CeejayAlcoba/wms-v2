@@ -1,10 +1,10 @@
-import { Button, Card, Form } from "antd";
+import { Button, Card } from "antd";
 import { FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
 import { SearchOutlined } from "@ant-design/icons";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
-import type { ReportFilterDTO } from "../../../@types/DTOs/ReportFilterDTO";
+import type { ReportInboundFilterDTO } from "../../../@types/DTOs/ReportInboundFilterDTO";
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
@@ -15,11 +15,12 @@ import { useQuery } from "@tanstack/react-query";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 import type { GoodsReceipt } from "../../../@types/tables/GoodsReceipt";
 import { goodsReceiptService } from "../../../services/goodsReceiptService";
+import DateRangePickerFormik from "../../../components/Formik/DateRanegPicker";
 
 export type FilterCardProps = {
   onSearch: (
-    values: ReportFilterDTO,
-    formikHelpers: FormikHelpers<ReportFilterDTO>
+    values: ReportInboundFilterDTO,
+    formikHelpers: FormikHelpers<ReportInboundFilterDTO>
   ) => void | Promise<any>;
 };
 
@@ -47,66 +48,78 @@ export default function FilterCard(props: FilterCardProps) {
     <Card className="mb-2">
       <h6>Filters</h6>
       <FormikProvider value={formik}>
-        <Form>
-          <div className="row row-cols-lg-2">
-            <DatePickerFormik<ReportFilterDTO>
-              label="Actual Check-in Date"
-              name="actualCheckInDate"
-            />
+        <div className="row row-cols-lg-2">
+          <DateRangePickerFormik<ReportInboundFilterDTO>
+            dateFromProps={{
+              label: "Actual Check-in Date From",
+              name: "actualCheckInDateFrom",
+            }}
+            dateToProps={{
+              label: "To",
+              name: "actualCheckInDateTo",
+            }}
+          />
 
-            <InputFormik<ReportFilterDTO>
-              label="ICR Reference Number"
-              name="icrReferenceNumber"
-              askterisk
-            />
-            <PrincipalProductSelect
-              principalName="principalId"
-              productCategoryName="productCategoryId"
-            />
-            <SelectFormik<ReportFilterDTO, GoodsReceipt>
-              label="Goods Receipt"
-              name="goodsReceiptId"
-              keyValue="id"
-              keyLabel="name"
-              option={goodsReceipts}
-            />
-            <InputFormik<ReportFilterDTO> label="SKU Code" name="skuCode" />
-            <InputFormik<ReportFilterDTO> label="PRO Number" name="proNumber" />
-            <InputFormik<ReportFilterDTO>
-              label="Delivery Note"
-              name="deliveryNote"
-            />
-            <SelectFormik<ReportFilterDTO, RefUnitOfMeasurement>
-              label="Unit of Measurement"
-              name="unitOfMeasurementId"
-              keyValue="id"
-              keyLabel="name"
-              option={unitOfMeasurements}
-            />
-            <InputFormik<ReportFilterDTO> label="Batch No" name="batchNo" />
-            <DatePickerFormik<ReportFilterDTO>
-              label="Expiration Date"
-              name="expirationDate"
-            />
-            <SelectFormik<ReportFilterDTO, ShelfDetails>
-              label="Bin Location"
-              name="shelfDetailsId"
-              keyValue="id"
-              keyLabel="name"
-              option={[]}
-            />
-          </div>
-          <div className="d-flex justify-content-end">
-            <Button
-              htmlType="submit"
-              type="primary"
-              onClick={() => formik.submitForm()}
-              icon={<SearchOutlined />}
-            >
-              Search
-            </Button>
-          </div>
-        </Form>
+          <InputFormik<ReportInboundFilterDTO>
+            label="ICR Reference Number"
+            name="icrReferenceNumber"
+            askterisk
+          />
+          <PrincipalProductSelect
+            principalName="principalId"
+            productCategoryName="productCategoryId"
+          />
+          <SelectFormik<ReportInboundFilterDTO, GoodsReceipt>
+            label="Goods Receipt"
+            name="goodsReceiptId"
+            keyValue="id"
+            keyLabel="name"
+            option={goodsReceipts}
+          />
+          <InputFormik<ReportInboundFilterDTO>
+            label="SKU Code"
+            name="skuCode"
+          />
+          <InputFormik<ReportInboundFilterDTO>
+            label="PRO Number"
+            name="proNumber"
+          />
+          <InputFormik<ReportInboundFilterDTO>
+            label="Delivery Note"
+            name="deliveryNote"
+          />
+          <SelectFormik<ReportInboundFilterDTO, RefUnitOfMeasurement>
+            label="Unit of Measurement"
+            name="unitOfMeasurementId"
+            keyValue="id"
+            keyLabel="name"
+            option={unitOfMeasurements}
+          />
+          <InputFormik<ReportInboundFilterDTO>
+            label="Batch No"
+            name="batchNo"
+          />
+          <DatePickerFormik<ReportInboundFilterDTO>
+            label="Expiration Date"
+            name="expirationDate"
+          />
+          <SelectFormik<ReportInboundFilterDTO, ShelfDetails>
+            label="Bin Location"
+            name="shelfDetailsId"
+            keyValue="id"
+            keyLabel="name"
+            option={[]}
+          />
+        </div>
+        <div className="d-flex justify-content-end">
+          <Button
+            type="primary"
+            onClick={() => formik.submitForm()}
+            icon={<SearchOutlined />}
+          >
+            Search
+          </Button>
+        </div>
       </FormikProvider>
     </Card>
   );

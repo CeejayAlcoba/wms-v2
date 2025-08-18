@@ -28,3 +28,16 @@
 .light-table .ant-table-bordered .ant-table-cell {
   border: 1px solid #aaa;
 }
+
+.light-table .ant-table-footer {
+  background-color: #e8e8e8;
+  color: #000 !important;
+  padding: 4px;
+  border-top: 1px solid #aaa;
+}
+.light-table .ant-table-title {
+  color: #000 !important;
+  background-color: #fff;
+  padding: 8px 12px;
+  border-bottom: 1px solid #aaa;
+}
