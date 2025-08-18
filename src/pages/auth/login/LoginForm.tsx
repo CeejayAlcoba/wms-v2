@@ -16,7 +16,6 @@ import useUser from "../../../contexts/useUser";
 import { authService } from "../../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useAuthFormTypeContext } from "../../../contexts/useAuthFormTypeContext";
-import HeaderForm from "../HeaderForm";
 
 const { Title, Text } = Typography;
 
