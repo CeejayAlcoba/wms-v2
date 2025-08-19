@@ -35,9 +35,9 @@ export default function PrincipalProductSelect<TFormik>(
   }, [getFieldProps(principalName).value]);
 
   const handleChangePrincipal = (principalId: number) => {
+    setFieldValue(productCategoryName, null);
     if (!principalId) {
       setProductCategories([]);
-      setFieldValue(productCategoryName, null);
       return;
     }
   };
