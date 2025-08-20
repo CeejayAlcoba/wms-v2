@@ -1,6 +1,6 @@
 import { Button, Card } from "antd";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
-import type { BillingStatement } from "../../../@types/tables/BillingStatement";
+import type { BillingConfiguration } from "../../../@types/tables/BillingConfiguration";
 import { PercentageOutlined, SearchOutlined } from "@ant-design/icons";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { useQuery } from "@tanstack/react-query";
@@ -11,8 +11,8 @@ import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 
 export type FilterCardProps = {
   onSearch: (
-    values: BillingStatement,
-    formikHelpers: FormikHelpers<BillingStatement>
+    values: BillingConfiguration,
+    formikHelpers: FormikHelpers<BillingConfiguration>
   ) => void | Promise<any>;
 };
 
@@ -36,14 +36,14 @@ export default function FilterCard(props: FilterCardProps) {
       <FormikProvider value={formik}>
         <Form>
           <div className="row row-cols-lg-2">
-            <SelectFormik<BillingStatement, RefPrincipal>
+            <SelectFormik<BillingConfiguration, RefPrincipal>
               label="Principal"
               name="principalId"
               keyValue="id"
               keyLabel="name"
               option={principals}
             />
-            <InputNumberFormik<BillingStatement>
+            <InputNumberFormik<BillingConfiguration>
               addonAfter={<PercentageOutlined />}
               label="VAT"
               name="valueAddedTax"

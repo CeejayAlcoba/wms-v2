@@ -1,8 +1,8 @@
-import type { BillingStatement } from "../tables/BillingStatement";
+import type { BillingConfiguration } from "../tables/BillingConfiguration";
 
-export type BillingStatementDTO = {
+export type BillingConfigurationDTO = {
   principal?: string | null;
   handlingInBillType?: string | null;
   handlingOutBillType?: string | null;
   storageBillType?: string | null;
-} & BillingStatement;
+} & BillingConfiguration;

@@ -77,6 +77,8 @@ export default function IndexPage() {
   ) => {
     if (expanded) {
       const res = await reportService.CargoHistoryGetAll({
+        actualCheckInDateFrom: search.actualCheckInDateFrom,
+        actualCheckInDateTo: search.actualCheckInDateTo,
         id: record.id,
       });
       setCargoHistories((prev) => [...prev, ...res]);

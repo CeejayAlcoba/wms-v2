@@ -63,7 +63,14 @@ export default function MainRoute() {
         </Route>
         <Route path="/login" element={<AuthPage />} />
         <Route path="/test" element={<TestPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<LoadingScreenLayout />}>
+              <NotFoundPage />
+            </Suspense>
+          }
+        />
       </Routes>
     </Router>
   );

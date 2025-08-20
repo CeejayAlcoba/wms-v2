@@ -1,5 +1,5 @@
-import { Button, Popconfirm, Table, Tooltip, type TableProps } from "antd";
-import type { BillingStatement } from "../../../@types/tables/BillingStatement";
+import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
+import type { BillingConfiguration } from "../../../@types/tables/BillingConfiguration";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
@@ -10,38 +10,38 @@ import {
 import TableComponent from "../../../components/Table/TableComponent";
 import usePage from "../../../hooks/usePage";
 import FilterCard from "./FilterCard";
-import { billingStatementService } from "../../../services/billingStatementService";
+import { billingConfigurationService } from "../../../services/billingConfigurationService";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import SaveModal from "./SaveModal";
-import type { BillingStatementDTO } from "../../../@types/DTOs/BillingStatementDTO";
+import type { BillingConfigurationDTO } from "../../../@types/DTOs/BillingConfigurationDTO";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import ToggleText from "../../../components/Toggle/ToggleText";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState<BillingStatement | null>(
+  const [selectedData, setSelectedData] = useState<BillingConfiguration | null>(
     null
   );
-  const [search, setSearch] = useState<BillingStatement>(EMPTY_FORM);
+  const [search, setSearch] = useState<BillingConfiguration>(EMPTY_FORM);
 
   const { title: pageTitle } = usePage();
 
   const {
-    data: billingStatements,
+    data: billingConfigurations,
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["billingStatements", search],
+    queryKey: ["billingConfigurations", search],
     queryFn: async ({ queryKey }) => {
       const [, searchParam] = queryKey;
-      return await billingStatementService.GetAll(
-        searchParam as BillingStatement
+      return await billingConfigurationService.GetAll(
+        searchParam as BillingConfiguration
       );
     },
     initialData: [],
   });
 
-  const handleClickEdit = (record: BillingStatement) => {
+  const handleClickEdit = (record: BillingConfiguration) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
@@ -56,9 +56,9 @@ export default function IndexPage() {
     setSaveModalOpen(false);
   };
 
-  const handleDelete = async (record: BillingStatement) => {
+  const handleDelete = async (record: BillingConfiguration) => {
     if (!record.id) throw new Error("Id is null");
-    await billingStatementService.Delete(record.id);
+    await billingConfigurationService.Delete(record.id);
     await refetch();
     SweetAlert({
       title: "Successfully deleted.",
@@ -71,12 +71,12 @@ export default function IndexPage() {
     refetch();
   };
 
-  const handleSearch = async (value: BillingStatement) => {
+  const handleSearch = async (value: BillingConfiguration) => {
     await setSearch(value);
     await refetch();
   };
 
-  const columns: TableProps<BillingStatementDTO>["columns"] = [
+  const columns: TableProps<BillingConfigurationDTO>["columns"] = [
     {
       title: "Principal",
       dataIndex: "principal",
@@ -179,10 +179,10 @@ export default function IndexPage() {
         selectedData={selectedData}
       />
       <FilterCard onSearch={handleSearch} />
-      <TableComponent<BillingStatement>
+      <TableComponent<BillingConfiguration>
         headerTitle={pageTitle}
         columns={columns}
-        dataSource={billingStatements}
+        dataSource={billingConfigurations}
         loading={isFetching}
         add={{
           onClick: handleClickAdd,

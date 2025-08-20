@@ -8,6 +8,7 @@ import { goodIssueDetailsService } from "../../../services/goodIssueDetailsServi
 import { Form } from "antd";
 import usePage from "../../../hooks/usePage";
 import type { AxiosError } from "axios";
+import { goodIssueDetailsSchema } from "../../../schemas/goodIssueDetailsSchema";
 
 type SaveGoodIssueModalProps = {
   open: boolean;
@@ -69,6 +70,7 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
   const formik = useFormik({
     initialValues: selectedData ?? EMPTY_FORM,
     enableReinitialize: true,
+    validationSchema: goodIssueDetailsSchema,
     onSubmit: handleSave,
   });
 

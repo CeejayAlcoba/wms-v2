@@ -14,6 +14,7 @@ export type ReportCargoHistoryDTO = {
   pickListQuantity?: number;
   pickListPalleteCount?: number;
   pickListCubicMeter?: number;
+  pullOutDate?: string;
   status?: string;
   totalPickListCubicMeter?: number;
   totalPickListQuantity?: number;

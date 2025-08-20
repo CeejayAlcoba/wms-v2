@@ -1,11 +1,11 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
-import type { BillingStatement } from "../../../@types/tables/BillingStatement";
+import type { BillingConfiguration } from "../../../@types/tables/BillingConfiguration";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
-import { billingStatementService } from "../../../services/billingStatementService";
+import { billingConfigurationService } from "../../../services/billingConfigurationService";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
-import { billingStatementSchema } from "../../../schemas/billingStatementSchema";
+import { billingConfigurationSchema } from "../../../schemas/billingConfigurationSchema";
 import SelectFormik from "../../../components/Formik/SelectFormik";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
 import { principalService } from "../../../services/principalService";
@@ -21,7 +21,7 @@ type SaveModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
-  selectedData: BillingStatement | null;
+  selectedData: BillingConfiguration | null;
 };
 
 type BilltypeOptionProps = {
@@ -40,7 +40,7 @@ export default function SaveModal(props: SaveModalProps) {
   });
   const { data: billTypes } = useQuery({
     queryKey: ["billTypes"],
-   queryFn: async () => {
+    queryFn: async () => {
       const res = await billTypeService.GetAll();
       return res?.map((r) => ({
         id: r.id,
@@ -58,15 +58,15 @@ export default function SaveModal(props: SaveModalProps) {
   });
 
   const handleSave = async (
-    values: BillingStatement,
-    formik: FormikHelpers<BillingStatement>
+    values: BillingConfiguration,
+    formik: FormikHelpers<BillingConfiguration>
   ) => {
     try {
       formik.setSubmitting(true);
       if (values.id) {
-        await billingStatementService.Update(values.id, values);
+        await billingConfigurationService.Update(values.id, values);
       } else {
-        await billingStatementService.Add(values);
+        await billingConfigurationService.Add(values);
       }
       SweetAlert({
         title: `Successfully ${selectedData ? "updated" : "added"}`,
@@ -87,7 +87,7 @@ export default function SaveModal(props: SaveModalProps) {
   const formik = useFormik({
     initialValues: selectedData ?? EMPTY_FORM,
     enableReinitialize: true,
-    validationSchema: billingStatementSchema,
+    validationSchema: billingConfigurationSchema,
     onSubmit: handleSave,
   });
 
@@ -102,7 +102,7 @@ export default function SaveModal(props: SaveModalProps) {
       onCancel={handleCancel}
     >
       <FormikProvider value={formik}>
-        <SelectFormik<BillingStatement, RefPrincipal>
+        <SelectFormik<BillingConfiguration, RefPrincipal>
           askterisk
           label="Principal"
           name="principalId"
@@ -111,13 +111,13 @@ export default function SaveModal(props: SaveModalProps) {
           option={principals}
         />
         <div className="row row-cols-lg-2">
-          <InputNumberFormik<BillingStatement>
+          <InputNumberFormik<BillingConfiguration>
             askterisk
             label="Handling In Rate"
             name="handlingInRate"
             className="col-lg"
           />
-          <SelectFormik<BillingStatement, BilltypeOptionProps>
+          <SelectFormik<BillingConfiguration, BilltypeOptionProps>
             askterisk
             label="/ Per"
             name="handlingInBillTypeId"
@@ -128,12 +128,12 @@ export default function SaveModal(props: SaveModalProps) {
           />
         </div>
         <div className="row row-cols-lg-2">
-          <InputNumberFormik<BillingStatement>
+          <InputNumberFormik<BillingConfiguration>
             askterisk
             label="Handling Out Rate"
             name="handlingOutRate"
           />
-          <SelectFormik<BillingStatement, BilltypeOptionProps>
+          <SelectFormik<BillingConfiguration, BilltypeOptionProps>
             askterisk
             label="/ Per"
             name="handlingOutBillTypeId"
@@ -143,12 +143,12 @@ export default function SaveModal(props: SaveModalProps) {
           />
         </div>
         <div className="row row-cols-lg-2">
-          <InputNumberFormik<BillingStatement>
+          <InputNumberFormik<BillingConfiguration>
             askterisk
             label="Storage Rate"
             name="storageRate"
           />
-          <SelectFormik<BillingStatement, BilltypeOptionProps>
+          <SelectFormik<BillingConfiguration, BilltypeOptionProps>
             askterisk
             label="/ Per"
             name="storageBillTypeId"
@@ -157,7 +157,7 @@ export default function SaveModal(props: SaveModalProps) {
             option={billTypes}
           />
         </div>
-        <InputNumberFormik<BillingStatement>
+        <InputNumberFormik<BillingConfiguration>
           askterisk
           addonAfter={<PercentageOutlined />}
           label="VAT"

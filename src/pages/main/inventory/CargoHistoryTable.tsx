@@ -19,6 +19,12 @@ export default function CargoHistoryTable(props: {
 
   const columns: TableProps<ReportCargoHistoryDTO>["columns"] = [
     {
+      title: "Pull Out Date",
+      dataIndex: "pullOutDate",
+      key: "pullOutDate",
+      render: (value) => value && dayjs(value).format("YYYY-MM-DD"),
+    },
+    {
       title: "Pallet Count",
       dataIndex: "pickListPalleteCount",
       key: "pickListPalleteCount",
@@ -119,7 +125,7 @@ export default function CargoHistoryTable(props: {
           <GridList<ReportInventoryDTO>
             data={record}
             columns={gridHeader}
-            cols={3}
+            gutter={3}
           />
         )}
         dataSource={cargoHistories.filter((c) => c.id == record.id)}
@@ -132,7 +138,7 @@ export default function CargoHistoryTable(props: {
           <GridList<ReportCargoHistoryDTO>
             data={cargoHistories?.[0]}
             columns={gridFooter}
-            cols={2}
+            gutter={2}
           />
         )}
       />

@@ -1,4 +1,4 @@
-export type BillingStatement = {
+export type BillingConfiguration = {
   id?: number | null;
   principalId?: number | null;
   handlingInRate?: number | null;

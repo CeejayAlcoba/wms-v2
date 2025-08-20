@@ -1,7 +1,8 @@
-import { DECIMAL_MONEY } from "../constants/DECIMAL";
-
 export const handleMoney = (number?: number) => {
   if (!number) return null;
-  const roundedString = number.toFixed(DECIMAL_MONEY);
-  return parseFloat(roundedString);
+  const formatedNumber = number.toLocaleString("en-US", {
+    style: "currency",
+    currency: "PHP",
+  });
+  return formatedNumber;
 };

@@ -43,8 +43,10 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     element: lazy(() => import("../../pages/main/truckDetails/IndexPage")),
   },
   {
-    key: "BillingStatement",
-    element: lazy(() => import("../../pages/main/billingStatement/IndexPage")),
+    key: "BillingConfiguration",
+    element: lazy(
+      () => import("../../pages/main/billingConfiguration/IndexPage")
+    ),
   },
   {
     key: "CheckInByICR",
@@ -78,7 +80,7 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     key: "Inventory",
     element: lazy(() => import("../../pages/main/inventory/IndexPage")),
   },
-   {
+  {
     key: "Outbound",
     element: lazy(() => import("../../pages/main/outbound/IndexPage")),
   },
@@ -89,6 +91,10 @@ const PRIVATE_ROUTES: PageRouteType[] = [
   {
     key: "Role",
     element: lazy(() => import("../../pages/main/role/IndexPage")),
+  },
+  {
+    key: "Billing",
+    element: lazy(() => import("../../pages/main/billing/IndexPage")),
   },
   {
     key: "Test",

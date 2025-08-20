@@ -6,9 +6,9 @@ import { PercentageOutlined } from "@ant-design/icons";
 import { useEffect, useState, type ReactNode } from "react";
 import ToggleText from "../../../components/Toggle/ToggleText";
 import { Alert, Typography } from "antd";
-import SaveModal from "../billingStatement/SaveModal";
-import type { BillingStatement } from "../../../@types/tables/BillingStatement";
-import { billingStatementService } from "../../../services/billingStatementService";
+import SaveModal from "../billingConfiguration/SaveModal";
+import type { BillingConfiguration } from "../../../@types/tables/BillingConfiguration";
+import { billingConfigurationService } from "../../../services/billingConfigurationService";
 import { useFormikContext } from "formik";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 
@@ -21,8 +21,8 @@ const { Link } = Typography;
 
 export default function BillingInformation() {
   const [openBillingModal, setOpenBillingModal] = useState<boolean>(false);
-  const [billingStatement, setBillingStatement] =
-    useState<BillingStatement | null>(null);
+  const [billingConfiguration, setBillingConfiguration] =
+    useState<BillingConfiguration | null>(null);
   const { getFieldProps, setFieldValue } = useFormikContext<CheckInByICRDTO>();
   const { data: billTypes } = useQuery({
     queryKey: ["billTypes"],
@@ -51,7 +51,9 @@ export default function BillingInformation() {
   const handleSetBilling = async () => {
     const principalId = getFieldProps("bookingDetails.principalId").value;
     if (!principalId) return;
-    const billing = await billingStatementService.GetSingle({ principalId });
+    const billing = await billingConfigurationService.GetSingle({
+      principalId,
+    });
 
     if (!billing) return;
 
@@ -68,7 +70,7 @@ export default function BillingInformation() {
     setFieldValue(`${fieldName}.storageRate`, billing.storageRate);
     setFieldValue(`${fieldName}.storageBillTypeId`, billing.storageBillTypeId);
     setFieldValue(`${fieldName}.valueAddedTax`, billing.valueAddedTax);
-    setBillingStatement(billing);
+    setBillingConfiguration(billing);
   };
 
   const handleAfterSave = () => {
@@ -82,11 +84,11 @@ export default function BillingInformation() {
   return (
     <>
       <SaveModal
-        title="Billing Statement"
+        title="Billing Configuration"
         open={openBillingModal}
         onCancel={handleCancelModal}
         onAfterSave={handleAfterSave}
-        selectedData={billingStatement}
+        selectedData={billingConfiguration}
       />
       <Alert
         type="warning"

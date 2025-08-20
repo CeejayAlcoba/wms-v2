@@ -1,5 +1,5 @@
-import type { BillingStatement } from "../../../../@types/tables/BillingStatement";
-export const EMPTY_FORM: BillingStatement = {
+import type { BillingConfiguration } from "../../../../@types/tables/BillingConfiguration";
+export const EMPTY_FORM: BillingConfiguration = {
   id: null,
   principalId: null,
   handlingInRate: null,

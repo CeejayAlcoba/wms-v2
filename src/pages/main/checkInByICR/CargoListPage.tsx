@@ -189,7 +189,7 @@ function CargoForm(props: { arrayName: string; index: number }) {
         placeholder="0.00"
         askterisk
         onChange={(value) => {
-          const money = handleMoney(value as number);
+          const money = (value as number).toFixed(2);
           setFieldValue(`${arrayName}.totalAmount`, money);
         }}
       />
