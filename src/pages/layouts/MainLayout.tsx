@@ -8,7 +8,7 @@ const { Content } = Layout;
 
 const MainLayout = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgLayout, borderRadiusLG },
   } = theme.useToken();
 
   return (
@@ -23,7 +23,7 @@ const MainLayout = () => {
             padding: 24,
             margin: 16,
             overflow: "auto",
-            background: colorBgContainer,
+            background: colorBgLayout,
             borderRadius: borderRadiusLG,
           }}
         >

@@ -97,6 +97,18 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     element: lazy(() => import("../../pages/main/billing/IndexPage")),
   },
   {
+    key: "OtherServiceField",
+    element: lazy(() => import("../../pages/main/otherServiceField/IndexPage")),
+  },
+    {
+    key: "OtherService",
+    element: lazy(() => import("../../pages/main/otherService/IndexPage")),
+  },
+   {
+    key: "OtherServiceReport",
+    element: lazy(() => import("../../pages/main/otherServiceReport/IndexPage")),
+  },
+  {
     key: "Test",
     element: lazy(() => import("../../pages/main/test/TestPage")),
   },

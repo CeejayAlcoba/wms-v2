@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { AntConfigContext } from "../useAntConfig";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme, type ThemeConfig } from "antd";
 import { THEME_MODE } from "../../constants/LOCAL_STORAGE_KEYS";
 
 export type ThemeModeType = "dark" | "light";
+
 
 export const AntConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

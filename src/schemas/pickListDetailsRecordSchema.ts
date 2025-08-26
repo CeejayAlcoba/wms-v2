@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { minZeroMessage, requiredMessage } from "./yupInitials";
-import type { PickListDetailsRecordDTO } from "../@types/DTOs/PicklistDetailsRecordDTO";
+import type { PickListDetailsRecordDTO } from "../@types/DTOs/PicklistDetailsRecordDTO.ts";
 
 export const pickListDetailsRecordSchema: yup.Schema<PickListDetailsRecordDTO> =
   yup.object().shape({

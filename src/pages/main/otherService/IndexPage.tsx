@@ -1,44 +1,36 @@
 import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
-import type { MasterSidebarMenuItem } from "../../../@types/tables/MasterSidebarMenuItem";
+import type { RefOtherService } from "../../../@types/tables/RefOtherService";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import TableComponent from "../../../components/Table/TableComponent";
-
-import AntIcon from "../../../components/AntIcon/AntIcon";
 import SaveModal from "./SaveModal";
-import { sidebarMenuItemService } from "../../../services/sidebarMenuItemService";
 import usePage from "../../../hooks/usePage";
+import FilterCard from "./FilterCard";
+import { otherServiceService } from "../../../services/otherServiceService";
+import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
-import ToggleTag from "../../../components/Toggle/ToggleTag";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
-  const [selectedData, setSelectedData] =
-    useState<MasterSidebarMenuItem | null>(null);
-  const [search, setSearch] = useState<MasterSidebarMenuItem>({
-    id: null,
-    name: null,
-    antIconId: null,
-  });
+  const [selectedData, setSelectedData] = useState<RefOtherService | null>(null);
+  const [search, setSearch] = useState<RefOtherService>(EMPTY_FORM);
+
   const { title: pageTitle } = usePage();
 
   const {
-    data: sidebarMenuItems,
+    data: otherServices,
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["sidebarMenuItems", search],
-    queryFn: async ({ queryKey }) => {
-      const [, searchParam] = queryKey;
-      return await sidebarMenuItemService.GetAll(
-        searchParam as MasterSidebarMenuItem
-      );
+    queryKey: ["otherServices", search],
+    queryFn: async () => {
+      return await otherServiceService.GetAll(search);
     },
     initialData: [],
   });
 
-  const handleClickEdit = (record: MasterSidebarMenuItem) => {
+  const handleClickEdit = (record: RefOtherService) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
@@ -53,9 +45,9 @@ export default function IndexPage() {
     setSaveModalOpen(false);
   };
 
-  const handleDelete = async (record: MasterSidebarMenuItem) => {
+  const handleDelete = async (record: RefOtherService) => {
     if (!record.id) throw new Error("Id is null");
-    await sidebarMenuItemService.Delete(record.id);
+    await otherServiceService.Delete(record.id);
     await refetch();
     SweetAlert({
       title: "Successfully deleted.",
@@ -68,57 +60,21 @@ export default function IndexPage() {
     refetch();
   };
 
-  const handleSearch = async (value: string) => {
-    await setSearch((prev) => ({ ...prev, name: value }));
+  const handleSearch = async (value: RefOtherService) => {
+    await setSearch(value);
     await refetch();
   };
 
-  const columns: TableProps<MasterSidebarMenuItem>["columns"] = [
+  const columns: TableProps<RefOtherService>["columns"] = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Sidebar Menu",
-      dataIndex: "sidebarMenu",
-      key: "sidebarMenu",
-    },
-    {
-      title: "Key name",
-      dataIndex: "keyName",
-      key: "keyName",
-    },
-    {
-      title: "Path",
-      dataIndex: "path",
-      key: "path",
-    },
-    {
-      title: "Visible",
-      dataIndex: "isVisible",
-      key: "isVisible",
-      render: (data) => <ToggleTag data={data} />,
-    },
-    {
-      title: "Any roles",
-      dataIndex: "isAccessibleToAnyRole",
-      key: "isAccessibleToAnyRole",
-      render: (data) => <ToggleTag data={data} />,
-    },
-    {
-      title: "Icon",
-      dataIndex: "antIcon",
-      key: "antIcon",
-      render: (antIcon) => (
-        <span>
-          {antIcon && (
-            <>
-              <AntIcon icon={antIcon} /> {` ${antIcon}`}
-            </>
-          )}
-        </span>
-      ),
+      title: "Formula",
+      dataIndex: "formula",
+      key: "formula",
     },
     {
       title: "Action",
@@ -161,18 +117,14 @@ export default function IndexPage() {
         onCancel={handleClickCancel}
         selectedData={selectedData}
       />
-      <TableComponent<MasterSidebarMenuItem>
+      <FilterCard onSearch={handleSearch} />
+      <TableComponent<RefOtherService>
         headerTitle={pageTitle}
         columns={columns}
-        dataSource={sidebarMenuItems}
+        dataSource={otherServices}
         loading={isFetching}
         add={{
           onClick: handleClickAdd,
-        }}
-        search={{
-          onChange: (e) => {
-            handleSearch(e.target.value);
-          },
         }}
       />
     </>

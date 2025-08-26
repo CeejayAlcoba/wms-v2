@@ -1,4 +1,4 @@
-import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO";
+import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO.ts";
 
 export const EMPTY_PICKLIST_RECORD: PickListDetailsRecordDTO = {
   id: null,

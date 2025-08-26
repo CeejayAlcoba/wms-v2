@@ -3,17 +3,17 @@ import { Form, Select } from "antd";
 import type { SelectProps } from "antd";
 import { useEffect, useState, useMemo } from "react";
 
-export type SelectFormikProps<T = unknown, T2 = any> = {
+export type SelectFormikProps<T = unknown, TOption = any> = {
   name: keyof T & string;
   label?: string;
   placeholder?: string;
   askterisk?: boolean;
-  keyValue: keyof T2;
-  keyLabel: keyof T2;
-  option: T2[];
+  keyValue: keyof TOption;
+  keyLabel: keyof TOption;
+  option: TOption[];
 } & SelectProps;
 
-export default function SelectFormik<T = unknown, T2 = any>({
+export default function SelectFormik<T = unknown, TOption = any>({
   name,
   label,
   placeholder,
@@ -24,7 +24,7 @@ export default function SelectFormik<T = unknown, T2 = any>({
   onChange,
   mode,
   ...rest
-}: SelectFormikProps<T, T2>) {
+}: SelectFormikProps<T, TOption>) {
   const [newOptions, setNewOptions] = useState<any[]>([]);
 
   const initialProps: SelectProps = {
