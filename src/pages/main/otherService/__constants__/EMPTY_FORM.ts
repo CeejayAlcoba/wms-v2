@@ -1,4 +1,5 @@
 import type { OtherServiceDTO } from "../../../../@types/DTOs/OtherServiceDTO";
+import { EMPTY_FIELD } from "./EMPTY_FIELD";
 
 export const EMPTY_FORM: OtherServiceDTO = {
   id: null,
@@ -6,5 +7,5 @@ export const EMPTY_FORM: OtherServiceDTO = {
   noOfFields: null,
   jsonInitialData: null,
   formula: null,
-  otherServiceFields: []
+  otherServiceFields: [EMPTY_FIELD]
 };
