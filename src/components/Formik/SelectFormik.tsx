@@ -38,7 +38,7 @@ export default function SelectFormik<T = unknown, TOption = any>({
   // Memoize options to prevent unnecessary re-renders
   const mappedOptions = useMemo(() => {
     if (!option || option.length === 0) return [];
-    
+
     return option.map((o) => ({
       value: o[keyValue],
       label: o[keyLabel],
@@ -47,7 +47,7 @@ export default function SelectFormik<T = unknown, TOption = any>({
 
   useEffect(() => {
     setNewOptions(mappedOptions);
-  }, [mappedOptions]);
+  }, [option]);
 
   // Helper function to get the display value for Select component
   const getDisplayValue = (fieldValue: any) => {
@@ -60,10 +60,10 @@ export default function SelectFormik<T = unknown, TOption = any>({
       if (!Array.isArray(fieldValue)) {
         return [];
       }
-      
+
       return fieldValue.map((item: any) => {
         // If item is an object, extract the key value
-        if (typeof item === 'object' && item !== null && keyValue in item) {
+        if (typeof item === "object" && item !== null && keyValue in item) {
           return item[keyValue];
         }
         // If item is already a primitive value
@@ -71,8 +71,12 @@ export default function SelectFormik<T = unknown, TOption = any>({
       });
     } else {
       // For single mode
-      if (typeof fieldValue === 'object' && fieldValue !== null && keyValue in fieldValue) {
-        return fieldValue[keyValue];
+      if (
+        typeof fieldValue === "object" &&
+        fieldValue !== null &&
+        keyLabel in fieldValue
+      ) {
+        return fieldValue[keyLabel];
       }
       return fieldValue;
     }
@@ -89,7 +93,7 @@ export default function SelectFormik<T = unknown, TOption = any>({
       if (!Array.isArray(displayValue)) {
         return [];
       }
-      
+
       return displayValue.map((val: any) => {
         const foundOption = option.find((opt) => opt[keyValue] === val);
         return foundOption || val; // Return the full object if found, otherwise the primitive value
@@ -114,7 +118,7 @@ export default function SelectFormik<T = unknown, TOption = any>({
           <Select
             {...field}
             mode={mode}
-            showSearch={!isMultiple} // Disable showSearch for multiple mode as it can cause issues
+            showSearch={!isMultiple}
             placeholder={placeholder}
             value={getDisplayValue(field.value)}
             onBlur={() => form.setFieldTouched(name, true)}

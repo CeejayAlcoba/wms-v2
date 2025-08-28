@@ -15,7 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 import type { GoodsReceipt } from "../../../@types/tables/GoodsReceipt";
 import { goodsReceiptService } from "../../../services/goodsReceiptService";
-import DateRangePickerFormik from "../../../components/Formik/DateRanegPicker";
+import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
 
 export type FilterCardProps = {
   onSearch: (
@@ -65,9 +65,13 @@ export default function FilterCard(props: FilterCardProps) {
             name="icrReferenceNumber"
             askterisk
           />
-          <PrincipalProductSelect
-            principalName="principalId"
-            productCategoryName="productCategoryId"
+          <PrincipalProductSelect<ReportInboundFilterDTO>
+            principalProps={{
+              name: "principalId",
+            }}
+            productCategoryProps={{
+              name: "productCategoryId",
+            }}
           />
           <SelectFormik<ReportInboundFilterDTO, GoodsReceipt>
             label="Goods Receipt"

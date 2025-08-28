@@ -95,6 +95,7 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
     <>
       <TableComponent<HandlingOutDetails>
         indexedColumn={false}
+        pagination={false}
         headerTitle="Handling Out"
         columns={columns}
         dataSource={handlingOut?.details ?? []}

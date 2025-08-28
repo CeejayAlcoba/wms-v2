@@ -60,9 +60,15 @@ export default function ICRPage() {
         option={cargoTypes}
         askterisk
       />
-      <PrincipalProductSelect<CheckInByICRDTO>
-        principalName={`${fieldName}.principalId`}
-        productCategoryName={`${fieldName}.productCategoryId`}
+      <PrincipalProductSelect<any>
+        principalProps={{
+          name: `${fieldName}.principalId`,
+          askterisk: true,
+        }}
+        productCategoryProps={{
+          name: `${fieldName}.productCategoryId`,
+          askterisk: true,
+        }}
       />
       <SelectFormik<any, any>
         label="Truck Details"

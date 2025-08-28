@@ -61,8 +61,12 @@ export default function FilterCard(props: FilterCardProps) {
               name="actualCheckInDate"
             />
             <PrincipalProductSelect<BookingDetails>
-              principalName="Principal"
-              productCategoryName="productCategoryId"
+              principalProps={{
+                name: "principalId",
+              }}
+              productCategoryProps={{
+                name: "productCategoryId",
+              }}
             />
             <SelectFormik<BookingDetails, RefCargoType>
               label="Cargo Type"

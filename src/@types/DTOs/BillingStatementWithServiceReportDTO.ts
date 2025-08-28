@@ -1,6 +1,6 @@
 import type { BillingStatement } from "../tables/BillingStatement";
-import type { OtherServiceReports } from "../tables/OtherServiceReports";
+import type { OtherServiceBillDTO } from "./OtherServiceBillDTO";
 
 export type BillingStatementWithServiceReportDTO = {
-  otherServiceReports?: OtherServiceReports[];
+  otherServiceBills?: OtherServiceBillDTO[];
 } & BillingStatement;

@@ -13,7 +13,7 @@ import PrincipalProductSelect from "../../../../components/Select/PrincipalCateg
 import SelectFormik from "../../../../components/Formik/SelectFormik";
 import type { GoodsReceipt } from "../../../../@types/tables/GoodsReceipt";
 import type { ShelfDetails } from "../../../../@types/tables/ShelfDetails";
-import DateRangePickerFormik from "../../../../components/Formik/DateRanegPicker";
+import DateRangePickerFormik from "../../../../components/Formik/DateRangePickerFormik";
 import SwitchFormik from "../../../../components/Formik/SwitchFormik";
 
 export type FilterCardProps = {
@@ -57,9 +57,13 @@ export default function FilterCard(props: FilterCardProps) {
             name="icrReferenceNumber"
             askterisk
           />
-          <PrincipalProductSelect
-            principalName="principalId"
-            productCategoryName="productCategoryId"
+          <PrincipalProductSelect<ReportPickListFilterDTO>
+            principalProps={{
+              name: "principalId",
+            }}
+            productCategoryProps={{
+              name: "productCategoryId",
+            }}
           />
           <SelectFormik<ReportPickListFilterDTO, GoodsReceipt>
             label="Goods Receipt"

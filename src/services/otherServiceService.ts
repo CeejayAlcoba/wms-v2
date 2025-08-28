@@ -1,36 +1,17 @@
-import type { OtherServiceDTO } from "../@types/DTOs/OtherServiceDTO";
-import type { RefOtherService } from "../@types/tables/RefOtherService";
+import type { OtherServiceBillDTO } from "../@types/DTOs/OtherServiceBillDTO";
 import axiosInstance from "./axiosIntance";
-import genericService from "./genericService";
 
-const path = "other-service";
+const path = "other-service-bill";
 
-function _otherServiceService() {
-  const GetById = async (id: number) => {
-    const { data } = await axiosInstance.get<OtherServiceDTO>(`${path}/${id}`);
+function _otherServiceBillService() {
+  const GetByBillingStatementId = async (id?: number) => {
+    const { data } = await axiosInstance.get<OtherServiceBillDTO[]>(
+      `${path}/billing-statement/${id}`
+    );
     return data;
   };
 
-  const Update = async (id: number, data: OtherServiceDTO) => {
-    const { data: reponseData } = await axiosInstance.patch<RefOtherService>(
-      `${path}/${id}`,
-      data
-    );
-    return reponseData;
-  };
-  const Add = async (data: OtherServiceDTO) => {
-    const { data: reponseData } = await axiosInstance.post<RefOtherService>(
-      path,
-      data
-    );
-    return reponseData;
-  };
-  return {
-    ...genericService<RefOtherService>(path),
-    GetById,
-    Update,
-    Add,
-  };
+  return { GetByBillingStatementId };
 }
 
-export const otherServiceService = _otherServiceService();
+export const otherServiceBillService = _otherServiceBillService();

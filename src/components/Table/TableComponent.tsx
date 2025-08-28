@@ -52,12 +52,7 @@ export default function TableComponent<T extends object = any>(
     ...rest
   } = initialProps;
 
-  const {
-    setColumns,
-    setData,
-    handleDelay,
-    columns: docColumns,
-  } = useDocument();
+  const { setData, handleDelay } = useDocument();
   const { handlePrint: onPrint, componentRef: refPrint } = usePrint();
   const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF();
   const debouncedSearch = useMemo(
@@ -169,12 +164,16 @@ export default function TableComponent<T extends object = any>(
       </div>
 
       <Table<T>
-        {...rest}
         columns={handleUpdateColumns()}
-        pagination={{
-          showSizeChanger: true,
-          ...rest.pagination,
-        }}
+        {...rest}
+        pagination={
+          rest.pagination == false
+            ? false
+            : {
+                showSizeChanger: true,
+                ...rest.pagination,
+              }
+        }
         scroll={{ x: "max-content" }}
       />
       <DocumentTable<T>

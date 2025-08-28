@@ -4,22 +4,31 @@ import type { RefProductCategory } from "../../@types/tables/RefProductCategory"
 import { useQuery } from "@tanstack/react-query";
 import { principalService } from "../../services/principalService";
 import { useFormikContext } from "formik";
-import SelectFormik from "../Formik/SelectFormik";
+import SelectFormik, { type SelectFormikProps } from "../Formik/SelectFormik";
 
-export type PrincipalProductSelectProps = {
-  principalName: string;
-  productCategoryName: string;
+export type PrincipalProductSelectProps<T = any> = {
+  principalProps: Omit<
+    SelectFormikProps<T, RefPrincipal>,
+    "keyValue" | "keyLabel" | "option"
+  >;
+  productCategoryProps: Omit<
+    SelectFormikProps<T, RefProductCategory>,
+    "keyValue" | "keyLabel" | "option"
+  >;
 };
 
-export default function PrincipalProductSelect<TFormik>(
-  props: PrincipalProductSelectProps
+export default function PrincipalProductSelect<T = any>(
+  props: PrincipalProductSelectProps<T>
 ) {
-  const { principalName, productCategoryName } = props;
+  const { principalProps, productCategoryProps } = props;
+  const principalName = principalProps.name;
+  const productCategoryName = productCategoryProps.name;
+
   const [productCategories, setProductCategories] = useState<
     RefProductCategory[]
   >([]);
 
-  const { getFieldProps, setFieldValue } = useFormikContext<TFormik>();
+  const { getFieldProps, setFieldValue } = useFormikContext<T>();
 
   const { data: principals } = useQuery({
     queryKey: ["principals"],
@@ -32,7 +41,7 @@ export default function PrincipalProductSelect<TFormik>(
     const prods =
       principals.find((p) => p.id == principalId)?.productCategories ?? [];
     setProductCategories(prods);
-  }, [getFieldProps(principalName).value]);
+  }, [getFieldProps(principalName as string).value]);
 
   const handleChangePrincipal = (principalId: number) => {
     setFieldValue(productCategoryName, null);
@@ -45,21 +54,19 @@ export default function PrincipalProductSelect<TFormik>(
   return (
     <>
       <SelectFormik<any, RefPrincipal>
-        name={principalName}
         label="Principal"
         keyValue="id"
         keyLabel="name"
         option={principals}
         onChange={(val) => handleChangePrincipal(val)}
-        askterisk
+        {...principalProps}
       />
       <SelectFormik<any, RefProductCategory>
-        name={productCategoryName}
         label="Product Category"
         keyValue="id"
         keyLabel="name"
         option={productCategories}
-        askterisk
+        {...productCategoryProps}
       />
     </>
   );

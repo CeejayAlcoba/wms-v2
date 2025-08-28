@@ -1,27 +1,25 @@
-import { Button, Card, type ButtonProps } from "antd";
+import { Button, Card } from "antd";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
+import InputFormik from "../../../components/Formik/InputFormik";
+import type { BillingStatement } from "../../../@types/tables/BillingStatement";
 import { SearchOutlined } from "@ant-design/icons";
-import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
-import type { BillingFilterDTO } from "../../../@types/DTOs/BillingFilterDTO";
-import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
+import { EMPTY_SEARCH } from "./__contants__/EMPTY_SEARCH";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
-import { billingFilterSchema } from "../../../schemas/billingFilterSchema";
+import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
 
 export type FilterCardProps = {
   onSearch: (
-    values: BillingFilterDTO,
-    formikHelpers: FormikHelpers<BillingFilterDTO>
+    values: BillingStatement,
+    formikHelpers: FormikHelpers<BillingStatement>
   ) => void | Promise<any>;
-  buttonProps?: ButtonProps;
 };
 
 export default function FilterCard(props: FilterCardProps) {
-  const { onSearch, buttonProps } = props;
+  const { onSearch } = props;
 
   const formik = useFormik({
-    initialValues: EMPTY_FORM,
+    initialValues: EMPTY_SEARCH,
     enableReinitialize: true,
-    validationSchema: billingFilterSchema,
     onSubmit: onSearch,
   });
 
@@ -30,38 +28,37 @@ export default function FilterCard(props: FilterCardProps) {
       <h6>Filters</h6>
       <FormikProvider value={formik}>
         <Form>
-          <div className="row row-cols-lg-1">
-            <DateRangePickerFormik<BillingFilterDTO>
+          <div className="row row-cols-lg-2">
+            <DateRangePickerFormik<BillingStatement>
               dateFromProps={{
                 name: "dateFrom",
-                label: "Date To",
-                askterisk: true,
+                label: "Date From",
               }}
               dateToProps={{
                 name: "dateTo",
-                label: "Date From",
-                askterisk: true,
+                label: "Date To",
               }}
             />
-            <PrincipalProductSelect<BillingFilterDTO>
+            <InputFormik<BillingStatement>
+              label="Reference Number"
+              askterisk
+              name="referenceNumber"
+            />
+            <PrincipalProductSelect<BillingStatement>
               principalProps={{
                 name: "principalId",
-                askterisk: true,
               }}
               productCategoryProps={{
                 name: "productCategoryId",
-                askterisk: true,
               }}
             />
           </div>
-
           <div className="d-flex justify-content-end">
             <Button
-              htmlType="submit"
               type="primary"
+              htmlType="submit"
               onClick={() => formik.submitForm()}
               icon={<SearchOutlined />}
-              {...buttonProps}
             >
               Search
             </Button>

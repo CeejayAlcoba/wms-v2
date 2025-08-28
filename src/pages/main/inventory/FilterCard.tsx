@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 import type { GoodsReceipt } from "../../../@types/tables/GoodsReceipt";
 import { goodsReceiptService } from "../../../services/goodsReceiptService";
-import DateRangePickerFormik from "../../../components/Formik/DateRanegPicker";
+import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
 import SwitchFormik from "../../../components/Formik/SwitchFormik";
 
 export type FilterCardProps = {
@@ -63,9 +63,13 @@ export default function FilterCard(props: FilterCardProps) {
             name="icrReferenceNumber"
             askterisk
           />
-          <PrincipalProductSelect
-            principalName="principalId"
-            productCategoryName="productCategoryId"
+          <PrincipalProductSelect<ReportInventoryFilterDTO>
+            principalProps={{
+              name: "principalId",
+            }}
+            productCategoryProps={{
+              name: "productCategoryId",
+            }}
           />
           <SelectFormik<ReportInventoryFilterDTO, GoodsReceipt>
             label="Goods Receipt"

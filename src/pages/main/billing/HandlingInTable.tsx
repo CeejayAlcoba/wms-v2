@@ -98,6 +98,7 @@ export default function HandlingInTable(props: HandlingInTableProps) {
         headerTitle="Handling In"
         columns={columns}
         dataSource={handlingIn?.details ?? []}
+        pagination={false}
         footer={() => (
           <GridList<HandlingInTotals>
             gutter={3}
