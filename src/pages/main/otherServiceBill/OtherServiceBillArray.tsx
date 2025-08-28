@@ -34,16 +34,21 @@ export default function OtherServiceBillArray() {
     <FieldArray name={otherServiceBillsKey}>
       {({ push, remove }) => (
         <>
-          {values.otherServiceBills?.map((record: OtherServiceBill, index) => (
-            <OtherServiceBillRow
-              key={index}
-              record={record}
-              index={index}
-              remove={remove}
-              otherServices={otherServices}
-            />
-          ))}
-
+          <div className="row row-cols-lg-2">
+            {values.otherServiceBills?.map(
+              (record: OtherServiceBill, index) => (
+                <div className="mb-2">
+                  <OtherServiceBillRow
+                    key={index}
+                    record={record}
+                    index={index}
+                    remove={remove}
+                    otherServices={otherServices}
+                  />
+                </div>
+              )
+            )}
+          </div>
           <Button
             type="primary"
             style={{ marginTop: 12 }}
@@ -134,7 +139,7 @@ function OtherServiceBillRow({
   };
 
   return (
-    <Card className="card mb-2">
+    <Card>
       <div className="d-flex justify-content-between">
         <strong>Service {index + 1}</strong>
         <Button

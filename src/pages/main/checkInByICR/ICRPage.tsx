@@ -5,14 +5,9 @@ import InputFormik from "../../../components/Formik/InputFormik";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import { useQuery } from "@tanstack/react-query";
 import { cargoTypeService } from "../../../services/cargoTypeService";
-import type { RefTruckType } from "../../../@types/tables/RefTruckType";
-import { truckTypeService } from "../../../services/truckTypeService";
-import { useEffect } from "react";
-import { principalService } from "../../../services/principalService";
 import { useFormikContext } from "formik";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 import { truckDetailsService } from "../../../services/truckDetailsService";
-import type { RefTruckDetails } from "../../../@types/tables/RefTruckDetails";
 
 export default function ICRPage() {
   const { setFieldValue } = useFormikContext<CheckInByICRDTO>();

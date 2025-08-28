@@ -97,6 +97,26 @@ export default function StorageTable(props: StorageTableProps) {
       },
     },
   ];
+  const gridHeader: GridListColumnsProps<StorageTotals> = [
+    {
+      key: "totalBill",
+      label: "Rate",
+      render: (_, record) => {
+        return (
+          <span>
+            {handleMoney(record?.storageRate)}/{record?.billType}
+          </span>
+        );
+      },
+    },
+    {
+      key: "totalBill",
+      label: "Bill",
+      render: (_, record) => {
+        return <span>{handleMoney(record?.totalBill)}</span>;
+      },
+    },
+  ];
   return (
     <>
       <TableComponent<StorageDetails>

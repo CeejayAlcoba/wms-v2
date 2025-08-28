@@ -68,7 +68,7 @@ export default function SaveModal(props: SaveModalProps) {
 
   return (
     <ModalComponent
-      width={1000}
+      width={1500}
       title={`${selectedData ? "Update" : "Add"} ${pageTitle}`}
       open={open}
       onOk={() => formik.submitForm()}

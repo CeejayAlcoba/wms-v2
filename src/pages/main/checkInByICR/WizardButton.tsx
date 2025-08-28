@@ -9,7 +9,7 @@ type ButtonType = "Previous" | "Next" | "Submit";
 
 export default function WizardButton() {
   const { currentStep, handleNext, handlePrev } = useCurrentStep();
-  const { validateForm, setTouched, submitForm, values, isSubmitting } =
+  const { validateForm, setTouched, submitForm, isSubmitting } =
     useFormikContext<CheckInByICRDTO>();
 
   const handleValidateAndShowErrors = async (
@@ -48,7 +48,6 @@ export default function WizardButton() {
   };
 
   const handleClickButton = async (type: ButtonType) => {
-    console.log(values);
     if (type == "Previous") return handlePrev();
     const isValidated = await handleValidateAndShowErrors(
       CHECK_IN_STEPS[currentStep].field

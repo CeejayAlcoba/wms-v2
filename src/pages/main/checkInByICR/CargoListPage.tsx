@@ -10,7 +10,6 @@ import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
 import { useEffect, useState } from "react";
 import { handleRoundOff } from "../../../utils/handleRoundOff";
-import { handleMoney } from "../../../utils/handleMoney";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";
@@ -18,12 +17,23 @@ import { unitOfMeasurementService } from "../../../services/unitOfMeasurementSer
 const { Panel } = Collapse;
 
 export default function CargoListPage() {
-  const { values } = useFormikContext<CheckInByICRDTO>();
+  const { values, errors, touched } = useFormikContext<CheckInByICRDTO>();
 
   const [activeKey, setActiveKey] = useState<string[]>(["0"]);
   const onChange = (key: string | string[]) => {
     setActiveKey([...key]);
   };
+  useEffect(() => {
+    if (errors?.cargoDetails && Array.isArray(errors.cargoDetails)) {
+      const keysWithErrors = errors.cargoDetails
+        .map((err, index) => (err ? index.toString() : null))
+        .filter((k): k is string => k !== null);
+
+      if (keysWithErrors.length > 0) {
+        setActiveKey(keysWithErrors);
+      }
+    }
+  }, [errors.cargoDetails && touched.cargoDetails]);
 
   return (
     <FieldArray name="cargoDetails">

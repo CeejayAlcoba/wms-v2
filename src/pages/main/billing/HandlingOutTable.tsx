@@ -13,6 +13,7 @@ import {
 } from "../../../components/Grid/GridList";
 import dayjs from "dayjs";
 import { handleMoney } from "../../../utils/handleMoney";
+import { handleRoundOff } from "../../../utils/handleRoundOff";
 
 type HandlingOutTableProps = {
   handlingOut?: BillingHandlingOutDTO;
@@ -67,7 +68,7 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
         return (
           <>
             <strong>Total {record?.billType} : </strong>
-            <span>{record?.total}</span>
+            <span>{handleRoundOff(record?.total)}</span>
           </>
         );
       },

@@ -7,7 +7,7 @@ const colors: StatusColor[] = [
     color: "cyan",
   },
   {
-    name: "PICKED",
+    name: "PICKLIST",
     color: "gold",
   },
   {
