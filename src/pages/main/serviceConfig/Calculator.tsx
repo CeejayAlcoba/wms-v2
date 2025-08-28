@@ -66,7 +66,7 @@ const Calculator = () => {
   }, [formula]);
 
   return (
-    <Card style={{ margin: "20px auto" }} className="card">
+    <Card style={{ margin: "20px auto" }}>
       <div className="row row-cols-md-1">
         <div>
           <strong>Previous: </strong> {values.previousFormula || "N/A"}
@@ -86,18 +86,18 @@ const Calculator = () => {
       <div className="text-danger">
         {touched.formula && errors.formula && errors.formula}
       </div>
-      <div className="row row-cols-md-4 gap-1">
+      <div className="row row-cols-md-4 gap-1 d-flex justify-content-center">
         {buttons.map((btn, index) => (
           <>
             <Button
-              block
               key={index}
               type={btn.value === "C" ? "primary" : "default"}
               danger={btn.value === "C"}
               onClick={() => handleClick(btn)}
-              style={{ width: 200 }}
             >
-              <strong style={{ color: btn.color }}>{btn.name}</strong>
+              <strong style={{ color: btn.color, fontSize: 18 }}>
+                {btn.name}
+              </strong>
             </Button>
           </>
         ))}
