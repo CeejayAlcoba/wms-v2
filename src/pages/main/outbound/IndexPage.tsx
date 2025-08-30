@@ -130,7 +130,7 @@ export default function IndexPage() {
     setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
   };
 
-  const handleNoPagination = async () => {
+  const handleUnpaginate = async () => {
     await setSearch((prev) => ({
       ...prev,
       currentPage: null,
@@ -143,8 +143,8 @@ export default function IndexPage() {
     <>
       <FilterCard onSearch={handleSearch} />
       <TableComponent<ReportOutboundDTO>
-        print={{ onBeforePrint: async() => await handleNoPagination() }}
-        pdf={{onChange: async() => await handleNoPagination()}}
+        print={{ onBeforePrint: async() => await handleUnpaginate() }}
+        pdf={{onChange: async() => await handleUnpaginate()}}
         headerTitle={pageTitle}
         columns={columns}
         dataSource={reports.items}
