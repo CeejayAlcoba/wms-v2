@@ -1,6 +1,5 @@
 import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { antIconService } from "../../../services/antIconService";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import TableComponent from "../../../components/Table/TableComponent";
@@ -18,6 +17,7 @@ import type { FormikHelpers } from "formik";
 import OtherServicesTable from "./OtherServicesTable";
 import type { OtherServiceBillDTO } from "../../../@types/DTOs/OtherServiceBillDTO";
 import { otherServiceBillService } from "../../../services/otherServiceService";
+import type { BillingStatementFilterDTO } from "../../../@types/DTOs/BillingStatementFilterDTO";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
@@ -25,7 +25,7 @@ export default function IndexPage() {
   const [selectedData, setSelectedData] = useState<OtherServiceBill | null>(
     null
   );
-  const [search, setSearch] = useState<BillingStatement>(EMPTY_SEARCH);
+  const [search, setSearch] = useState<BillingStatementFilterDTO>(EMPTY_SEARCH);
   const { title: pageTitle } = usePage();
   const {
     data: billingStatements,
@@ -56,7 +56,7 @@ export default function IndexPage() {
 
   const handleDelete = async (record: OtherServiceBill) => {
     if (!record.id) throw new Error("Id is null");
-    await antIconService.Delete(record.id);
+    await billingStatementService.Delete(record.id);
     await refetch();
     SweetAlert({
       title: "Successfully deleted.",
@@ -93,6 +93,18 @@ export default function IndexPage() {
       );
       setOtherServices(filteredCargo);
     }
+  };
+
+  const handlePaginate = async (page: number, pageSize: number) => {
+    await setSearch((prev) => ({
+      ...prev,
+      pageSize: pageSize,
+      currentPage: page,
+    }));
+  };
+
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({ ...prev, pageSize: null, currentPage: null }));
   };
 
   const columns: TableProps<BillingStatementDTO>["columns"] = [
@@ -174,8 +186,18 @@ export default function IndexPage() {
         columns={columns}
         dataSource={billingStatements}
         loading={isFetching}
+        print={{
+          onBeforePrint: async () => await handleUnpaginate(),
+        }}
+        pdf={{
+          onBeforeDownload: async () => await handleUnpaginate(),
+        }}
         add={{
           onClick: handleClickAdd,
+        }}
+        pagination={{
+          onChange: handlePaginate,
+          total: billingStatements?.[0]?.totalItems,
         }}
         expandable={{
           expandedRowRender: (record) => (
