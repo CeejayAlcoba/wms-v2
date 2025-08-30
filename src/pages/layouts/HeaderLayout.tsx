@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import useSidebar from "../../contexts/useSidebar";
 import useDrawer from "../../contexts/useDrawer";
+import Logo from "../../assets/LOGO-ONLY.png";
 
 export default function HeaderLayout() {
   const { collapsed, setCollapsed } = useSidebar();
@@ -24,16 +25,19 @@ export default function HeaderLayout() {
           height: "100%",
         }}
       >
-        <Button
-          type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            fontSize: "16px",
-            width: 64,
-            height: 64,
-          }}
-        />
+        <div>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "16px",
+              width: 64,
+              height: 64,
+            }}
+          />
+          <img style={{width:120}} src={Logo} />
+        </div>
 
         <Avatar
           icon={<UserOutlined />}

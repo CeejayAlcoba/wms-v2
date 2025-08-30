@@ -1,11 +1,26 @@
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 
-export function usePDF(ref?: React.RefObject<HTMLDivElement | null>) {
+type UsePDFOptions = {
+  ref?: React.RefObject<HTMLDivElement | null>;
+  delay?: number;
+  onBeforeDownload?: () => Promise<void> | void;
+};
+
+export function usePDF({ ref, delay = 500, onBeforeDownload }: UsePDFOptions = {}) {
   const componentRef = useRef<HTMLDivElement>(null);
 
-  const handleDownloadPDF = (title?: string) => {
-    const element = ref ?? componentRef.current;
+  const handleDownloadPDF = async (title?: string) => {
+    const element = ref?.current ?? componentRef.current;
+    if (!element) return;
+
+    if (onBeforeDownload) {
+      await onBeforeDownload();
+    }
+
+    if (delay > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
 
     html2pdf()
       .from(element)

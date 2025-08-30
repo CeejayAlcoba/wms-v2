@@ -11,19 +11,16 @@ type DocumentTableProps<T extends object = any> = {
 export default function DocumentTable<T extends object = any>(
   props: DocumentTableProps<T>
 ) {
+  const { headerTitle, ref, ...rest } = props;
   return (
     <div className="d-none">
-      <div ref={props.ref} className="print-container">
-        <MainLayout headerTitle={props.headerTitle}>
+      <div ref={ref} className="print-container">
+        <MainLayout headerTitle={headerTitle}>
           <Table<T>
-            title={props.title}
-            footer={props.footer}
+            {...rest}
             className="light-table"
-            columns={props.columns}
-            dataSource={props.dataSource}
-            pagination={false}
             size={"small"}
-            rowKey={(record, index) => (record as any).id || index?.toString()}
+            pagination={false}
           />
         </MainLayout>
       </div>

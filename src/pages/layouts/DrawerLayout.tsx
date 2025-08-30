@@ -4,7 +4,6 @@ import { Drawer, Space, Typography, Divider, Switch, Button } from "antd";
 import useDrawer from "../../contexts/useDrawer";
 import { UserOutlined, LogoutOutlined, BulbOutlined } from "@ant-design/icons";
 import useUser from "../../contexts/useUser";
-import Swal from "sweetalert2";
 import SweetAlert from "../../components/SweetAlert/SweetAlert";
 import { useNavigate } from "react-router-dom";
 import { useAntConfig } from "../../contexts/useAntConfig";

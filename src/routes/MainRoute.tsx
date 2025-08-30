@@ -15,17 +15,28 @@ import { routeService } from "../services/routeService";
 import TestPage from "../pages/main/test/TestPage";
 import AuthPage from "../pages/auth/AuthPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import WrongServerPage from "../pages/WrongServerPage";
 
 export default function MainRoute() {
   const { user } = useUser();
   const { setLoading } = useSidebar();
   const [menuItems, setMenuItems] = useState<MasterSidebarMenuItem[]>([]);
+  const [is500,setIs500]=useState<boolean>(false);
   const handleGetMenuItems = async () => {
     try {
+       setIs500(true)
       setLoading(true);
       const res = await routeService.GetAll();
       setMenuItems(res);
+      if(is500){
+         window.location.pathname = "/";
+         setIs500(false)
+      }
     } catch {
+      if (window.location.pathname != "/wrong-server") {
+        setIs500(true)
+        window.location.pathname = "wrong-server";
+      }
     } finally {
       setLoading(false);
     }
@@ -68,6 +79,14 @@ export default function MainRoute() {
           element={
             <Suspense fallback={<LoadingScreenLayout />}>
               <NotFoundPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/wrong-server"
+          element={
+            <Suspense fallback={<LoadingScreenLayout />}>
+              <WrongServerPage handleGetMenuItems={handleGetMenuItems}/>
             </Suspense>
           }
         />

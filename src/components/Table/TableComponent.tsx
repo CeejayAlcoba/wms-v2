@@ -27,8 +27,8 @@ export type TableComponentProps<T extends object = any> = TableProps<T> & {
   headerTitle?: string;
   search?: InputProps;
   add?: ButtonProps;
-  print?: ButtonProps;
-  pdf?: ButtonProps;
+  print?: { onBeforePrint?: () => Promise<void> } & ButtonProps;
+  pdf?: { onBeforeDownload?: () => Promise<void> } & ButtonProps;
 };
 
 const { Text } = Typography;
@@ -52,9 +52,12 @@ export default function TableComponent<T extends object = any>(
     ...rest
   } = initialProps;
 
-  const { setData, handleDelay } = useDocument();
-  const { handlePrint: onPrint, componentRef: refPrint } = usePrint();
-  const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF();
+  const { handlePrint: onPrint, componentRef: refPrint } = usePrint({
+    onBeforePrint: print?.onBeforePrint,
+  });
+  const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF({
+    onBeforeDownload: pdf?.onBeforeDownload,
+  });
   const debouncedSearch = useMemo(
     () => debounce(search?.onChange ? search?.onChange : () => {}, 500),
     []
@@ -94,11 +97,8 @@ export default function TableComponent<T extends object = any>(
     if (print?.onChange) {
       print.onChange(e);
     } else {
-      setData([...(rest.dataSource ?? [])]);
+      await onPrint();
     }
-    await handleDelay({
-      fn: () => onPrint(),
-    });
   };
   const handleDownloadPDF = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>
@@ -106,11 +106,8 @@ export default function TableComponent<T extends object = any>(
     if (pdf?.onChange) {
       pdf.onChange(e);
     } else {
-      setData([...(rest.dataSource ?? [])]);
+      onDownloadPdf(headerTitle);
     }
-    await handleDelay({
-      fn: () => onDownloadPdf(headerTitle),
-    });
   };
 
   return (
@@ -133,6 +130,7 @@ export default function TableComponent<T extends object = any>(
 
           <Tooltip title="Download PDF">
             <Button
+              loading={props.loading}
               variant="outlined"
               color="danger"
               onClick={handleDownloadPDF}
@@ -181,6 +179,7 @@ export default function TableComponent<T extends object = any>(
         className="light-table"
         headerTitle={headerTitle}
         {...props}
+        dataSource={rest.dataSource}
         columns={handleColumnDocument()}
       />
       <DocumentTable<T>
@@ -188,6 +187,7 @@ export default function TableComponent<T extends object = any>(
         className="light-table"
         headerTitle={headerTitle}
         {...props}
+        dataSource={rest.dataSource}
         columns={handleColumnDocument()}
       />
     </Card>

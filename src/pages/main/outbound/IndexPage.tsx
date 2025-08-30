@@ -12,13 +12,12 @@ import { handleMoney } from "../../../utils/handleMoney";
 import type { ReportOutboundDTO } from "../../../@types/DTOs/ReportOutboundDTO";
 import TableTotalFooter from "../../../components/Table/TableTotalFooter";
 import { TABLE_TOTAL_FOOTER } from "../../../constants/TABLE_TOTAL_FOOTER";
-import useDocument from "../../../contexts/useDocument";
 import { usePrint } from "../../../hooks/usePrint";
 import DocumentTable from "../../../components/Documents/DocumentTable";
+import { usePDF } from "../../../hooks/usePDF";
 
 export default function IndexPage() {
   const [search, setSearch] = useState<ReportOutboundFilterDTO>(EMPTY_FORM);
-  const [progress, setProgress] = useState<number>(0);
 
   const { title: pageTitle } = usePage();
   const {
@@ -131,33 +130,21 @@ export default function IndexPage() {
     setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
   };
 
-  const componentRef = useRef<HTMLDivElement | null>(null);
-  const { handlePrint: onPrint } = usePrint(componentRef);
-  const { handleDelay } = useDocument();
-  const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-  const handlePrint = async () => {
-    handleDelay({
-      progress,
-      fn: () => onPrint(),
-    });
-    while (progress < 100) {
-      setProgress(progress + 10);
-
-      console.log(`Progress: ${progress}%`);
-
-      if (progress >= 100) {
-        break; // stop loop when done
-      }
-
-      await delay(100000);
-    }
+  const handleNoPagination = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+    await refetch();
   };
 
   return (
     <>
       <FilterCard onSearch={handleSearch} />
       <TableComponent<ReportOutboundDTO>
-        print={{ onChange: handlePrint }}
+        print={{ onBeforePrint: async() => await handleNoPagination() }}
+        pdf={{onChange: async() => await handleNoPagination()}}
         headerTitle={pageTitle}
         columns={columns}
         dataSource={reports.items}
@@ -169,13 +156,6 @@ export default function IndexPage() {
             values={TABLE_TOTAL_FOOTER}
           />
         )}
-      />
-      <DocumentTable
-        ref={componentRef}
-        className="light-table"
-        headerTitle={pageTitle}
-        columns={columns}
-        dataSource={reports.items}
       />
     </>
   );
