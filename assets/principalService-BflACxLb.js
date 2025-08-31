@@ -1,1 +1,0 @@
-import{n as c,at as i,an as s}from"./index-uab80KLf.js";const a="principal";function o(){const t=async n=>{const r=i(n),{data:e}=await s.get(`${a}/list?${r}`);return e};return{...c(a),GetAll:t}}const l=o();export{l as p};
