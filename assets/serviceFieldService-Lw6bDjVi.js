@@ -1,1 +1,0 @@
-import{n as r,an as s}from"./index-aR9scm1j.js";const e="service-field";function t(){const i=async c=>{const{data:n}=await s.get(`${e}/service-config/${c}`);return n};return{...r(e),GetByServiceConfigId:i}}const o=t();export{o as s};

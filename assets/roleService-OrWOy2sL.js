@@ -1,1 +1,0 @@
-import{n as i,at as s,an as n}from"./index-aR9scm1j.js";const r="role";function l(){const o=async t=>{const a=s(t),{data:e}=await n.get(`${r}/list?${a}`);return e},c=async t=>{const a=s(t),{data:e}=await n.get(`${r}/sidebar/list?${a}`);return e};return{...i(r),GetAll:o,GetAllWithSidebar:c}}const m=l();export{m as r};

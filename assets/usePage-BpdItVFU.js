@@ -1,1 +1,0 @@
-import{bs as e}from"./index-aR9scm1j.js";function n(){return{title:e().pathname.split("-").join(" ").replace(/\//g," ").replace(/\w+/g,t=>t[0].toUpperCase()+t.slice(1).toLowerCase()).trim()}}export{n as u};

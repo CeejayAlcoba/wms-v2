@@ -1,1 +1,0 @@
-import{n as i,an as n}from"./index-aR9scm1j.js";const e="service-config";function p(){const s=async t=>{const{data:a}=await n.get(`${e}/${t}`);return a},c=async(t,a)=>{const{data:o}=await n.patch(`${e}/${t}`,a);return o},r=async t=>{const{data:a}=await n.post(e,t);return a};return{...i(e),GetById:s,Update:c,Add:r}}const v=p();export{v as s};
