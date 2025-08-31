@@ -33,7 +33,7 @@ export default function MainRoute() {
          setIs500(false)
       }
     } catch {
-      if (window.location.pathname != "/wrong-server") {
+      if (window.location.pathname != "wrong-server") {
         setIs500(true)
         window.location.pathname = "wrong-server";
       }
