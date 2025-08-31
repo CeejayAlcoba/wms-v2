@@ -7,4 +7,5 @@ export type MasterSidebarMenuItem = {
   antIconId?: number | null;
   isVisible?: boolean | null;
   isAccessibleToAnyRole?: boolean | null;
+  isMaster?: boolean | null;
 };

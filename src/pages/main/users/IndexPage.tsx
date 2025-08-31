@@ -1,13 +1,10 @@
 import { Tabs } from "antd";
 import { useState } from "react";
-// import PendingTable from "./pending/PendingTable";
-// import CompleteTable from "./complete/CompleteTable";
 import { TAB_ITEMS } from "./__constants__/TAB_ITEMS";
 import PendingPage from "./pending/PendingPage";
 import ApprovedPage from "./approved/ApprovedPage";
 import FilterCard from "./FilterCard";
 import type { UserDTO } from "../../../@types/DTOs/UserDTO";
-import type { FormikHelpers } from "formik";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 
 export type TabKey = "Pending" | "Completed";

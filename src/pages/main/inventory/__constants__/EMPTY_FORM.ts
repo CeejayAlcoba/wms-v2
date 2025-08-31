@@ -28,4 +28,6 @@ export const EMPTY_FORM: ReportInventoryFilterDTO = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
+  currentPage:1,
+  pageSize:10
 };

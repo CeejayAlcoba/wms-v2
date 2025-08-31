@@ -14,6 +14,7 @@ import { sidebarMenuItemService } from "../../../services/sidebarMenuItemService
 import { sidebarMenuService } from "../../../services/sidebarMenuService";
 import usePage from "../../../hooks/usePage";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
+import useUser from "../../../contexts/useUser";
 
 type SaveModalProps = {
   open: boolean;
@@ -25,7 +26,7 @@ type SaveModalProps = {
 export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
-
+  const { user } = useUser();
   const { data: antIcons } = useQuery({
     queryKey: ["antIcons"],
     queryFn: async () => {
@@ -129,6 +130,14 @@ export default function SaveModal(props: SaveModalProps) {
             label="Accessible to any role"
             name="isAccessibleToAnyRole"
           />
+          {user?.isMaster && (
+            <CheckboxFormik<MasterSidebarMenuItem>
+              description="This is only available to Master users only"
+              askterisk
+              label="Master"
+              name="isMaster"
+            />
+          )}
         </Form>
       </FormikProvider>
     </ModalComponent>

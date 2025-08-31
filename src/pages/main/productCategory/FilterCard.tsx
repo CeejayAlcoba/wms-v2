@@ -6,7 +6,6 @@ import { SearchOutlined } from "@ant-design/icons";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import SelectFormik from "../../../components/Formik/SelectFormik";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
-
 import { principalService } from "../../../services/principalService";
 import { useQuery } from "@tanstack/react-query";
 

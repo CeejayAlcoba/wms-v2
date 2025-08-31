@@ -22,7 +22,7 @@ function _roleService() {
     );
     return data;
   };
-  return { ...genericService<RefRole>(path),GetAll,GetAllWithSidebar };
+  return { ...genericService<RefRole>(path), GetAll, GetAllWithSidebar };
 }
 
 export const roleService = _roleService();

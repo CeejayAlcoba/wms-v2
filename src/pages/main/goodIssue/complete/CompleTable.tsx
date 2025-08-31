@@ -1,14 +1,8 @@
-import { Button, Empty, Popconfirm, Tooltip, type TableProps } from "antd";
+import { Button, Tooltip, type TableProps } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
-
-import { useSearchParams } from "react-router-dom";
-
-import CompletePicklistTable from "../../picklist/complete/CompleteTable";
+import { EditOutlined } from "@ant-design/icons";
 import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
-import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListDetailsFilterDTO";
-import { pickListDetailsService } from "../../../../services/pickListDetailsService";
 import SaveGoodIssueModal from "../SaveGoodIssueModal";
 import { goodIssueDetailsService } from "../../../../services/goodIssueDetailsService";
 import type { GoodIssueDetails } from "../../../../@types/tables/GoodIssueDetails";

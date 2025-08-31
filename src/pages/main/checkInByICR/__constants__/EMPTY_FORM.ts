@@ -4,7 +4,7 @@ export const EMPTY_FORM: CheckInByICRDTO = {
   bookingDetails: {
     cargoTypeId: null,
     actualCheckInDate: null,
-    iCRReferenceNumber: null,
+    icrReferenceNumber: null,
     principalId: null,
     productCategoryId: null,
     truckDetailsId: null,

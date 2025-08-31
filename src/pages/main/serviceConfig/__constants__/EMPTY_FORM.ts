@@ -5,7 +5,6 @@ export const EMPTY_FORM: ServiceConfigDTO = {
   id: null,
   name: null,
   noOfFields: null,
-  jsonInitialData: null,
   formula: null,
   serviceFields: [EMPTY_FIELD],
 };

@@ -16,6 +16,7 @@ import useUser from "../../../contexts/useUser";
 import { authService } from "../../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useAuthFormTypeContext } from "../../../contexts/useAuthFormTypeContext";
+import handleDecodeJwt from "../../../utils/handleDecodeJWT";
 
 const { Title, Text } = Typography;
 
@@ -36,8 +37,8 @@ export const LoginForm: React.FC = () => {
     try {
       const res = await authService.Login(values);
       localStorage.setItem(TOKEN_KEY, res.token);
-      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
-      setUser(res.user);
+      const user = handleDecodeJwt(res.token);
+      setUser(user);
       navigate("/");
     } catch (error: any) {
       formikHelpers.setStatus(error?.response?.data || "Login failed.");

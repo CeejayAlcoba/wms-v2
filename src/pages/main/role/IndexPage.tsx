@@ -10,10 +10,12 @@ import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import { roleService } from "../../../services/roleService";
 import type { RoleDTO } from "../../../@types/DTOs/RoleDTO";
 import type { SidebarMenuItemDTO } from "../../../@types/DTOs/SidebarMenuItemDTO";
+import useUser from "../../../contexts/useUser";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<RoleDTO | null>(null);
+  const {user}=useUser();
   const [search, setSearch] = useState<RoleDTO>({
     id: null,
     name: null,
@@ -77,7 +79,7 @@ export default function IndexPage() {
       title: "Sidebars",
       dataIndex: "sidebarMenuItems",
       key: "sidebarMenuItems",
-      width:500,
+      width: 500,
       render: (value: SidebarMenuItemDTO[]) => {
         return (
           <div
@@ -85,7 +87,7 @@ export default function IndexPage() {
               display: "flex",
               flexWrap: "wrap",
               gap: "6px",
-              maxWidth: "100%", 
+              maxWidth: "100%",
             }}
           >
             {value.map((v, index) => (
@@ -108,7 +110,7 @@ export default function IndexPage() {
       title: "Action",
       key: "action",
       render: (_, record) => {
-        if (record.id !== 1)
+        if (user?.isMaster || !record.isMaster)
           return (
             <div className="d-flex gap-1">
               <Tooltip title="Edit">

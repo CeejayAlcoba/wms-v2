@@ -2,7 +2,6 @@ import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import usePage from "../../../hooks/usePage";
 import { userService } from "../../../services/userService";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
-import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import InputFormik from "../../../components/Formik/InputFormik";
 import { userSchema } from "../../../schemas/userSchema";
@@ -15,8 +14,9 @@ import type { UserDTO } from "../../../@types/DTOs/UserDTO";
 import { userWithPasswordSchema } from "../../../schemas/userWithPasswordSchema";
 import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
 import type { UserWithPasswordDTO } from "../../../@types/DTOs/UserWithPasswordDTO";
-import { LockOutlined } from "@ant-design/icons";
 import { EMPTY_WITH_PASSWORD } from "./__constants__/EMPTY_WITH_PASSWORD";
+import CheckboxFormik from "../../../components/Formik/CheckboxFormik";
+import useUser from "../../../contexts/useUser";
 
 type SaveModalProps = {
   open: boolean;
@@ -28,13 +28,17 @@ type SaveModalProps = {
 
 export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData, type } = props;
+  const { user } = useUser();
   const { data: roles } = useQuery({
     queryKey: ["roles"],
-    queryFn: async () => roleService.GetAll(),
+    queryFn: async () =>
+      await roleService.GetAll({
+        isMaster: user?.isMaster ? null : false,
+      }),
+
     initialData: [],
   });
   const { title: pageTitle } = usePage();
-
   const handleSave = async (
     values: UserDTO,
     formik: FormikHelpers<UserDTO>
@@ -90,7 +94,6 @@ export default function SaveModal(props: SaveModalProps) {
               name="firstName"
             />
             <InputFormik<UserDTO> label="Last Name" askterisk name="lastName" />
-
             <InputFormik<UserDTO>
               label="Employee Number"
               askterisk
@@ -127,6 +130,13 @@ export default function SaveModal(props: SaveModalProps) {
             keyValue="id"
             option={roles}
           />
+          {user?.isMaster && (
+            <CheckboxFormik<UserDTO>
+              name="isMaster"
+              description="Grants full access to all sidebar menus. Can edit and delete this information"
+              label="Master"
+            />
+          )}
         </Form>
       </FormikProvider>
     </ModalComponent>

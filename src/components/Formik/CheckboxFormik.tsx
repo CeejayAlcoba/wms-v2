@@ -1,17 +1,20 @@
 import { Field, type FieldProps } from "formik";
-import { Form, Checkbox } from "antd";
+import { Form, Checkbox, Typography } from "antd";
 import type { CheckboxProps } from "antd";
+
+const { Text } = Typography;
 
 type CheckboxFormikProps<T = unknown> = {
   name: keyof T & string;
   label?: string;
+  description?: string;
   askterisk?: boolean;
 } & CheckboxProps;
 
 export default function CheckboxFormik<T = unknown>({
   name,
   label,
-  type = "text",
+  description,
   askterisk = false,
   ...rest
 }: CheckboxFormikProps<T>) {
@@ -28,10 +31,17 @@ export default function CheckboxFormik<T = unknown>({
             {...rest}
             onBlur={() => form.setFieldTouched(name, true)}
           >
-            <label>
-              {label}
-              {askterisk && <span style={{ color: "red" }}>{" *"}</span>}
-            </label>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>
+                {label}
+                {askterisk && <span style={{ color: "red" }}>{" *"}</span>}
+              </span>
+              {description && (
+                <Text type="secondary" style={{ fontSize: "12px" }}>
+                  {description}
+                </Text>
+              )}
+            </div>
           </Checkbox>
         </Form.Item>
       )}

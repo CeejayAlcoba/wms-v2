@@ -1,6 +1,5 @@
 import { Button, Card } from "antd";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
-import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import { SearchOutlined } from "@ant-design/icons";
 import SelectFormik from "../../../components/Formik/SelectFormik";
 import { useQuery } from "@tanstack/react-query";

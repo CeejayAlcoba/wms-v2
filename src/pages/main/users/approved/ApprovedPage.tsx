@@ -9,11 +9,13 @@ import type { UserDTO } from "../../../../@types/DTOs/UserDTO";
 import type { RefRole } from "../../../../@types/tables/RefRole";
 import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
 import SaveModal from "../SaveModal";
+import useUser from "../../../../contexts/useUser";
 
 export default function ApprovedPage(props: { search: UserDTO }) {
   const { search } = props;
   const [saveModal, setSaveModal] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<UserDTO | null>(null);
+  const {user} = useUser();
   const { data: userPendings, refetch } = useQuery({
     queryKey: ["userPendings", search],
     queryFn: async () =>
@@ -81,33 +83,34 @@ export default function ApprovedPage(props: { search: UserDTO }) {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <div className="d-flex gap-1">
-          <Tooltip title="Edit">
-            <Button
-              color="primary"
-              shape="circle"
-              variant="solid"
-              icon={<EditOutlined />}
-              onClick={() => handleClickEdit(record)}
-            />
-          </Tooltip>
-          <Popconfirm
-            title="Are you sure to delete this item?"
-            onConfirm={() => handleDelete(record)}
-            onCancel={() => console.log("Cancelled")}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button
-              color="danger"
-              shape="circle"
-              variant="solid"
-              icon={<DeleteOutlined />}
-            />
-          </Popconfirm>
-        </div>
-      ),
+      render: (_, record) =>
+        (user?.isMaster || !record.isMaster) && (
+          <div className="d-flex gap-1">
+            <Tooltip title="Edit">
+              <Button
+                color="primary"
+                shape="circle"
+                variant="solid"
+                icon={<EditOutlined />}
+                onClick={() => handleClickEdit(record)}
+              />
+            </Tooltip>
+            <Popconfirm
+              title="Are you sure to delete this item?"
+              onConfirm={() => handleDelete(record)}
+              onCancel={() => console.log("Cancelled")}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button
+                color="danger"
+                shape="circle"
+                variant="solid"
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
+          </div>
+        ),
     },
   ];
 

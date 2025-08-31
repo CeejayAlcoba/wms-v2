@@ -26,17 +26,12 @@ const DrawerLayout = () => {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       timer: undefined,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        closeDrawer()
-        SweetAlert({
-          title: "Logged out",
-          text: "You have been successfully logged out.",
-          icon: "success",
-        });
-        localStorage.clear();
-        setUser(null);
-        navigate("/login");
+        closeDrawer();
+        await navigate("/login");
+        await localStorage.clear();
+        await setUser(null);
       }
     });
   };
@@ -60,7 +55,6 @@ const DrawerLayout = () => {
       onClose={closeDrawer}
       open={isDrawerOpen}
     >
-
       <Divider />
       <Space
         align="center"
@@ -70,7 +64,6 @@ const DrawerLayout = () => {
         <Text>Dark Mode</Text>
         <Switch onChange={toggleTheme} defaultChecked={isDarkMode} />
       </Space>
-
 
       <Divider />
       <Button

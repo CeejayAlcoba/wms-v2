@@ -1,6 +1,6 @@
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import type { CheckInByICRDTO } from "../@types/DTOs/CheckInByICRDTO";
-import type { PickListDetailsRecordDTO } from "../@types/DTOs/PicklistDetailsRecordDTO.ts";
+import type { PickListDetailsRecordDTO } from "../@types/DTOs/PickListDetailsRecordDTO";
 
 type StoreName = "checkInByICR" | "pendingPickList";
 

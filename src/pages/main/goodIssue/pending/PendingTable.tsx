@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TableProps } from "antd";
+import { Button, Tooltip } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";

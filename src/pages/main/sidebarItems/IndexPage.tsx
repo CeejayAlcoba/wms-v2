@@ -106,6 +106,12 @@ export default function IndexPage() {
       key: "isAccessibleToAnyRole",
       render: (data) => <ToggleTag data={data} />,
     },
+     {
+      title: "Master",
+      dataIndex: "isMaster",
+      key: "isMaster",
+      render: (data) => <ToggleTag data={data} />,
+    },
     {
       title: "Icon",
       dataIndex: "antIcon",

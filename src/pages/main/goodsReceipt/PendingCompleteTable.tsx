@@ -1,5 +1,4 @@
 import { Button, Tooltip, type TableProps } from "antd";
-import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import { useState } from "react";
 import { CheckCircleOutlined, EditOutlined } from "@ant-design/icons";
 import TableComponent from "../../../components/Table/TableComponent";

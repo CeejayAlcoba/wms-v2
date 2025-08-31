@@ -1,8 +1,6 @@
-import { Badge, Table, Tag, type TableProps } from "antd";
+import { type TableProps } from "antd";
 import type { ReportCargoHistoryDTO } from "../../../@types/DTOs/ReportCargoHistoryDTO";
-import TableTotalFooter from "../../../components/Table/TableTotalFooter";
 import StatusTag from "./StatusTag";
-import { CARGO_HISTORY_TOTAL_FOOTER } from "./__constants__/CARGO_HISTORY_TOTAL_FOOTER";
 import TableComponent from "../../../components/Table/TableComponent";
 import type { ReportInventoryDTO } from "../../../@types/DTOs/ReportInventoryDTO";
 import {

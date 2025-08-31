@@ -1,6 +1,6 @@
 import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import type { BillingConfiguration } from "../../../@types/tables/BillingConfiguration";
-import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
+import { FormikProvider, useFormik, type FormikHelpers } from "formik";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import usePage from "../../../hooks/usePage";
 import { billingConfigurationService } from "../../../services/billingConfigurationService";

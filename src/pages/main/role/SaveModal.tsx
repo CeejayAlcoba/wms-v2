@@ -12,6 +12,8 @@ import type { MasterSidebarMenuItem } from "../../../@types/tables/MasterSidebar
 import { useQuery } from "@tanstack/react-query";
 import { sidebarMenuItemService } from "../../../services/sidebarMenuItemService";
 import { roleService } from "../../../services/roleService";
+import CheckboxFormik from "../../../components/Formik/CheckboxFormik";
+import useUser from "../../../contexts/useUser";
 
 type SaveModalProps = {
   open: boolean;
@@ -23,9 +25,11 @@ type SaveModalProps = {
 export default function SaveModal(props: SaveModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
   const { title: pageTitle } = usePage();
+  const { user } = useUser();
   const { data: sidebarItems } = useQuery({
     queryKey: ["sidebarItems"],
-    queryFn: async () => await sidebarMenuItemService.GetAll(),
+    queryFn: async () =>
+      await sidebarMenuItemService.GetAll({ isMaster: false }),
     initialData: [],
   });
   const handleSave = async (
@@ -91,6 +95,14 @@ export default function SaveModal(props: SaveModalProps) {
             keyValue="id"
             option={sidebarItems}
           />
+          {user?.isMaster && (
+            <CheckboxFormik<RoleDTO>
+              askterisk
+              label="Master"
+              name="isMaster"
+              description="Only Master users can edit, update and select this."
+            />
+          )}
         </Form>
       </FormikProvider>
     </ModalComponent>

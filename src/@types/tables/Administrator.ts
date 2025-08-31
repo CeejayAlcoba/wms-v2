@@ -4,6 +4,7 @@ export type Administrator = {
   firstName?: string | null;
   lastName?: string | null;
   employeeNumber?: string | null;
-  birthday?: Date | null;
+  birthday?: string | null;
   isApproved?: boolean | null;
+  isMaster?: boolean | null;
 };

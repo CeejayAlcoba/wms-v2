@@ -1,8 +1,6 @@
 import { Button, Card } from "antd";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
 import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
 import type { PickListDetailsRecordFilterDTO } from "../../../../@types/DTOs/PickListDetailsRecordFilterDTO";
 import { pickListDetailsService } from "../../../../services/pickListDetailsService";

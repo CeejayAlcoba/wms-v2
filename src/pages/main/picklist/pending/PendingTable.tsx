@@ -9,7 +9,7 @@ import { reportService } from "../../../../services/reportService";
 import dayjs from "dayjs";
 import { handleMoney } from "../../../../utils/handleMoney";
 import { EMPTY_FILTER } from "../__constants__/EMPTY_FILTER";
-import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO.ts";
+import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PickListDetailsRecordDTO";
 import { indexDbService } from "../../../../services/indexDbService";
 import AddPendingModal from "./AddPendingModal";
 import { EMPTY_PICKLIST_RECORD } from "../__constants__/EMPTY_PICKLIST_RECORD";

@@ -1,4 +1,4 @@
-import { Table, type TableProps } from "antd";
+import { type TableProps } from "antd";
 import dayjs from "dayjs";
 import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
 import TableComponent from "../../../../components/Table/TableComponent";

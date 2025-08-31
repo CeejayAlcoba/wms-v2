@@ -1,6 +1,6 @@
-import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
+import { type TableProps } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import TableComponent from "../../../components/Table/TableComponent";
 import usePage from "../../../hooks/usePage";
 import FilterCard from "./FilterCard";

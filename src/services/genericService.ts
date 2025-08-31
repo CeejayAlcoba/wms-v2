@@ -2,7 +2,7 @@ import axiosInstance from "./axiosIntance";
 import objectToQueryParam from "./utilities/objectToQueryParam";
 
 export default function genericService<T = any>(path: string) {
-  const GetAll = async (filters?: T) => {
+  const GetAll = async (filters?: Partial<T>) => {
     const queryParams = objectToQueryParam(filters);
     const { data } = await axiosInstance.get<T[]>(
       `${path}/list?${queryParams}`

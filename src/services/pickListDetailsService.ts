@@ -9,7 +9,7 @@ import objectToQueryParam from "./utilities/objectToQueryParam";
 const path = "pick-list-details";
 
 function _pickListDetailsService() {
-  const GetAll = async (filters?: PickListDetailsFilterDTO) => {
+  const GetAll = async (filters?: Partial<PickListDetailsFilterDTO> ) => {
     const queryParams = objectToQueryParam(filters);
     const { data } = await axiosInstance.get<PickListDetailsGetDTO[]>(
       `${path}/list?${queryParams}`

@@ -1,4 +1,4 @@
-import { Table, type TableProps } from "antd";
+import { type TableProps } from "antd";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import TableComponent from "../../../components/Table/TableComponent";
 import {
