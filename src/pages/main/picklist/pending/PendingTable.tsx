@@ -201,6 +201,19 @@ export default function PendingTable() {
     },
   ];
 
+  const handlePaginate = (page: number, pageSize: number) => {
+    setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
+  };
+
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+    await refetch();
+  };
+
   return (
     <>
       <AddPendingModal
@@ -245,6 +258,14 @@ export default function PendingTable() {
         columns={columns}
         dataSource={pickLists}
         loading={isFetching}
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
+        pagination={{
+          total: pickLists?.[0]?.totalItems,
+          onChange: handlePaginate,
+          current: search.currentPage ?? 1,
+          pageSize: search.pageSize ?? 10,
+        }}
         footer={() => (
           <TableTotalFooter<ReportPickListDTO>
             data={pickLists}

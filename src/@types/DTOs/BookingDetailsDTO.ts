@@ -1,3 +1,4 @@
+import type { IPaginationTotal } from "../pagination/IPaginationTotal";
 import type { BookingDetails } from "../tables/BookingDetails";
 
 export type BookingDetailsDTO = {
@@ -6,4 +7,4 @@ export type BookingDetailsDTO = {
   truckPlateNumber?: string;
   palleteGroup?: string;
   goodsReceipt?: string;
-} & BookingDetails;
+} & BookingDetails & IPaginationTotal;

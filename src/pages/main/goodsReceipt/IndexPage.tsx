@@ -1,18 +1,20 @@
 import { Tabs } from "antd";
 import { useState } from "react";
 import { bookingDetailsService } from "../../../services/bookingDetailsService";
-import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import { EMPTY_BOOKING_DETAILS } from "./__constants__/EMPTY_BOOKING_DETAILS";
 import { useQuery } from "@tanstack/react-query";
 import FilterCard from "./FilterCard";
 import type { FormikHelpers } from "formik";
 import { TAB_ITEMS } from "./__constants__/TAB_ITEMS";
 import PendingCompleteTable from "./PendingCompleteTable";
+import type { BookingDetailsFilterDTO } from "../../../@types/DTOs/BookingDetailsFilterDTO";
 
 export type TabKey = "Pending" | "Completed";
 
 export default function IndexPage() {
-  const [search, setSearch] = useState<BookingDetails>(EMPTY_BOOKING_DETAILS);
+  const [search, setSearch] = useState<BookingDetailsFilterDTO>(
+    EMPTY_BOOKING_DETAILS
+  );
   const [activeKey, setActiveKey] = useState<TabKey>("Pending");
   const {
     data: bookingDetails,
@@ -20,16 +22,11 @@ export default function IndexPage() {
     isFetching,
   } = useQuery({
     queryKey: ["products", search, activeKey],
-    queryFn: async ({ queryKey }) => {
-      const [, searchParam, activeKey] = queryKey;
+    queryFn: async () => {
       if (activeKey == "Pending") {
-        return await bookingDetailsService.GetAllGoodsReceiptPending(
-          searchParam as BookingDetails
-        );
+        return await bookingDetailsService.GetAllGoodsReceiptPending(search);
       } else {
-        return await bookingDetailsService.GetAllGoodsReceipCompleted(
-          searchParam as BookingDetails
-        );
+        return await bookingDetailsService.GetAllGoodsReceipCompleted(search);
       }
     },
     initialData: [],
@@ -40,8 +37,8 @@ export default function IndexPage() {
   };
 
   const handleSearch = async (
-    values: BookingDetails,
-    formikHelpers: FormikHelpers<BookingDetails>
+    values: BookingDetailsFilterDTO,
+    formikHelpers: FormikHelpers<BookingDetailsFilterDTO>
   ) => {
     formikHelpers.setSubmitting(true);
     await setSearch(values);
@@ -53,6 +50,8 @@ export default function IndexPage() {
       <Tabs defaultActiveKey="1" items={TAB_ITEMS} onChange={handleTab} />
       <FilterCard onSearch={handleSearch} activeKey={activeKey} />
       <PendingCompleteTable
+        search={search}
+        setSearch={setSearch}
         bookingDetails={bookingDetails}
         refetch={refetch}
         isFetching={isFetching}

@@ -125,7 +125,7 @@ export default function CargoHistoryTable(props: {
           <GridList<ReportInventoryDTO>
             data={record}
             columns={gridHeader}
-            gutter={3}
+            cols={3}
           />
         )}
         dataSource={cargoHistories.filter((c) => c.id == record.id)}
@@ -138,7 +138,7 @@ export default function CargoHistoryTable(props: {
           <GridList<ReportCargoHistoryDTO>
             data={cargoHistories?.[0]}
             columns={gridFooter}
-            gutter={2}
+            cols={2}
           />
         )}
       />

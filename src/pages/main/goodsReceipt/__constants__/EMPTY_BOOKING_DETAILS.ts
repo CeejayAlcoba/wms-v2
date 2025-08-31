@@ -1,6 +1,6 @@
-import type { BookingDetails } from "../../../../@types/tables/BookingDetails";
+import type { BookingDetailsFilterDTO } from "../../../../@types/DTOs/BookingDetailsFilterDTO";
 
-export const EMPTY_BOOKING_DETAILS: BookingDetails = {
+export const EMPTY_BOOKING_DETAILS: BookingDetailsFilterDTO = {
   id: null,
   cargoTypeId: null,
   actualCheckInDate: null,
@@ -11,4 +11,6 @@ export const EMPTY_BOOKING_DETAILS: BookingDetails = {
   drNumber: null,
   palleteGroupId: null,
   goodsReceiptId: null,
+  currentPage: 1,
+  pageSize: 10,
 };

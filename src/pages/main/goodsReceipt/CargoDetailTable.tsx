@@ -5,7 +5,6 @@ import {
   GridList,
   type GridListColumnsProps,
 } from "../../../components/Grid/GridList";
-import type { BookingDetails } from "../../../@types/tables/BookingDetails";
 import dayjs from "dayjs";
 import type { BookingDetailsDTO } from "../../../@types/DTOs/BookingDetailsDTO";
 

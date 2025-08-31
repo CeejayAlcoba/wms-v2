@@ -1,13 +1,10 @@
 import { Button, Card } from "antd";
-import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
-
+import { FormikProvider, useFormik, type FormikHelpers } from "formik";
 import { SearchOutlined } from "@ant-design/icons";
-
 import { useQuery } from "@tanstack/react-query";
 import type { ReportPickListFilterDTO } from "../../../../@types/DTOs/ReportPickListFilterDTO";
 import { EMPTY_FILTER } from "../__constants__/EMPTY_FILTER";
 import { goodsReceiptService } from "../../../../services/goodsReceiptService";
-import DatePickerFormik from "../../../../components/Formik/DatePicker";
 import InputFormik from "../../../../components/Formik/InputFormik";
 import PrincipalProductSelect from "../../../../components/Select/PrincipalCategorySelect";
 import SelectFormik from "../../../../components/Formik/SelectFormik";

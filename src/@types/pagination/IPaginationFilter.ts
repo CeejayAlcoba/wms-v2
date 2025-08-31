@@ -1,4 +1,4 @@
 export interface IPaginationFilter {
-  currentPage?: number | null;
-  pageSize?: number | null;
+  currentPage: number | null;
+  pageSize: number | null;
 }

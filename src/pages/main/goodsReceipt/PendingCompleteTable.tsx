@@ -10,14 +10,18 @@ import CargoDetailTable from "./CargoDetailTable";
 import { INITIAL_COLUMNS } from "./__constants__/INITIAL_COLUMNS";
 import type { TabKey } from "./IndexPage";
 import SaveModal from "./SaveModal";
+import type { BookingDetailsFilterDTO } from "../../../@types/DTOs/BookingDetailsFilterDTO";
 
 export default function PendingCompleteTable(props: {
+  search: BookingDetailsFilterDTO;
+  setSearch: React.Dispatch<React.SetStateAction<BookingDetailsFilterDTO>>;
   bookingDetails: BookingDetailsDTO[];
   refetch: () => void;
   isFetching: boolean;
   activeKey: TabKey;
 }) {
-  const { bookingDetails, refetch, isFetching, activeKey } = props;
+  const { bookingDetails, search, setSearch, refetch, isFetching, activeKey } =
+    props;
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<BookingDetailsDTO | null>(
     null
@@ -25,12 +29,12 @@ export default function PendingCompleteTable(props: {
 
   const [cargoDetails, setCargoDetails] = useState<CargoDetails[]>([]);
 
-  const handleClickAdd = (record: BookingDetails) => {
+  const handleClickAdd = (record: BookingDetailsDTO) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
 
-  const handleClicEdit = (record: BookingDetails) => {
+  const handleClicEdit = (record: BookingDetailsDTO) => {
     setSelectedData(record);
     setSaveModalOpen(true);
   };
@@ -58,6 +62,19 @@ export default function PendingCompleteTable(props: {
       );
       setCargoDetails(filteredCargo);
     }
+  };
+
+  const handlePaginate = (page: number, pageSize: number) => {
+    setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
+  };
+
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+    await refetch();
   };
 
   const pendingColumns: TableProps<BookingDetailsDTO>["columns"] = [
@@ -120,6 +137,14 @@ export default function PendingCompleteTable(props: {
       />
       <TableComponent<BookingDetailsDTO>
         rowKey={(data: BookingDetailsDTO) => data.id ?? 0}
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
+        pagination={{
+          total: bookingDetails?.[0]?.totalItems,
+          onChange: handlePaginate,
+          current: search.currentPage ?? 1,
+          pageSize: search.pageSize ?? 10,
+        }}
         expandable={{
           expandedRowRender: (record) => (
             <CargoDetailTable cargoDetails={cargoDetails} record={record} />

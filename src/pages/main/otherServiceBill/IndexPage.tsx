@@ -8,7 +8,6 @@ import usePage from "../../../hooks/usePage";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import type { OtherServiceBill } from "../../../@types/tables/OtherServiceBill";
 import { billingStatementService } from "../../../services/billingStatementService";
-import type { BillingStatement } from "../../../@types/tables/BillingStatement";
 import { EMPTY_SEARCH } from "./__contants__/EMPTY_SEARCH";
 import type { BillingStatementDTO } from "../../../@types/DTOs/BillingStatementDTO";
 import dayjs from "dayjs";
@@ -70,8 +69,8 @@ export default function IndexPage() {
   };
 
   const handleSearch = (
-    values: BillingStatement,
-    formikHelpers: FormikHelpers<BillingStatement>
+    values: BillingStatementFilterDTO,
+    formikHelpers: FormikHelpers<BillingStatementFilterDTO>
   ) => {
     formikHelpers.setSubmitting(true);
     setSearch(values);
@@ -198,6 +197,8 @@ export default function IndexPage() {
         pagination={{
           onChange: handlePaginate,
           total: billingStatements?.[0]?.totalItems,
+          current: search.currentPage ?? 1,
+          pageSize: search.pageSize ?? 10,
         }}
         expandable={{
           expandedRowRender: (record) => (

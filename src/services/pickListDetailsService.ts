@@ -1,5 +1,6 @@
 import type { PickListDetailsDTO } from "../@types/DTOs/PickListDetailsDTO";
 import type { PickListDetailsFilterDTO } from "../@types/DTOs/PickListDetailsFilterDTO";
+import type { PickListDetailsGetDTO } from "../@types/DTOs/PickListDetailsGetDTO";
 import type { PickListDetails } from "../@types/tables/PickListDetails";
 import axiosInstance from "./axiosIntance";
 import genericService from "./genericService";
@@ -10,7 +11,7 @@ const path = "pick-list-details";
 function _pickListDetailsService() {
   const GetAll = async (filters?: PickListDetailsFilterDTO) => {
     const queryParams = objectToQueryParam(filters);
-    const { data } = await axiosInstance.get<PickListDetails[]>(
+    const { data } = await axiosInstance.get<PickListDetailsGetDTO[]>(
       `${path}/list?${queryParams}`
     );
     return data;

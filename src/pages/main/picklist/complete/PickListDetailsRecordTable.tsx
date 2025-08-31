@@ -6,12 +6,11 @@ import {
   GridList,
   type GridListColumnsProps,
 } from "../../../../components/Grid/GridList";
-import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
 import type { PickListDetailsGetDTO } from "../../../../@types/DTOs/PickListDetailsGetDTO";
 
 export default function PickListDetailsRecordTable(props: {
   pickListRecords: PickListDetailsRecordGetDTO[];
-  record: PickListDetails;
+  record: PickListDetailsGetDTO;
 }) {
   const { pickListRecords, record } = props;
 
@@ -58,17 +57,44 @@ export default function PickListDetailsRecordTable(props: {
 
   const gridColumns: GridListColumnsProps<PickListDetailsGetDTO> = [
     {
-      key: "goodIssue",
-      render: (value) => value && `GI-${value}`,
+      key: "id",
+      label: "PL",
     },
     {
-      key: "id",
-      render: (value) => `PL-${value}`,
+      key: "goodIssue",
+      label: "GI",
     },
-
     {
       key: "ocr",
-      render: (value) => value && `OCR : ${value}`,
+      label: "OCR",
+    },
+    {
+      key: "remarks",
+      label: "Remarks",
+    },
+    {
+      key: "soldTo",
+      label: "Sold To",
+    },
+    {
+      key: "deliveredTo",
+      label: "Delivered To",
+    },
+    {
+      key: "pickUpBy",
+      label: "Pick Up By",
+    },
+    {
+      key: "pONumber",
+      label: "PO Number",
+    },
+    {
+      key: "dONumber",
+      label: "DO Number",
+    },
+    {
+      key: "salesMan",
+      label: "Salesman",
     },
   ];
   return (
@@ -79,7 +105,7 @@ export default function PickListDetailsRecordTable(props: {
           <GridList<PickListDetailsGetDTO>
             data={record}
             columns={gridColumns}
-            cols={1}
+            cols={3}
           />
         )}
         dataSource={pickListRecords?.filter(

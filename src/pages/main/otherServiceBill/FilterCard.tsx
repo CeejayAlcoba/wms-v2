@@ -1,16 +1,16 @@
 import { Button, Card } from "antd";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
-import type { BillingStatement } from "../../../@types/tables/BillingStatement";
 import { SearchOutlined } from "@ant-design/icons";
 import { EMPTY_SEARCH } from "./__contants__/EMPTY_SEARCH";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
+import type { BillingStatementFilterDTO } from "../../../@types/DTOs/BillingStatementFilterDTO";
 
 export type FilterCardProps = {
   onSearch: (
-    values: BillingStatement,
-    formikHelpers: FormikHelpers<BillingStatement>
+    values: BillingStatementFilterDTO,
+    formikHelpers: FormikHelpers<BillingStatementFilterDTO>
   ) => void | Promise<any>;
 };
 
@@ -29,7 +29,7 @@ export default function FilterCard(props: FilterCardProps) {
       <FormikProvider value={formik}>
         <Form>
           <div className="row row-cols-lg-2">
-            <DateRangePickerFormik<BillingStatement>
+            <DateRangePickerFormik<BillingStatementFilterDTO>
               dateFromProps={{
                 name: "dateFrom",
                 label: "Date From",
@@ -39,12 +39,12 @@ export default function FilterCard(props: FilterCardProps) {
                 label: "Date To",
               }}
             />
-            <InputFormik<BillingStatement>
+            <InputFormik<BillingStatementFilterDTO>
               label="Reference Number"
               askterisk
               name="referenceNumber"
             />
-            <PrincipalProductSelect<BillingStatement>
+            <PrincipalProductSelect<BillingStatementFilterDTO>
               principalProps={{
                 name: "principalId",
               }}

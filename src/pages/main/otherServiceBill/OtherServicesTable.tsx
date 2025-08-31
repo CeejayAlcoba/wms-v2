@@ -106,6 +106,10 @@ export default function OtherServicesTable(props: {
       key: "productCategory",
       label: "Product",
     },
+     {
+      key: "referenceNumber",
+      label: "Ref No",
+    },
   ];
 
   return (
@@ -118,7 +122,7 @@ export default function OtherServicesTable(props: {
           <GridList<BillingStatementDTO>
             data={record}
             columns={gridHeader}
-            gutter={2}
+            cols={2}
           />
         )}
         dataSource={handleGetGroupBills()}

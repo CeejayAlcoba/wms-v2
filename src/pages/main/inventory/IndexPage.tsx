@@ -88,6 +88,19 @@ export default function IndexPage() {
     }
   };
 
+  const handlePaginate = (page: number, pageSize: number) => {
+    setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
+  };
+
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+    await refetch();
+  };
+
   const columns: TableProps<ReportInventoryDTO>["columns"] = [
     {
       title: "Actual Check-in Date",
@@ -222,6 +235,14 @@ export default function IndexPage() {
         columns={columns}
         dataSource={inventories}
         loading={isFetching}
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
+        pagination={{
+          total: inventories?.[0]?.totalItems,
+          onChange: handlePaginate,
+          current: search.currentPage ?? 1,
+          pageSize: search.pageSize ?? 10,
+        }}
         expandable={{
           expandedRowRender: (record) => (
             <CargoHistoryTable

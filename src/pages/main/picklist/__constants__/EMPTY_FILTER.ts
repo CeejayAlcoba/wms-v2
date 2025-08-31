@@ -28,4 +28,6 @@ export const EMPTY_FILTER: ReportPickListFilterDTO = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
+  pageSize: 10,
+  currentPage: 1,
 };

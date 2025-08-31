@@ -72,7 +72,13 @@ export default function TableComponent<T extends object = any>(
         {
           title: "#",
           key: "#",
-          render: (__, _, index) => index + 1,
+          render: (__, _, index) =>
+            props.pagination && props.pagination.onChange
+              ? ((props.pagination.current ?? 0) - 1) *
+                  (props.pagination.pageSize ?? 0) +
+                index +
+                1
+              : index + 1,
         },
         ...newColumns,
       ];
@@ -179,6 +185,7 @@ export default function TableComponent<T extends object = any>(
         className="light-table"
         headerTitle={headerTitle}
         {...props}
+        expandable={undefined}
         dataSource={rest.dataSource}
         columns={handleColumnDocument()}
       />
@@ -187,6 +194,7 @@ export default function TableComponent<T extends object = any>(
         className="light-table"
         headerTitle={headerTitle}
         {...props}
+        expandable={undefined}
         dataSource={rest.dataSource}
         columns={handleColumnDocument()}
       />

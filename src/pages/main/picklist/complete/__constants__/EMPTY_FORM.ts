@@ -1,9 +1,7 @@
-import type { GoodIssueDetails } from "../../../../../@types/tables/GoodIssueDetails";
+import type { PickListDetailsFilterDTO } from "../../../../../@types/DTOs/PickListDetailsFilterDTO";
 
-export const EMPTY_FORM: GoodIssueDetails = {
+export const EMPTY_FORM: PickListDetailsFilterDTO = {
   id: null,
-  ocrNumber: null,
-  note: null,
-  dofNumber: null,
-  pickListDetailsId: null,
+  currentPage: 1,
+  pageSize: 10,
 };

@@ -1,3 +1,4 @@
+import type { IPaginationFilter } from "../pagination/IPaginationFilter";
 import type { CargoDetails } from "../tables/CargoDetails";
 
 export type ReportInventoryFilterDTO = {
@@ -9,4 +10,4 @@ export type ReportInventoryFilterDTO = {
   goodsReceiptId?: number | null;
   allowZeroBalance?: boolean | null;
   allowNullGoodIssue?: boolean | null;
-} & CargoDetails;
+} & CargoDetails & IPaginationFilter;

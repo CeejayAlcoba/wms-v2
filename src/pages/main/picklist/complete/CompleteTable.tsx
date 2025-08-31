@@ -2,37 +2,35 @@ import { Button, Tooltip, type TableProps } from "antd";
 import { useQuery, type DefinedUseQueryResult } from "@tanstack/react-query";
 import { useState, type JSX } from "react";
 import { EditOutlined } from "@ant-design/icons";
-
 import { useSearchParams } from "react-router-dom";
-import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
-import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import usePage from "../../../../hooks/usePage";
 import { pickListDetailsService } from "../../../../services/pickListDetailsService";
-import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListDetailsFilterDTO";
 import { pickListDetailsRecordService } from "../../../../services/pickListDetailsRecordService";
 import SaveGoodIssueModal from "../../goodIssue/SaveGoodIssueModal";
 import UpdateModal from "../../goodIssue/pending/UpdateModal";
 import FilterCard from "./FilterCard";
 import TableComponent from "../../../../components/Table/TableComponent";
 import PickListDetailsRecordTable from "./PickListDetailsRecordTable";
+import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListDetailsFilterDTO";
+import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
+import type { PickListDetailsGetDTO } from "../../../../@types/DTOs/PickListDetailsGetDTO";
 
 type CompleteTableProps = {
-  renderAction?: (value: any, record: PickListDetails) => JSX.Element;
-  queryResult?: DefinedUseQueryResult<PickListDetails[], Error>;
+  renderAction?: (value: any, record: PickListDetailsGetDTO) => JSX.Element;
+  queryResult?: DefinedUseQueryResult<PickListDetailsGetDTO[], Error>;
 };
 
 export default function CompleteTable(props: CompleteTableProps) {
   const { renderAction, queryResult } = props;
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [saveGoodIssueModal, setSaveGoodIssueModal] = useState<boolean>(false);
-  const [selectedData, setSelectedData] = useState<PickListDetails | null>(
-    null
-  );
+  const [selectedData, setSelectedData] =
+    useState<PickListDetailsGetDTO | null>(null);
   const [pickListRecords, setPickListRecords] = useState<
     PickListDetailsRecordGetDTO[]
   >([]);
-  const [search, setSearch] = useState<PickListDetails>(EMPTY_FORM);
+  const [search, setSearch] = useState<PickListDetailsFilterDTO>(EMPTY_FORM);
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { title: pageTitle } = usePage();
@@ -52,7 +50,7 @@ export default function CompleteTable(props: CompleteTableProps) {
     },
     initialData: [],
   });
-  const handleClickEdit = (record: PickListDetails) => {
+  const handleClickEdit = (record: PickListDetailsGetDTO) => {
     setSelectedData(record);
     setUpdateModalOpen(true);
   };
@@ -69,12 +67,12 @@ export default function CompleteTable(props: CompleteTableProps) {
     refetch();
   };
 
-  const handleSearch = async (value: PickListDetails) => {
+  const handleSearch = async (value: PickListDetailsFilterDTO) => {
     await setSearch(value);
     await refetch();
   };
 
-  const columns: TableProps<PickListDetails>["columns"] = [
+  const columns: TableProps<PickListDetailsGetDTO>["columns"] = [
     {
       title: "Pick List No",
       dataIndex: "id",
@@ -152,7 +150,10 @@ export default function CompleteTable(props: CompleteTableProps) {
     },
   ];
 
-  const handleExpand = async (expanded: boolean, record: PickListDetails) => {
+  const handleExpand = async (
+    expanded: boolean,
+    record: PickListDetailsGetDTO
+  ) => {
     if (expanded) {
       const res = await pickListDetailsRecordService.GetAll({
         pickListDetailsId: record.id,
@@ -164,6 +165,19 @@ export default function CompleteTable(props: CompleteTableProps) {
       );
       setPickListRecords(filteredCargo);
     }
+  };
+
+  const handlePaginate = (page: number, pageSize: number) => {
+    setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
+  };
+
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+    await refetch();
   };
 
   return (
@@ -181,11 +195,19 @@ export default function CompleteTable(props: CompleteTableProps) {
         onCancel={handleCancel}
       />
       <FilterCard onSearch={handleSearch} />
-      <TableComponent<PickListDetails>
+      <TableComponent<PickListDetailsGetDTO>
         headerTitle={pageTitle}
         columns={columns}
         dataSource={pickListDetails}
         loading={isFetching}
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
+        pagination={{
+          total: pickListDetails?.[0]?.totalItems,
+          onChange: handlePaginate,
+          current: search.currentPage ?? 1,
+          pageSize: search.pageSize ?? 10,
+        }}
         rowKey="id"
         expandable={{
           expandedRowRender: (record) => (

@@ -1,3 +1,4 @@
+import type { IPaginationTotal } from "../pagination/IPaginationTotal";
 import type { CargoDetails } from "../tables/CargoDetails";
 
 export type ReportInboundDTO = {
@@ -11,4 +12,4 @@ export type ReportInboundDTO = {
   totalCubicMeter?: number | null;
   totalQuantity?: number | null;
   totalPalleteCount?: number | null;
-} & CargoDetails;
+} & CargoDetails & IPaginationTotal;

@@ -12,9 +12,6 @@ import { handleMoney } from "../../../utils/handleMoney";
 import type { ReportOutboundDTO } from "../../../@types/DTOs/ReportOutboundDTO";
 import TableTotalFooter from "../../../components/Table/TableTotalFooter";
 import { TABLE_TOTAL_FOOTER } from "../../../constants/TABLE_TOTAL_FOOTER";
-import { usePrint } from "../../../hooks/usePrint";
-import DocumentTable from "../../../components/Documents/DocumentTable";
-import { usePDF } from "../../../hooks/usePDF";
 
 export default function IndexPage() {
   const [search, setSearch] = useState<ReportOutboundFilterDTO>(EMPTY_FORM);

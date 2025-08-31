@@ -1,3 +1,4 @@
+import type { IPaginationFilter } from "../pagination/IPaginationFilter";
 import type { CargoDetails } from "../tables/CargoDetails";
 
 export type ReportInboundFilterDTO = {
@@ -7,4 +8,4 @@ export type ReportInboundFilterDTO = {
   principalId?: number | null;
   productCategoryId?: number | null;
   goodsReceiptId?: number | null;
-} & CargoDetails;
+} & CargoDetails & IPaginationFilter;

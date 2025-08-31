@@ -16,11 +16,12 @@ import InputFormik from "../../../components/Formik/InputFormik";
 import type { TabKey } from "./IndexPage";
 import { goodsReceiptService } from "../../../services/goodsReceiptService";
 import type { GoodsReceipt } from "../../../@types/tables/GoodsReceipt";
+import type { BookingDetailsFilterDTO } from "../../../@types/DTOs/BookingDetailsFilterDTO";
 
 export type FilterCardProps = {
   onSearch: (
-    values: BookingDetails,
-    formikHelpers: FormikHelpers<BookingDetails>
+    values: BookingDetailsFilterDTO,
+    formikHelpers: FormikHelpers<BookingDetailsFilterDTO>
   ) => void | Promise<any>;
   activeKey: TabKey;
 };
@@ -56,11 +57,11 @@ export default function FilterCard(props: FilterCardProps) {
       <FormikProvider value={formik}>
         <Form>
           <div className="row row-cols-lg-2">
-            <DatePickerFormik<BookingDetails>
+            <DatePickerFormik<BookingDetailsFilterDTO>
               label="Actual Check In Date"
               name="actualCheckInDate"
             />
-            <PrincipalProductSelect<BookingDetails>
+            <PrincipalProductSelect<BookingDetailsFilterDTO>
               principalProps={{
                 name: "principalId",
               }}
@@ -68,26 +69,26 @@ export default function FilterCard(props: FilterCardProps) {
                 name: "productCategoryId",
               }}
             />
-            <SelectFormik<BookingDetails, RefCargoType>
+            <SelectFormik<BookingDetailsFilterDTO, RefCargoType>
               label="Cargo Type"
               name="cargoTypeId"
               keyValue="id"
               keyLabel="name"
               option={cargoTypes}
             />
-            <InputFormik<BookingDetails> label="DR No" name="drNumber" />
-            <InputFormik<BookingDetails>
+            <InputFormik<BookingDetailsFilterDTO> label="DR No" name="drNumber" />
+            <InputFormik<BookingDetailsFilterDTO>
               label="ICR No"
               name="icrReferenceNumber"
             />
-            <SelectFormik<BookingDetails, RefPalleteGroup>
+            <SelectFormik<BookingDetailsFilterDTO, RefPalleteGroup>
               label="Pallete Group"
               name="palleteGroupId"
               keyValue="id"
               keyLabel="name"
               option={[]}
             />
-            <SelectFormik<BookingDetails, RefTruckDetails>
+            <SelectFormik<BookingDetailsFilterDTO, RefTruckDetails>
               label="Truck Plate Number"
               name="truckDetailsId"
               keyValue="id"
@@ -95,7 +96,7 @@ export default function FilterCard(props: FilterCardProps) {
               option={truckDetails}
             />
             {activeKey == "Completed" && (
-              <SelectFormik<BookingDetails, GoodsReceipt>
+              <SelectFormik<BookingDetailsFilterDTO, GoodsReceipt>
                 label="Good Receipt"
                 name="goodsReceiptId"
                 keyValue="id"

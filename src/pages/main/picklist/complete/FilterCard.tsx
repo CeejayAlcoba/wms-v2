@@ -7,15 +7,14 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
-import type { PickListDetailsRecordFilterDTO } from "../../../../@types/DTOs/PickListDetailsRecordFilterDTO";
-import { pickListDetailsService } from "../../../../services/pickListDetailsService";
 import SelectFormik from "../../../../components/Formik/SelectFormik";
+import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListDetailsFilterDTO";
+import { pickListDetailsService } from "../../../../services/pickListDetailsService";
 
 export type FilterCardProps = {
   onSearch: (
-    values: PickListDetails,
-    formikHelpers: FormikHelpers<PickListDetailsRecordFilterDTO>
+    values: PickListDetailsFilterDTO,
+    formikHelpers: FormikHelpers<PickListDetailsFilterDTO>
   ) => void | Promise<any>;
 };
 
@@ -23,14 +22,14 @@ export default function FilterCard(props: FilterCardProps) {
   const { onSearch } = props;
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const formik = useFormik<PickListDetails>({
+  const formik = useFormik<PickListDetailsFilterDTO>({
     initialValues: EMPTY_FORM,
     enableReinitialize: true,
     onSubmit: onSearch,
   });
 
-  const { data: pickListDetails } = useQuery({
-    queryKey: ["pickListDetails"],
+  const { data: PickListDetailsFilterDTO } = useQuery({
+    queryKey: ["PickListDetailsFilterDTO"],
     queryFn: async () => {
       const res = await pickListDetailsService.GetAll();
       return res?.map((r) => ({ ...r, name: `PL-${r.id}` })) ?? [];
@@ -59,12 +58,12 @@ export default function FilterCard(props: FilterCardProps) {
       <FormikProvider value={formik}>
         <Form>
           <div className="row row-cols-lg-1">
-            <SelectFormik<PickListDetails, any>
+            <SelectFormik<PickListDetailsFilterDTO, any>
               label="Pick List No"
               name="id"
               keyValue="id"
               keyLabel="name"
-              option={pickListDetails}
+              option={PickListDetailsFilterDTO}
               onChange={handleChange}
             />
           </div>
