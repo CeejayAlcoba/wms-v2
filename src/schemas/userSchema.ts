@@ -9,7 +9,7 @@ export const userSchema: Yup.Schema<UserDTO> = Yup.object().shape({
   firstName: Yup.string().required(requiredMessage),
   lastName: Yup.string().required(requiredMessage),
   employeeNumber: Yup.string().required(requiredMessage),
-  birthday: Yup.date().required(requiredMessage),
+  birthday: Yup.string().required(requiredMessage),
   isApproved: Yup.boolean().nullable().default(false),
   roles: Yup.array()
     .of(roleSchema)

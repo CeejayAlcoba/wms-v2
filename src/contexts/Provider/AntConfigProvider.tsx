@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AntConfigContext } from "../useAntConfig";
-import { ConfigProvider, theme, type ThemeConfig } from "antd";
+import { ConfigProvider, theme } from "antd";
 import { THEME_MODE } from "../../constants/LOCAL_STORAGE_KEYS";
 
 export type ThemeModeType = "dark" | "light";

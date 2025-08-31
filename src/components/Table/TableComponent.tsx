@@ -17,7 +17,6 @@ import {
 import type { TableProps } from "antd/es/table";
 import { useMemo } from "react";
 import { debounce } from "lodash";
-import useDocument from "../../contexts/useDocument";
 import { usePrint } from "../../hooks/usePrint";
 import { usePDF } from "../../hooks/usePDF";
 import DocumentTable from "../Documents/DocumentTable";

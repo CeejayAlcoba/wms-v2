@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import type { UserDTO } from "../../@types/DTOs/UserDTO";
-import { TOKEN_KEY, USER_KEY } from "../../constants/LOCAL_STORAGE_KEYS";
 import { UserContext } from "../useUser";
-import { jwtDecode } from "jwt-decode";
-import type { RoleDTO } from "../../@types/DTOs/RoleDTO";
-import handleDecodeJwt from "../../utils/handleDecodeJWT";
+import handleDecodeJwt from "../../utils/handleDecodeJwt";
 
 export interface JWTPayload {
   UserId: string;

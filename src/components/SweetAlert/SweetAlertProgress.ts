@@ -1,6 +1,4 @@
 import Swal, { type SweetAlertOptions } from "sweetalert2";
-import { THEME_MODE } from "../../constants/LOCAL_STORAGE_KEYS";
-import type { ThemeModeType } from "../../contexts/Provider/AntConfigProvider";
 import { handleGetSweetAlertTheme } from "./SweetAlert";
 
 type SweetAlertProgressProps = {

@@ -2,7 +2,7 @@ import { FieldArray, useFormikContext } from "formik";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SelectFormik from "../../../components/Formik/SelectFormik";
-import { Button, Collapse, Popconfirm, Tooltip } from "antd";
+import { Button, Collapse, Tooltip } from "antd";
 import { EMPTY_CARGO } from "./__constants__/EMPTY_CARGO";
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";

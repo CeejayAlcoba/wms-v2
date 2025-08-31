@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { handleRoundOff } from "../../../../utils/handleRoundOff";
 import type { PickListDetailsRecord } from "../../../../@types/tables/PickListDetailsRecord";
 import { pickListDetailsRecordSchema } from "../../../../schemas/pickListDetailsRecordSchema";
-import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO.ts";
+import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PickListDetailsRecordDTO";
 import { Alert, Card } from "antd";
 import { indexDbService } from "../../../../services/indexDbService";
 import { EMPTY_PICKLIST_RECORD } from "../__constants__/EMPTY_PICKLIST_RECORD";

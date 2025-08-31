@@ -9,26 +9,18 @@ import {
   CalendarOutlined,
 } from "@ant-design/icons";
 import InputFormik from "../../../components/Formik/InputFormik";
-import useUser from "../../../contexts/useUser";
-import { useNavigate } from "react-router-dom";
 import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
 import type { UserWithPasswordDTO } from "../../../@types/DTOs/UserWithPasswordDTO";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
-import HeaderForm from "../HeaderForm";
 import { useAuthFormTypeContext } from "../../../contexts/useAuthFormTypeContext";
 import { userWithPasswordSchema } from "../../../schemas/userWithPasswordSchema";
-import SelectFormik from "../../../components/Formik/SelectFormik";
-import type { RefRole } from "../../../@types/tables/RefRole";
-import { useQuery } from "@tanstack/react-query";
 import { userService } from "../../../services/userService";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 
 const { Title, Text } = Typography;
 
 export const SignupForm: React.FC = () => {
-  const { setUser } = useUser();
-  const navigate = useNavigate();
   const { setType } = useAuthFormTypeContext();
 
   const handleSignUp = async (

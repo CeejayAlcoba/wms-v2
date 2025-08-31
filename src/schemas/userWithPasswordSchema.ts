@@ -8,7 +8,7 @@ export const userWithPasswordSchema: Yup.ObjectSchema<UserWithPasswordDTO> =
     firstName: Yup.string().required(requiredMessage),
     lastName: Yup.string().required(requiredMessage),
     employeeNumber: Yup.string().required(requiredMessage),
-    birthday: Yup.date().required(requiredMessage),
+    birthday: Yup.string().required(requiredMessage),
     isApproved: Yup.boolean().nullable().default(false),
     password: Yup.string()
       .required("Password is required")

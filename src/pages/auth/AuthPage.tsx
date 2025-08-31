@@ -1,4 +1,3 @@
-import { Card } from "antd";
 import { useAuthFormTypeContext } from "../../contexts/useAuthFormTypeContext";
 import useWindowWidth from "../../hooks/useWindowWidth";
 import { LoginForm } from "./login/LoginForm";

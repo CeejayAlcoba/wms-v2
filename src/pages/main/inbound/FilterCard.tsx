@@ -1,13 +1,11 @@
 import { Button, Card } from "antd";
 import { FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
-import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
 import { SearchOutlined } from "@ant-design/icons";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import type { ReportInboundFilterDTO } from "../../../@types/DTOs/ReportInboundFilterDTO";
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
-import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import SelectFormik from "../../../components/Formik/SelectFormik";
 import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
 import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";

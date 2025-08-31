@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table, Tooltip, type TableProps } from "antd";
+import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
 import type { RefPrincipal } from "../../../@types/tables/RefPrincipal";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";

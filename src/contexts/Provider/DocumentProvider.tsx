@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import type { ColumnsType } from "antd/es/table";
 import { DocumentContext } from "../useDocument";
 import SweetAlertProgress from "../../components/SweetAlert/SweetAlertProgress";

@@ -102,7 +102,7 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
         dataSource={handlingOut?.details ?? []}
         footer={() => (
           <GridList<HandlingOutTotals>
-            gutter={3}
+            cols={3}
             data={
               handlingOut?.totals ?? {
                 handlingOutRate: 0,

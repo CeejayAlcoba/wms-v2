@@ -19,6 +19,5 @@ export const EMPTY_CARGO: CargoDetails = {
   customerName: null,
   shelfDetailsId: null,
   totalAmount: null,
-  goodsReceiptId: null,
   bookingDetailsId: null,
 };

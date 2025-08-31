@@ -11,12 +11,12 @@ import {
 import InputFormik from "../../../components/Formik/InputFormik";
 import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
 import { loginSchema } from "../../../schemas/loginSchema";
-import { TOKEN_KEY, USER_KEY } from "../../../constants/LOCAL_STORAGE_KEYS";
+import { TOKEN_KEY } from "../../../constants/LOCAL_STORAGE_KEYS";
 import useUser from "../../../contexts/useUser";
 import { authService } from "../../../services/authService";
 import { useNavigate } from "react-router-dom";
 import { useAuthFormTypeContext } from "../../../contexts/useAuthFormTypeContext";
-import handleDecodeJwt from "../../../utils/handleDecodeJWT";
+import handleDecodeJwt from "../../../utils/handleDecodeJwt";
 
 const { Title, Text } = Typography;
 

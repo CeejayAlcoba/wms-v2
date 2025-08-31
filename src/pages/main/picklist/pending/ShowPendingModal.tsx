@@ -6,7 +6,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import type { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PicklistDetailsRecordDTO.ts";
+import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PickListDetailsRecordDTO";
 import type { ReportPickListDTO } from "../../../../@types/DTOs/ReportPickListDTO";
 import usePage from "../../../../hooks/usePage";
 import type { PickListDetails } from "../../../../@types/tables/PickListDetails";

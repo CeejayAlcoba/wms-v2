@@ -1,7 +1,6 @@
-import type { ServiceConfigFieldMappingDTO } from "../../../../@types/DTOs/ServiceConfigFieldMappingDTO";
+import type { RefServiceField } from "../../../../@types/tables/RefServiceField";
 
-export const EMPTY_FIELD: ServiceConfigFieldMappingDTO = {
-  fieldValue: 0,
+export const EMPTY_FIELD: RefServiceField = {
   id: null,
   jsonKey: null,
   name: null,

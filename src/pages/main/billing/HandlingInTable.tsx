@@ -101,7 +101,7 @@ export default function HandlingInTable(props: HandlingInTableProps) {
         pagination={false}
         footer={() => (
           <GridList<HandlingInTotals>
-            gutter={3}
+            cols={3}
             data={
               handlingIn?.totals ?? {
                 handlingInRate: 0,

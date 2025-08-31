@@ -26,4 +26,6 @@ export const EMPTY_FORM: ReportInboundFilterDTO = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
+  currentPage:1,
+  pageSize:10
 };
