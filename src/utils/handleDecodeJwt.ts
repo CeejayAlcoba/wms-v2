@@ -4,7 +4,7 @@ import { TOKEN_KEY } from "../constants/LOCAL_STORAGE_KEYS";
 import type { JWTPayload } from "../contexts/Provider/UserProvider";
 import type { RoleDTO } from "../@types/DTOs/RoleDTO";
 
-const handleDecodeJwt = (token?:string) => {
+const handleDecodeJwt = (token?: string) => {
   const myToken = token ?? localStorage.getItem(TOKEN_KEY);
   if (myToken) {
     const decoded: JWTPayload = jwtDecode(myToken);
@@ -21,6 +21,7 @@ const handleDecodeJwt = (token?:string) => {
     };
     return user;
   }
+  localStorage.clear();
   return null;
 };
 

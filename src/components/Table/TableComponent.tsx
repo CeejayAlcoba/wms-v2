@@ -116,7 +116,7 @@ export default function TableComponent<T extends object = any>(
   };
 
   return (
-    <Card style={{ margin: 0 }}>
+    <Card style={{ margin: 0, padding: 0 }}>
       <div className="row align-items-center mb-3">
         <div className="col-lg-6">
           {headerTitle && <h6 className="mb-0">{headerTitle}</h6>}

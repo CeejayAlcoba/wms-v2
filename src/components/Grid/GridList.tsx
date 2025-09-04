@@ -14,18 +14,16 @@ interface GridListProps<T = any> {
 }
 
 export function GridList<T = any>(props: GridListProps<T>) {
-  const { columns, data, cols = 3} = props;
+  const { columns, data, cols = 3 } = props;
 
   if (!data) return null;
 
-  const colWidth = Math.floor(12 / cols);
-
   return (
-    <div className={`row row-cols-lg-${cols}`}>
+    <div className={`row row-cols-sm-${cols}`}>
       {columns.map((col, index) => {
         if (col.title) {
           return (
-            <div className={`col-${colWidth}`} key={`title-${index}`}>
+            <div key={`title-${index}`}>
               <strong>{col.title}</strong>
             </div>
           );
@@ -37,7 +35,7 @@ export function GridList<T = any>(props: GridListProps<T>) {
             ? col.render(value, data, index)
             : value ?? <span className="text-secondary">N/A</span>;
         return (
-          <div className={`col-${colWidth}`} key={String(col.key)}>
+          <div key={String(col.key)}>
             {col.label && <strong>{col.label}: </strong>}
             <ValueDisplay />
           </div>
