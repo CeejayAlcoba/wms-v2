@@ -1,1 +1,0 @@
-import{j as n,br as s}from"./index-CHfacyiO.js";function a(o){const t={maskClosable:!1};return n.jsx(s,{...t,...o,okButtonProps:{...o.okButtonProps,htmlType:"submit"},children:o.children})}export{a as M};
