@@ -15,10 +15,12 @@ import { serviceFieldService } from "../../../services/serviceFieldService";
 import type { RefServiceField } from "../../../@types/tables/RefServiceField";
 import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import { EMPTY_SERVICE } from "./__contants__/EMPTY_SERVICE";
+import DatePickerFormik from "../../../components/Formik/DatePicker";
 
 const otherServiceBillsKey: keyof BillingStatementWithServiceReportDTO =
   "otherServiceBills";
 const totalAmount: keyof OtherServiceBillDTO = "totalAmount";
+const date: keyof OtherServiceBillDTO = "date";
 const serviceFieldsKey: keyof OtherServiceBillDTO = "serviceFields";
 
 export default function OtherServiceBillArray() {
@@ -156,7 +158,12 @@ function OtherServiceBillRow({
         option={otherServices}
         onChange={(value) => handleOnSelect(value)}
       />
-
+      <DatePickerFormik<any>
+        askterisk
+        label="Date"
+        readOnly
+        name={`${otherServiceBillsKey}[${index}].${date}`}
+      />
       <div className="row row-cols-lg-3">
         {fields.map((field, indexField) => (
           <div key={field.id}>

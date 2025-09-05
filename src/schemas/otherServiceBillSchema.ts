@@ -10,4 +10,5 @@ export const otherServiceBillSchema: yup.Schema<OtherServiceBill> = yup
     otherServiceId: yup.number().required(requiredMessage),
     jsonData: yup.string().required(requiredMessage),
     totalAmount: yup.number().required(requiredMessage),
+    date: yup.string().required(requiredMessage),
   });

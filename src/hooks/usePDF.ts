@@ -6,6 +6,7 @@ type UsePDFOptions = {
   delay?: number;
   onBeforeDownload?: () => Promise<void> | void;
   onAfterDownload?: () => Promise<void> | void;
+  fontSize?: number;
 };
 
 export function usePDF({
@@ -13,22 +14,26 @@ export function usePDF({
   delay = 500,
   onBeforeDownload,
   onAfterDownload,
-}: UsePDFOptions = {}) {
-  const componentRef = useRef<HTMLDivElement>(null);
+   fontSize,
+}: UsePDFOptions) {
+ const componentRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = async (title?: string) => {
     const element = ref?.current ?? componentRef.current;
     if (!element) return;
 
-    if (onBeforeDownload) {
-      await onBeforeDownload();
-    }
+    if (onBeforeDownload) await onBeforeDownload();
 
     if (delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
 
-    html2pdf()
+    // ✅ Apply font size dynamically if provided
+    if (fontSize) {
+      element.style.fontSize = `${fontSize}px`;
+    }
+
+    await html2pdf()
       .from(element)
       .set({
         margin: [0.5, 0.5, 0.5, 0.5],
@@ -38,9 +43,7 @@ export function usePDF({
       })
       .save();
 
-    if (onAfterDownload) {
-      await onAfterDownload();
-    }
+    if (onAfterDownload) await onAfterDownload();
   };
 
   return { componentRef, handleDownloadPDF };

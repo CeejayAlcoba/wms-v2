@@ -1,4 +1,4 @@
-import { Space, Typography, type TableProps } from "antd";
+import { type TableProps } from "antd";
 import TableComponent, {
   type TableComponentProps,
 } from "../../../components/Table/TableComponent";
@@ -9,50 +9,54 @@ import BillingTableHeader from "../billing/BillingTableHeader";
 import handleGroupOtherServices, {
   type GroupBillType,
 } from "../../../utils/handleGroupOtherServices";
-import type { RefServiceField } from "../../../@types/tables/RefServiceField";
+import type { ServiceFieldDTO } from "../../../@types/DTOs/ServiceFieldDTO";
+import BoostrapTable from "../../../components/Table/BoostrapTable";
+import dayjs from "dayjs";
 
 type OtherServicesTableProps = {
+  forPrinting?: boolean;
   otherServices: OtherServiceBillDTO[];
   record?: BillingStatementDTO;
 } & TableComponentProps<GroupBillType>;
 
-const { Text } = Typography;
-
 export default function OtherServicesTable({
   otherServices,
+  forPrinting = false,
   record,
   ...rest
 }: OtherServicesTableProps) {
   const columns: TableProps<GroupBillType>["columns"] = [
     {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Service",
-      dataIndex: "service",
-      key: "service",
-    },
-    {
-      title: "Formula",
-      dataIndex: "formula",
-      key: "formula",
-    },
-    {
-      title: "Value",
       dataIndex: "values",
       key: "values",
-      render: (values: RefServiceField[][], record) => {
+      render: (values: ServiceFieldDTO[], record) => {
         if (!values || values.length === 0)
-          return <Text type="secondary">No Data</Text>;
+          return <span className="text-muted">No Data</span>;
 
         return (
-          <div className={`row row-cols-lg-${values.length}`}>
-            {values.flat().map((f, idx) => (
-              <div key={idx} className="p-2 border rounded bg-light">
-                <div className="fw-bold">{f.name}</div>
-                <div>{f.value ?? "-"}</div>
+          <div className="text-center align-middle p-1">
+            <div className="fw-bold text-uppercase">{record.service}</div>
+            <div className="row fw-bold text-danger border-bottom">
+              <div className="col">Date</div>
+              {values[0].fields.map((field, idx) => (
+                <div key={idx} className="col">
+                  {field.name}
+                </div>
+              ))}
+              <div className="col">Amount</div>
+            </div>
+
+            {values.map((dto, rowIdx) => (
+              <div key={rowIdx} className="row border-bottom">
+                <div className="col">
+                  {dto.date && dayjs(dto.date).format("DD-MMM-YY")}
+                </div>
+                {dto.fields.map((field, colIdx) => (
+                  <div key={colIdx} className="col">
+                    {field.value ?? "-"}
+                  </div>
+                ))}
+                <div className="col">{handleMoney(dto.amount ?? 0)}</div>
               </div>
             ))}
           </div>
@@ -60,12 +64,20 @@ export default function OtherServicesTable({
       },
     },
     {
-      title: "Total",
       dataIndex: "totalAmount",
       key: "totalAmount",
       render: (totalAmount: number) => handleMoney(totalAmount),
     },
   ];
+
+  if (forPrinting)
+    return (
+      <BoostrapTable<GroupBillType>
+        {...rest}
+        columns={columns}
+        dataSource={handleGroupOtherServices(otherServices, record)}
+      />
+    );
 
   return (
     <div>

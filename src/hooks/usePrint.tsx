@@ -32,6 +32,21 @@ export function usePrint({
         size: A4; 
         margin: 11mm 5mm 11mm 5mm; 
       }
+      *{
+       font-size: 12px;
+      }
+         body {
+      font-size: 12px;
+    }
+
+    table {
+      font-size: 12px; 
+    }
+
+    th {
+      font-size: 12px;
+      font-weight: bold;
+    }
     `,
   });
 

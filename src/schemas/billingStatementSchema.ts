@@ -8,6 +8,7 @@ const otherServiceBillDTOSchema: yup.Schema<OtherServiceBillDTO> = yup
   .object()
   .shape({
     totalAmount: yup.number().min(0, minZeroMessage).required(requiredMessage),
+    date: yup.string().required(requiredMessage),
     serviceConfigId: yup.number().required(requiredMessage),
     serviceFields: yup
       .array()
@@ -23,8 +24,8 @@ export const billingStatementSchema: yup.Schema<BillingStatementWithServiceRepor
   yup.object().shape({
     principalId: yup.number().required(requiredMessage),
     productCategoryId: yup.number().required(requiredMessage),
-    dateFrom: yup.date().required(requiredMessage),
-    dateTo: yup.date().required(requiredMessage),
+    dateFrom: yup.string().required(requiredMessage),
+    dateTo: yup.string().required(requiredMessage),
     referenceNumber: yup
       .string()
       .required(requiredMessage)

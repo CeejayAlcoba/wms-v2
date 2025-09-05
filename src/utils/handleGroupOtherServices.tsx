@@ -1,14 +1,12 @@
-import type { ReactNode } from "react";
 import type { BillingStatementDTO } from "../@types/DTOs/BillingStatementDTO";
 import type { OtherServiceBillDTO } from "../@types/DTOs/OtherServiceBillDTO";
-import { handleMoney } from "./handleMoney";
-import type { RefServiceField } from "../@types/tables/RefServiceField";
+import type { ServiceFieldDTO } from "../@types/DTOs/ServiceFieldDTO";
 
 export type GroupBillType = {
   service: string;
   date: string;
   formula: string;
-  values: RefServiceField[][];
+  values: ServiceFieldDTO[];
   amounts: number[];
   totalAmount: number;
 };
@@ -33,24 +31,12 @@ const handleGroupOtherServices = (
         totalAmount: 0,
       };
     }
-
-    // const value = item.serviceFields.map((f) => (
-    //   <div className="d-flex gap-1">
-    //     <strong>{f.name} : </strong>
-    //     <span>{f.value}</span>
-    //   </div>
-    // ));
-
-    // grouped[key].values.push(
-    //   <div className="border rounded-1 p-1">
-    //     <div className={`row row-cols-md-${value.length + 2}`}>
-    //       {item.date} <div>{item.date}</div>
-    //       {value}
-    //       <div>{handleMoney(item.totalAmount ?? 0)}</div>
-    //     </div>
-    //   </div>
-    // );
-    grouped[key].values.push(item.serviceFields);
+    const values: ServiceFieldDTO = {
+      date: item.date,
+      amount: item.totalAmount,
+      fields: item.serviceFields,
+    };
+    grouped[key].values.push(values);
     grouped[key].amounts.push(item.totalAmount ?? 0);
     grouped[key].totalAmount += item.totalAmount ?? 0;
   });

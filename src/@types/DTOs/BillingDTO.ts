@@ -1,3 +1,4 @@
+import type { BillingSignatoriesConfig } from "../tables/BillingSignatoriesConfig";
 import type { BillingHandlingInDTO } from "./BillingHandlingInDTO";
 import type { BillingHandlingOutDTO } from "./BillingHandlingOutDTO";
 import type { BillingStatementWithServiceReportDTO } from "./BillingStatementWithServiceReportDTO";
@@ -8,6 +9,7 @@ export type BillingDTO = {
   handlingOut?: BillingHandlingOutDTO;
   storage?: BillingStorageDTO;
   billingStatement?: BillingStatementWithServiceReportDTO;
+  signatoriesConfigs?: BillingSignatoriesConfig[];
   unVatableAmount: number;
   vat?: number;
   vatCost?: number;
