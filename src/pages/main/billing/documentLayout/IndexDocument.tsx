@@ -1,4 +1,4 @@
-import DocumentLayout from "../../../../components/Documents/DocumentLayout";
+
 import type { BillingDTO } from "../../../../@types/DTOs/BillingDTO";
 import BodyLayout, { type ContentType } from "./BodyLayout";
 import { handleMoney } from "../../../../utils/handleMoney";
@@ -11,13 +11,14 @@ import TableHeaderLayout from "./TableHeaderLayout";
 import handleNumberToWords from "../../../../utils/handleNumberToWords";
 import BillingTableHeader from "../BillingTableHeader";
 import SignatoriesLayout from "./SignatoriesLayout";
+import DocumentLayout from "../../../../components/Documents/DocumentLayout";
 
-type IndexDoumentProps = {
+type IndexDocumentProps = {
   billing: BillingDTO | null;
   ref: React.Ref<HTMLDivElement> | undefined;
 };
 
-export default function DoumentLayout(props: IndexDoumentProps) {
+export default function IndexDocumentLayout(props: IndexDocumentProps) {
   const { billing, ref } = props;
   const handlingInContent: ContentType[] =
     billing?.handlingIn?.details?.map((c) => ({
@@ -66,7 +67,7 @@ export default function DoumentLayout(props: IndexDoumentProps) {
     return decimal === "00" ? "ONLY" : `AND ${decimal}/100 ONLY`;
   };
   return (
-    <div className="bg-light" style={{fontSize:11}}>
+    <div className="bg-light d-none" style={{fontSize:11}}>
       <DocumentLayout ref={ref} headerTitle="BILLING STATEMENT">
         <BillingTableHeader record={billing?.billingStatement as BillingStatementDTO}/>
         <table className="table table-bordered mt-2">

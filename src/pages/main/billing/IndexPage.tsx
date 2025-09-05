@@ -20,7 +20,7 @@ import { Button } from "antd";
 import { FilePdfOutlined, PrinterOutlined } from "@ant-design/icons";
 import { usePrint } from "../../../hooks/usePrint";
 import { usePDF } from "../../../hooks/usePDF";
-import DoumentLayout from "./documentLayout/IndexDoument";
+import IndexDocumentLayout from "./documentLayout/IndexDocument";
 
 export default function IndexPage() {
   const [billing, setBilling] = useState<BillingDTO | null>(null);
@@ -79,7 +79,7 @@ export default function IndexPage() {
 
   return (
     <>
-      <DoumentLayout billing={billing} ref={ref} />
+      <IndexDocumentLayout billing={billing} ref={ref} />
       <FilterCard
         onSearch={handleSearch}
         buttonProps={{
