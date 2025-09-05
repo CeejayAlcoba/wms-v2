@@ -26,8 +26,14 @@ export type TableComponentProps<T extends object = any> = TableProps<T> & {
   headerTitle?: string;
   search?: InputProps;
   add?: ButtonProps;
-  print?: { onBeforePrint?: () => Promise<void> } & ButtonProps;
-  pdf?: { onBeforeDownload?: () => Promise<void> } & ButtonProps;
+  print?: {
+    onBeforePrint?: () => Promise<void>;
+    onAfterPrint?: () => Promise<void>;
+  } & ButtonProps;
+  pdf?: {
+    onBeforeDownload?: () => Promise<void>;
+    onAfterDownload?: () => Promise<void>;
+  } & ButtonProps;
 };
 
 const { Text } = Typography;
@@ -53,9 +59,11 @@ export default function TableComponent<T extends object = any>(
 
   const { handlePrint: onPrint, componentRef: refPrint } = usePrint({
     onBeforePrint: print?.onBeforePrint,
+    onAfterPrint: print?.onAfterPrint,
   });
   const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF({
     onBeforeDownload: pdf?.onBeforeDownload,
+    onAfterDownload: pdf?.onAfterDownload,
   });
   const debouncedSearch = useMemo(
     () => debounce(search?.onChange ? search?.onChange : () => {}, 500),

@@ -3,5 +3,7 @@ import type { BillingStatement } from "../tables/BillingStatement";
 
 export type BillingStatementDTO = {
   principal: string;
+  principalAddress: string;
   productCategory: string;
-} & BillingStatement & IPaginationTotal;
+} & BillingStatement &
+  IPaginationTotal;

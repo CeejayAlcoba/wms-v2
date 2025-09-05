@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 import afreightLogo from "../../assets/afreight-logo.png";
 import { Typography } from "antd";
 
-type MainLayoutProps = {
+type DocumentLayoutProps = {
   children: ReactNode;
   headerTitle: ReactNode;
 };
-export default function MainLayout(props: MainLayoutProps) {
+export default function DocumentLayout(props: DocumentLayoutProps) {
   const { children, headerTitle } = props;
   const { Text } = Typography;
   return (

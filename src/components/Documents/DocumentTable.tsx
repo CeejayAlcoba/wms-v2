@@ -1,7 +1,7 @@
 import { Table, type TableProps } from "antd";
 import "./DocumentTable.css";
-import MainLayout from "./MainLayout";
 import { type ReactNode } from "react";
+import DocumentLayout from "./DocumentLayout";
 
 type DocumentTableProps<T extends object = any> = {
   headerTitle?: ReactNode;
@@ -15,14 +15,14 @@ export default function DocumentTable<T extends object = any>(
   return (
     <div className="d-none">
       <div ref={ref} className="print-container">
-        <MainLayout headerTitle={headerTitle}>
+        <DocumentLayout headerTitle={headerTitle}>
           <Table<T>
             {...rest}
             className="light-table"
             size={"small"}
             pagination={false}
           />
-        </MainLayout>
+        </DocumentLayout>
       </div>
     </div>
   );

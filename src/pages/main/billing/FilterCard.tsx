@@ -47,6 +47,7 @@ export default function FilterCard(props: FilterCardProps) {
               principalProps={{
                 name: "principalId",
                 askterisk: true,
+                onChange: () => {},
               }}
               productCategoryProps={{
                 name: "productCategoryId",

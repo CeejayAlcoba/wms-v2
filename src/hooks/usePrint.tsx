@@ -4,7 +4,7 @@ import { useReactToPrint } from "react-to-print";
 type UsePrintOptions = {
   ref?: React.RefObject<any | null>;
   onBeforePrint?: (() => Promise<void>) | undefined;
-  onAfterPrint?:(() => Promise<void>) | undefined;
+  onAfterPrint?: (() => Promise<void>) | undefined;
   delay?: number;
 };
 
@@ -20,7 +20,7 @@ export function usePrint({
     contentRef: ref ?? componentRef,
     onBeforePrint: async () => {
       if (onBeforePrint) {
-        await onBeforePrint(); 
+        await onBeforePrint();
       }
       if (delay > 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));

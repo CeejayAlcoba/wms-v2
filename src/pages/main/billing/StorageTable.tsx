@@ -118,6 +118,7 @@ export default function StorageTable(props: StorageTableProps) {
             columns={gridfooter}
           />
         )}
+        pagination={false}
         {...rest}
       />
     </>

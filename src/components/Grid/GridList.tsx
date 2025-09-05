@@ -8,7 +8,7 @@ export type GridListColumnsProps<T = any> = {
 }[];
 
 interface GridListProps<T = any> {
-  data: T;
+  data?: T;
   columns: GridListColumnsProps<T>;
   cols?: number;
 }

@@ -5,9 +5,15 @@ type UsePDFOptions = {
   ref?: React.RefObject<HTMLDivElement | null>;
   delay?: number;
   onBeforeDownload?: () => Promise<void> | void;
+  onAfterDownload?: () => Promise<void> | void;
 };
 
-export function usePDF({ ref, delay = 500, onBeforeDownload }: UsePDFOptions = {}) {
+export function usePDF({
+  ref,
+  delay = 500,
+  onBeforeDownload,
+  onAfterDownload,
+}: UsePDFOptions = {}) {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = async (title?: string) => {
@@ -31,6 +37,10 @@ export function usePDF({ ref, delay = 500, onBeforeDownload }: UsePDFOptions = {
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
       })
       .save();
+
+    if (onAfterDownload) {
+      await onAfterDownload();
+    }
   };
 
   return { componentRef, handleDownloadPDF };

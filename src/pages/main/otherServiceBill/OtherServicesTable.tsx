@@ -1,59 +1,34 @@
-import { type TableProps } from "antd";
-
-import TableComponent from "../../../components/Table/TableComponent";
-import {
-  GridList,
-  type GridListColumnsProps,
-} from "../../../components/Grid/GridList";
-import dayjs from "dayjs";
+import { Space, Typography, type TableProps } from "antd";
+import TableComponent, {
+  type TableComponentProps,
+} from "../../../components/Table/TableComponent";
 import type { OtherServiceBillDTO } from "../../../@types/DTOs/OtherServiceBillDTO";
 import type { BillingStatementDTO } from "../../../@types/DTOs/BillingStatementDTO";
 import { handleMoney } from "../../../utils/handleMoney";
+import BillingTableHeader from "../billing/BillingTableHeader";
+import handleGroupOtherServices, {
+  type GroupBillType,
+} from "../../../utils/handleGroupOtherServices";
+import type { RefServiceField } from "../../../@types/tables/RefServiceField";
 
-type GroupBillType = {
-  service: string;
-  formula: string;
-  values: string[];
-  amounts: number[];
-  totalAmount: number;
-};
-
-export default function OtherServicesTable(props: {
+type OtherServicesTableProps = {
   otherServices: OtherServiceBillDTO[];
-  record: BillingStatementDTO;
-}) {
-  const { otherServices, record } = props;
+  record?: BillingStatementDTO;
+} & TableComponentProps<GroupBillType>;
 
-  const handleGetGroupBills = (): GroupBillType[] => {
-    const data = otherServices.filter((c) => c.billingStatementId == record.id);
-    const grouped: Record<string, GroupBillType> = {};
+const { Text } = Typography;
 
-    data.forEach((item) => {
-      const key = `${item.serviceConfig?.name}__${item.serviceConfig?.displayFormula}`;
-
-      if (!grouped[key]) {
-        grouped[key] = {
-          service: item.serviceConfig?.name ?? "",
-          formula: item.serviceConfig?.displayFormula ?? "",
-          values: [],
-          amounts: [],
-          totalAmount: 0,
-        };
-      }
-
-      const valueStr = item.serviceFields
-        .map((f) => `${f.name} : ${f.value}`)
-        .join(", ");
-
-      grouped[key].values.push(valueStr);
-      grouped[key].amounts.push(item.totalAmount ?? 0);
-      grouped[key].totalAmount += item.totalAmount ?? 0;
-    });
-
-    return Object.values(grouped);
-  };
-
+export default function OtherServicesTable({
+  otherServices,
+  record,
+  ...rest
+}: OtherServicesTableProps) {
   const columns: TableProps<GroupBillType>["columns"] = [
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+    },
     {
       title: "Service",
       dataIndex: "service",
@@ -68,15 +43,21 @@ export default function OtherServicesTable(props: {
       title: "Value",
       dataIndex: "values",
       key: "values",
-      render: (values: string[]) =>
-        values?.map((val, idx) => <div key={idx}>{val}</div>),
-    },
-    {
-      title: "Amount",
-      dataIndex: "amounts",
-      key: "amounts",
-      render: (amounts: number[]) =>
-        amounts?.map((amt, idx) => <div key={idx}>{handleMoney(amt)}</div>),
+      render: (values: RefServiceField[][], record) => {
+        if (!values || values.length === 0)
+          return <Text type="secondary">No Data</Text>;
+
+        return (
+          <div className={`row row-cols-lg-${values.length}`}>
+            {values.flat().map((f, idx) => (
+              <div key={idx} className="p-2 border rounded bg-light">
+                <div className="fw-bold">{f.name}</div>
+                <div>{f.value ?? "-"}</div>
+              </div>
+            ))}
+          </div>
+        );
+      },
     },
     {
       title: "Total",
@@ -86,50 +67,19 @@ export default function OtherServicesTable(props: {
     },
   ];
 
-  const gridHeader: GridListColumnsProps<BillingStatementDTO> = [
-    {
-      key: "dateFrom",
-      label: "From",
-      render: (value) => dayjs(value).format("DD-MMM-YY"),
-    },
-    {
-      key: "principal",
-      label: "Principal",
-    },
-    {
-      key: "dateTo",
-      label: "To",
-      render: (value) => dayjs(value).format("DD-MMM-YY"),
-    },
-
-    {
-      key: "productCategory",
-      label: "Product",
-    },
-     {
-      key: "referenceNumber",
-      label: "Ref No",
-    },
-  ];
-
   return (
     <div>
       <TableComponent<GroupBillType>
         indexedColumn={false}
         rowKey="id"
         headerTitle="Other Services"
-        title={() => (
-          <GridList<BillingStatementDTO>
-            data={record}
-            columns={gridHeader}
-            cols={2}
-          />
-        )}
-        dataSource={handleGetGroupBills()}
+        title={() => <BillingTableHeader record={record} />}
+        dataSource={handleGroupOtherServices(otherServices, record)}
         columns={columns}
         scroll={{ x: "max-content" }}
         bordered
         pagination={false}
+        {...rest}
       />
     </div>
   );
