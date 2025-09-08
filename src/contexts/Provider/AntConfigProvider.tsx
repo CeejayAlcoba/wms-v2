@@ -2,9 +2,9 @@ import { useState } from "react";
 import { AntConfigContext } from "../useAntConfig";
 import { ConfigProvider, theme } from "antd";
 import { THEME_MODE } from "../../constants/LOCAL_STORAGE_KEYS";
+import useWindowWidth from "../../hooks/useWindowWidth";
 
 export type ThemeModeType = "dark" | "light";
-
 
 export const AntConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -21,10 +21,20 @@ export const AntConfigProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsDarkMode(!isDarkMode);
     localStorage.setItem(THEME_MODE, newMode);
   };
+  const {windowWidth} =useWindowWidth()
 
+  const cardPadding = windowWidth> 425 ? 20 : 5;
   return (
     <ConfigProvider
       theme={{
+        components: {
+          Card: {
+            padding: cardPadding,
+            paddingLG: cardPadding,
+            paddingMD: cardPadding,
+            paddingSM: cardPadding,
+          },
+        },
         algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
       }}
     >
