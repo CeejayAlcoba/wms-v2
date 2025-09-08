@@ -17,10 +17,17 @@ type SaveModalProps = {
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: BillingStatementWithServiceReportDTO | null;
+  disabledHeaders?: boolean;
 };
 
 export default function SaveModal(props: SaveModalProps) {
-  const { open, onAfterSave, onCancel, selectedData } = props;
+  const {
+    open,
+    onAfterSave,
+    onCancel,
+    selectedData,
+    disabledHeaders = false,
+  } = props;
   const { title: pageTitle } = usePage();
 
   const handleSave = async (
@@ -51,14 +58,17 @@ export default function SaveModal(props: SaveModalProps) {
   };
 
   const formik = useFormik({
-    initialValues: selectedData ?? EMPTY_FORM,
+    initialValues: selectedData?.id ? selectedData : EMPTY_FORM,
     enableReinitialize: true,
     validationSchema: billingStatementSchema,
     onSubmit: handleSave,
   });
 
   const handleBillingStatement = async () => {
-    if (!selectedData?.id) return;
+    if (!selectedData?.id) {
+      formik.setValues({ ...selectedData });
+      return;
+    }
     const billing = await billingStatementService.GetById(selectedData.id);
     formik.setValues(billing);
   };
@@ -83,17 +93,25 @@ export default function SaveModal(props: SaveModalProps) {
               name: "dateFrom",
               label: "Date From",
               askterisk: true,
+              disabled: disabledHeaders,
             }}
-            dateToProps={{ name: "dateTo", label: "Date To", askterisk: true }}
+            dateToProps={{
+              name: "dateTo",
+              label: "Date To",
+              askterisk: true,
+              disabled: disabledHeaders,
+            }}
           />
           <PrincipalProductSelect<BillingStatementWithServiceReportDTO>
             principalProps={{
               name: "principalId",
               askterisk: true,
+              disabled: disabledHeaders,
             }}
             productCategoryProps={{
               name: "productCategoryId",
               askterisk: true,
+              disabled: disabledHeaders,
             }}
           />
 

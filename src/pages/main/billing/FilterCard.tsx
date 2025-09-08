@@ -1,34 +1,26 @@
 import { Button, Card, type ButtonProps } from "antd";
-import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
+import {
+  Form,
+  FormikProvider,
+  type FormikContextType,
+} from "formik";
 import { SearchOutlined } from "@ant-design/icons";
-import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import type { BillingFilterDTO } from "../../../@types/DTOs/BillingFilterDTO";
 import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
-import { billingFilterSchema } from "../../../schemas/billingFilterSchema";
 
 export type FilterCardProps = {
-  onSearch: (
-    values: BillingFilterDTO,
-    formikHelpers: FormikHelpers<BillingFilterDTO>
-  ) => void | Promise<any>;
+  filterFormik: FormikContextType<BillingFilterDTO>;
   buttonProps?: ButtonProps;
 };
 
 export default function FilterCard(props: FilterCardProps) {
-  const { onSearch, buttonProps } = props;
-
-  const formik = useFormik({
-    initialValues: EMPTY_FORM,
-    enableReinitialize: true,
-    validationSchema: billingFilterSchema,
-    onSubmit: onSearch,
-  });
+  const { filterFormik, buttonProps } = props;
 
   return (
     <Card className="mb-2">
       <h6>Filters</h6>
-      <FormikProvider value={formik}>
+      <FormikProvider value={filterFormik}>
         <Form>
           <div className="row row-cols-lg-1">
             <DateRangePickerFormik<BillingFilterDTO>
@@ -47,7 +39,6 @@ export default function FilterCard(props: FilterCardProps) {
               principalProps={{
                 name: "principalId",
                 askterisk: true,
-                onChange: () => {},
               }}
               productCategoryProps={{
                 name: "productCategoryId",
@@ -60,7 +51,7 @@ export default function FilterCard(props: FilterCardProps) {
             <Button
               htmlType="submit"
               type="primary"
-              onClick={() => formik.submitForm()}
+              onClick={() => filterFormik.submitForm()}
               icon={<SearchOutlined />}
               {...buttonProps}
             >

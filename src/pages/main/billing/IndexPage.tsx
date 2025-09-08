@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FilterCard from "./FilterCard";
 import type { BillingDTO } from "../../../@types/DTOs/BillingDTO";
 import type { BillingFilterDTO } from "../../../@types/DTOs/BillingFilterDTO";
@@ -17,21 +17,34 @@ import BillingTableHeader from "./BillingTableHeader";
 import type { StorageDetails } from "../../../@types/DTOs/BillingStorageDTO";
 import type { GroupBillType } from "../../../utils/handleGroupOtherServices";
 import { Button } from "antd";
-import { FilePdfOutlined, PrinterOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  FilePdfOutlined,
+  PrinterOutlined,
+} from "@ant-design/icons";
 import { usePrint } from "../../../hooks/usePrint";
 import { usePDF } from "../../../hooks/usePDF";
 import IndexDocumentLayout from "./documentLayout/IndexDocument";
+import BillingHeaderForm from "./BillingHeaderForm";
+import { useFormik } from "formik";
+import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
+import { billingFilterSchema } from "../../../schemas/billingFilterSchema";
+import OtherServicesSaveModal from "../otherServiceBill/SaveModal";
 
 export default function IndexPage() {
   const [billing, setBilling] = useState<BillingDTO | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showHeader, setShowHeader] = useState<boolean>(false);
+  const [isSearched, setIsSearched] = useState<boolean>(false);
+  const [otherServicesSaveModal, setOtherServicesSaveModal] =
+    useState<boolean>(false);
 
   const handleSearch = async (value: BillingFilterDTO) => {
     try {
       setIsLoading(true);
       const res = await billingService.Get(value);
       setBilling(res);
+      setIsSearched(true);
     } catch {
     } finally {
       setIsLoading(false);
@@ -51,6 +64,29 @@ export default function IndexPage() {
   };
   const handleAfterPrint = async () => {
     await setShowHeader(false);
+  };
+
+  const handleChangeRefNumber = (value: string) => {
+    if (billing)
+      setBilling({
+        ...billing,
+        billingStatement: {
+          ...billing.billingStatement,
+          referenceNumber: value,
+        },
+      });
+  };
+
+  const filterFormik = useFormik<BillingFilterDTO>({
+    initialValues: EMPTY_FORM,
+    enableReinitialize: true,
+    validationSchema: billingFilterSchema,
+    onSubmit: handleSearch,
+  });
+
+  const handleAfterSaveOtherServices = () => {
+    filterFormik.submitForm();
+    setOtherServicesSaveModal(false)
   };
 
   const extendedTable = <T extends object = any>(): TableComponentProps<T> => {
@@ -73,15 +109,19 @@ export default function IndexPage() {
     ref,
   });
   const { handleDownloadPDF } = usePDF({
-    fontSize:11,
+    fontSize: 11,
     ref,
   });
+  useEffect(() => {
+    setIsSearched(false);
+    setBilling(null)
+  }, [filterFormik.values]);
 
   return (
     <>
       <IndexDocumentLayout billing={billing} ref={ref} />
       <FilterCard
-        onSearch={handleSearch}
+        filterFormik={filterFormik}
         buttonProps={{
           loading: isLoading,
         }}
@@ -93,7 +133,7 @@ export default function IndexPage() {
           color="primary"
           icon={<FilePdfOutlined />}
           onClick={() => handleDownloadPDF("BillingStatement")}
-          disabled={!billing}
+          disabled={!billing || !isSearched}
         >
           PDF
         </Button>
@@ -103,11 +143,19 @@ export default function IndexPage() {
           color="primary"
           icon={<PrinterOutlined />}
           onClick={handlePrint}
-          disabled={!billing}
+          disabled={!billing || !isSearched}
         >
           PRINT
         </Button>
       </div>
+      <BillingHeaderForm
+        disabled={!isSearched}
+        billing={{
+          ...billing?.billingStatement,
+          referenceNumber: billing?.billingStatement?.referenceNumber ?? "",
+        }}
+        handleChangeRefNumber={handleChangeRefNumber}
+      />
 
       <HandlingInTable
         {...extendedTable<HandlingInDetails>()}
@@ -133,8 +181,21 @@ export default function IndexPage() {
           showHeader && <BillingTableHeader record={billingMapped()} />
         }
       />
+      <OtherServicesSaveModal
+        disabledHeaders={true}
+        open={otherServicesSaveModal}
+        onAfterSave={handleAfterSaveOtherServices}
+        onCancel={()=>setOtherServicesSaveModal(false)}
+        selectedData={billing?.billingStatement ?? null}
+      />
 
       <OtherServicesTable
+        add={{
+          disabled:!isSearched,
+          onClick: () => setOtherServicesSaveModal(true),
+          children: "Edit",
+          icon: <EditOutlined />,
+        }}
         {...extendedTable<GroupBillType>()}
         title={() =>
           showHeader && <BillingTableHeader record={billingMapped()} />

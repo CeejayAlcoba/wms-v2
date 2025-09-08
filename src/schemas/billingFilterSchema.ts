@@ -5,6 +5,6 @@ import type { BillingFilterDTO } from "../@types/DTOs/BillingFilterDTO";
 export const billingFilterSchema: yup.Schema<BillingFilterDTO> = yup.object({
   principalId: yup.number().required(requiredMessage),
   productCategoryId: yup.number().required(requiredMessage),
-  dateFrom: yup.date().required(requiredMessage),
-  dateTo: yup.date().required(requiredMessage),
+  dateFrom: yup.string().required(requiredMessage),
+  dateTo: yup.string().required(requiredMessage),
 });

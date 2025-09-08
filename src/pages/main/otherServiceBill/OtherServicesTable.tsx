@@ -66,7 +66,21 @@ export default function OtherServicesTable({
     {
       dataIndex: "totalAmount",
       key: "totalAmount",
-      render: (totalAmount: number) => handleMoney(totalAmount),
+      render: (totalAmount: number) => (
+        <div>
+          <div className="text-danger fw-bold d-flex justify-content-center mt-3">
+            Total
+          </div>
+          <div
+            style={{
+              height: "90%",
+            }}
+            className=" d-flex justify-content-center align-items-end"
+          >
+            {handleMoney(totalAmount)}
+          </div>
+        </div>
+      ),
     },
   ];
 

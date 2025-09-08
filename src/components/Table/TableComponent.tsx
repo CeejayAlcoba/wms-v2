@@ -150,7 +150,7 @@ export default function TableComponent<T extends object = any>(
               icon={<FilePdfOutlined />}
             />
           </Tooltip>
-          
+
           <Tooltip title="Print">
             <Button
               loading={props.loading}
@@ -163,13 +163,13 @@ export default function TableComponent<T extends object = any>(
 
           {add && (
             <Button
-              {...add}
               loading={props.loading}
               onClick={add.onClick}
               type="primary"
               icon={<PlusOutlined />}
+              {...add}
             >
-              Add
+              {add.children ?? "Add"}
             </Button>
           )}
         </div>

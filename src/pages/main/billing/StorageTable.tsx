@@ -79,7 +79,7 @@ export default function StorageTable(props: StorageTableProps) {
   ];
   const gridfooter: GridListColumnsProps<StorageTotals> = [
     {
-      key: "totalBill",
+      key: "storageRate",
       label: "Rate",
       render: (_, record) => {
         return (

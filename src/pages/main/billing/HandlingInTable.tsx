@@ -62,7 +62,7 @@ export default function HandlingInTable(props: HandlingInTableProps) {
   ];
   const gridfooter: GridListColumnsProps<HandlingInTotals> = [
     {
-      key: "total",
+      key: "billType",
       render: (_, record) => {
         return (
           <>
@@ -73,7 +73,7 @@ export default function HandlingInTable(props: HandlingInTableProps) {
       },
     },
     {
-      key: "total",
+      key: "handlingInRate",
       label: "Rate",
       render: (_, record) => {
         return (
@@ -84,10 +84,10 @@ export default function HandlingInTable(props: HandlingInTableProps) {
       },
     },
     {
-      key: "total",
+      key: "bill",
       label: "Bill",
-      render: (_, record) => {
-        return <span>{handleMoney(record?.bill)}</span>;
+      render: (value) => {
+        return <span>{handleMoney(value)}</span>;
       },
     },
   ];

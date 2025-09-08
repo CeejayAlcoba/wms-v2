@@ -63,7 +63,7 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
   ];
   const gridfooter: GridListColumnsProps<HandlingOutTotals> = [
     {
-      key: "total",
+      key: "billType",
       render: (_, record) => {
         return (
           <>
@@ -74,7 +74,7 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
       },
     },
     {
-      key: "total",
+      key: "handlingOutRate",
       label: "Rate",
       render: (_, record) => {
         return (
@@ -85,10 +85,10 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
       },
     },
     {
-      key: "total",
+      key: "bill",
       label: "Bill",
-      render: (_, record) => {
-        return <span>{handleMoney(record?.bill)}</span>;
+      render: (value) => {
+        return <span>{handleMoney(value)}</span>;
       },
     },
   ];
