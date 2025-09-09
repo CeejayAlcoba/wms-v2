@@ -11,12 +11,13 @@ import { useQuery } from "@tanstack/react-query";
 import { roleService } from "../../../services/roleService";
 import type { RefRole } from "../../../@types/tables/RefRole";
 import type { UserDTO } from "../../../@types/DTOs/UserDTO";
-import { userWithPasswordSchema } from "../../../schemas/userWithPasswordSchema";
+import { userAddSchema } from "../../../schemas/userAddSchema";
 import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
-import type { UserWithPasswordDTO } from "../../../@types/DTOs/UserWithPasswordDTO";
+import type { UserAddDTO } from "../../../@types/DTOs/UserAddDTO";
 import { EMPTY_WITH_PASSWORD } from "./__constants__/EMPTY_WITH_PASSWORD";
 import CheckboxFormik from "../../../components/Formik/CheckboxFormik";
 import useUser from "../../../contexts/useUser";
+import type { AxiosError } from "axios";
 
 type SaveModalProps = {
   open: boolean;
@@ -49,7 +50,7 @@ export default function SaveModal(props: SaveModalProps) {
         if (!values.id) throw new Error("Id is null");
         await userService.Update(values.id, values);
       } else if (type == "Add") {
-        await userService.Add(values);
+        await userService.Add({ ...values, isApproved: true });
       } else {
         await userService.Approve(values);
       }
@@ -58,7 +59,14 @@ export default function SaveModal(props: SaveModalProps) {
       });
       formik.resetForm();
       onAfterSave();
-    } catch {
+    } catch (e: any) {
+      const ex: AxiosError = e;
+      SweetAlert({
+        icon: "error",
+        timer: undefined,
+        showConfirmButton: true,
+        title: `${(ex?.response?.data as string) ?? "Request failed"}`,
+      });
     } finally {
       formik.setSubmitting(false);
     }
@@ -72,7 +80,7 @@ export default function SaveModal(props: SaveModalProps) {
   const formik = useFormik({
     initialValues: selectedData ?? EMPTY_WITH_PASSWORD,
     enableReinitialize: true,
-    validationSchema: type == "Add" ? userWithPasswordSchema : userSchema,
+    validationSchema: type == "Add" ? userAddSchema : userSchema,
     onSubmit: handleSave,
   });
 
@@ -94,27 +102,27 @@ export default function SaveModal(props: SaveModalProps) {
               name="firstName"
             />
             <InputFormik<UserDTO> label="Last Name" askterisk name="lastName" />
-            <InputFormik<UserDTO>
-              label="Employee Number"
-              askterisk
-              name="employeeNumber"
-            />
-            <DatePickerFormik<UserDTO>
-              label="Birthday"
-              askterisk
-              name="birthday"
-            />
           </div>
           <InputFormik<UserDTO> label="User Name" askterisk name="username" />
           {type == "Add" && (
             <>
-              <InputPasswordFormik<UserWithPasswordDTO>
+              <InputFormik<UserAddDTO>
+                label="Employee Number"
+                askterisk
+                name="employeeNumber"
+              />
+              <DatePickerFormik<UserAddDTO>
+                label="Birthday"
+                askterisk
+                name="birthday"
+              />
+              <InputPasswordFormik<UserAddDTO>
                 askterisk
                 label="Password"
                 name="password"
               />
 
-              <InputPasswordFormik<UserWithPasswordDTO>
+              <InputPasswordFormik<UserAddDTO>
                 askterisk
                 label="Confirm Password"
                 name="confirmPassword"
@@ -133,8 +141,21 @@ export default function SaveModal(props: SaveModalProps) {
           {user?.isMaster && (
             <CheckboxFormik<UserDTO>
               name="isMaster"
-              description="Grants full access to all sidebar menus. Can edit and delete this information"
               label="Master"
+              description={
+                <ul style={{ margin: 0, paddingLeft: "1.2em" }}>
+                  <li>
+                    Grants full access to <strong>master features</strong>
+                  </li>
+                  <li>
+                    Only <strong>Master</strong> can <em>update</em> and{" "}
+                    <em>delete</em> this information
+                  </li>
+                  <li>
+                    Unrestricted access to <strong>all sidebars</strong>
+                  </li>
+                </ul>
+              }
             />
           )}
         </Form>

@@ -10,13 +10,14 @@ import {
 } from "@ant-design/icons";
 import InputFormik from "../../../components/Formik/InputFormik";
 import InputPasswordFormik from "../../../components/Formik/InputPasswordFormik";
-import type { UserWithPasswordDTO } from "../../../@types/DTOs/UserWithPasswordDTO";
+import type { UserAddDTO } from "../../../@types/DTOs/UserAddDTO";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import { useAuthFormTypeContext } from "../../../contexts/useAuthFormTypeContext";
-import { userWithPasswordSchema } from "../../../schemas/userWithPasswordSchema";
+
 import { userService } from "../../../services/userService";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
+import { userAddSchema } from "../../../schemas/userAddSchema";
 
 const { Title, Text } = Typography;
 
@@ -24,8 +25,8 @@ export const SignupForm: React.FC = () => {
   const { setType } = useAuthFormTypeContext();
 
   const handleSignUp = async (
-    values: UserWithPasswordDTO,
-    formikHelpers: FormikHelpers<UserWithPasswordDTO>
+    values: UserAddDTO,
+    formikHelpers: FormikHelpers<UserAddDTO>
   ) => {
     try {
       await userService.Add(values);
@@ -42,8 +43,8 @@ export const SignupForm: React.FC = () => {
     }
   };
 
-  const formik = useFormik<UserWithPasswordDTO>({
-    validationSchema: userWithPasswordSchema,
+  const formik = useFormik<UserAddDTO>({
+    validationSchema: userAddSchema,
     initialValues: EMPTY_FORM,
     onSubmit: handleSignUp,
   });
@@ -70,7 +71,7 @@ export const SignupForm: React.FC = () => {
             <Space direction="vertical" size="middle" style={{ width: "100%" }}>
               <div className="row">
                 <div className="col-md-6">
-                  <InputFormik<UserWithPasswordDTO>
+                  <InputFormik<UserAddDTO>
                     askterisk
                     name="firstName"
                     label="First Name"
@@ -78,7 +79,7 @@ export const SignupForm: React.FC = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <InputFormik<UserWithPasswordDTO>
+                  <InputFormik<UserAddDTO>
                     askterisk
                     name="lastName"
                     label="Last Name"
@@ -88,7 +89,7 @@ export const SignupForm: React.FC = () => {
               </div>
               <div className="row">
                 <div className="col-md-6">
-                  <InputFormik<UserWithPasswordDTO>
+                  <InputFormik<UserAddDTO>
                     askterisk
                     name="employeeNumber"
                     label="Employee Number"
@@ -96,7 +97,7 @@ export const SignupForm: React.FC = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <DatePickerFormik<UserWithPasswordDTO>
+                  <DatePickerFormik<UserAddDTO>
                     askterisk
                     name="birthday"
                     label="Birthday"
@@ -105,21 +106,21 @@ export const SignupForm: React.FC = () => {
                 </div>
               </div>
 
-              <InputFormik<UserWithPasswordDTO>
+              <InputFormik<UserAddDTO>
                 askterisk
                 name="username"
                 label="Username"
                 prefix={<UserOutlined />}
               />
 
-              <InputPasswordFormik<UserWithPasswordDTO>
+              <InputPasswordFormik<UserAddDTO>
                 askterisk
                 label="Password"
                 name="password"
                 prefix={<LockOutlined />}
               />
 
-              <InputPasswordFormik<UserWithPasswordDTO>
+              <InputPasswordFormik<UserAddDTO>
                 askterisk
                 label="Confirm Password"
                 name="confirmPassword"

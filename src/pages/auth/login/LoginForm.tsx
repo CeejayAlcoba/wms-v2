@@ -111,6 +111,10 @@ export const LoginForm: React.FC = () => {
           <Button type="link" onClick={() => setType("signup")}>
             Sign Up
           </Button>
+
+          <Button type="link" onClick={() => setType("forgot")}>
+            Forgot Password?
+          </Button>
         </div>
       </Card>
     </div>

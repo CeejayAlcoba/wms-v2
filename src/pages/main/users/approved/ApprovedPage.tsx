@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { userService } from "../../../../services/userService";
 import TableComponent from "../../../../components/Table/TableComponent";
 import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
-import dayjs from "dayjs";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import type { UserDTO } from "../../../../@types/DTOs/UserDTO";
@@ -15,7 +14,7 @@ export default function ApprovedPage(props: { search: UserDTO }) {
   const { search } = props;
   const [saveModal, setSaveModal] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<UserDTO | null>(null);
-  const {user} = useUser();
+  const { user } = useUser();
   const { data: userPendings, refetch } = useQuery({
     queryKey: ["userPendings", search],
     queryFn: async () =>
@@ -62,17 +61,6 @@ export default function ApprovedPage(props: { search: UserDTO }) {
       title: "Last Name",
       dataIndex: "lastName",
       key: "lastName",
-    },
-    {
-      title: "Employee Number",
-      dataIndex: "employeeNumber",
-      key: "employeeNumber",
-    },
-    {
-      title: "Birthday",
-      dataIndex: "birthday",
-      key: "birthday",
-      render: (value: Date) => value && dayjs(value).format("YYYY-MM-DD"),
     },
     {
       title: "Roles",

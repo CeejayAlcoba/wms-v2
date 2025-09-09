@@ -2,11 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { userService } from "../../../../services/userService";
 import TableComponent from "../../../../components/Table/TableComponent";
 import { Button, Tooltip, type TableProps } from "antd";
-import dayjs from "dayjs";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import type { UserDTO } from "../../../../@types/DTOs/UserDTO";
-import type { RefRole } from "../../../../@types/tables/RefRole";
 import SaveModal from "../SaveModal";
 
 export default function PendingPage(props: { search: UserDTO }) {
@@ -49,23 +47,6 @@ export default function PendingPage(props: { search: UserDTO }) {
       title: "Last Name",
       dataIndex: "lastName",
       key: "lastName",
-    },
-    {
-      title: "Employee Number",
-      dataIndex: "employeeNumber",
-      key: "employeeNumber",
-    },
-    {
-      title: "Birthday",
-      dataIndex: "birthday",
-      key: "birthday",
-      render: (value: Date) => value && dayjs(value).format("YYYY-MM-DD"),
-    },
-    {
-      title: "Roles",
-      dataIndex: "roles",
-      key: "roles",
-      render: (value: RefRole[]) => value.map((v) => v.name).join(","),
     },
     {
       title: "Action",

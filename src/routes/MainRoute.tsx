@@ -16,6 +16,7 @@ import TestPage from "../pages/main/test/TestPage";
 import AuthPage from "../pages/auth/AuthPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import WrongServerPage from "../pages/WrongServerPage";
+import ChangePasswordPage from "../pages/auth/changePassword/ChangePasswordPage";
 
 export default function MainRoute() {
   const { user } = useUser();
@@ -74,6 +75,10 @@ export default function MainRoute() {
         </Route>
         <Route path="/login" element={<AuthPage />} />
         <Route path="/test" element={<TestPage />} />
+        <Route
+          path="/change-password/:token"
+          element={<ChangePasswordPage />}
+        />
         <Route
           path="*"
           element={

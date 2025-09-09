@@ -31,10 +31,6 @@ export default function FilterCard(props: FilterCardProps) {
             <InputFormik<Administrator> label="User Name" name="username" />
             <InputFormik<Administrator> label="Last Name" name="lastName" />
             <InputFormik<Administrator> label="First Name" name="firstName" />
-            <InputFormik<Administrator>
-              label="Employee No."
-              name="employeeNumber"
-            />
           </div>
           <div className="d-flex justify-content-end">
             <Button

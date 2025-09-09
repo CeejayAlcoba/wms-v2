@@ -13,8 +13,6 @@ const handleDecodeJwt = (token?: string) => {
       username: decoded.Username,
       firstName: decoded.FirstName,
       lastName: decoded.LastName,
-      employeeNumber: decoded.EmployeeNumber,
-      birthday: decoded.Birthday,
       isApproved: decoded.IsApproved == "True",
       isMaster: decoded.IsMaster == "True",
       roles: decoded.Roles ? (JSON.parse(decoded.Roles) as RoleDTO[]) : [],

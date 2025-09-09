@@ -1,6 +1,6 @@
-import type { UserWithPasswordDTO } from "../../../../@types/DTOs/UserWithPasswordDTO";
+import type { UserAddDTO } from "../../../../@types/DTOs/UserAddDTO";
 
-export const EMPTY_FORM: UserWithPasswordDTO = {
+export const EMPTY_FORM: UserAddDTO = {
   password: null,
   confirmPassword: null,
   roles: [],

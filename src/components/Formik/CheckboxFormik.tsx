@@ -1,13 +1,14 @@
 import { Field, type FieldProps } from "formik";
 import { Form, Checkbox, Typography } from "antd";
 import type { CheckboxProps } from "antd";
+import type { ReactNode } from "react";
 
 const { Text } = Typography;
 
 type CheckboxFormikProps<T = unknown> = {
   name: keyof T & string;
   label?: string;
-  description?: string;
+  description?: string | ReactNode;
   askterisk?: boolean;
 } & CheckboxProps;
 

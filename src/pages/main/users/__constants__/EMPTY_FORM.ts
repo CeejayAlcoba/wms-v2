@@ -4,7 +4,5 @@ export const EMPTY_FORM: UserDTO = {
   username: null,
   firstName: null,
   lastName: null,
-  employeeNumber: null,
-  birthday: null,
-  roles:[]
+  roles: [],
 };
