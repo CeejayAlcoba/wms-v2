@@ -2,8 +2,9 @@ import type { IPaginationFilter } from "../pagination/IPaginationFilter";
 import type { CargoDetails } from "../tables/CargoDetails";
 
 export type ReportOutboundFilterDTO = {
-  actualCheckInDateFrom?: string | null;
-  actualCheckInDateTo?: string | null;
+  pullOutDateFrom?: string | null;
+  pullOutDateTo?: string | null;
+  actualCheckInDate?: string | null;
   icrReferenceNumber?: string | null;
   principalId?: number | null;
   productCategoryId?: number | null;

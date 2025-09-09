@@ -10,6 +10,7 @@ export type HandlingOutDetails = {
   cubicMeter: number;
   palleteCount: number;
   totalCbmPerDay: number;
+  isAdjusted: boolean;
 };
 
 export type HandlingOutTotals = {

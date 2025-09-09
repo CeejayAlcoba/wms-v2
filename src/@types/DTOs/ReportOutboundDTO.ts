@@ -2,6 +2,7 @@ import type { IPaginationTotal } from "../pagination/IPaginationTotal";
 import type { CargoDetails } from "../tables/CargoDetails";
 
 export type ReportOutboundDTO = {
+  pullOutDate?: string | null;
   actualCheckInDate?: string | null;
   icrReferenceNumber?: string | null;
   principal?: string | null;

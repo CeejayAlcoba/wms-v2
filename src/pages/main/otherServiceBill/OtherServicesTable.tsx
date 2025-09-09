@@ -94,7 +94,7 @@ export default function OtherServicesTable({
     );
 
   return (
-    <div>
+    <>
       <TableComponent<GroupBillType>
         indexedColumn={false}
         rowKey="id"
@@ -107,6 +107,6 @@ export default function OtherServicesTable({
         pagination={false}
         {...rest}
       />
-    </div>
+    </>
   );
 }

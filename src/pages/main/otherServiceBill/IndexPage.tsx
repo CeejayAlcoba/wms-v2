@@ -171,7 +171,7 @@ export default function IndexPage() {
   ];
 
   return (
-    <>
+    <div className="row row-cols-1 gap-2">
       <SaveModal
         open={saveModalOpen}
         onAfterSave={handleAfterSave}
@@ -207,6 +207,6 @@ export default function IndexPage() {
           onExpand: handleExpand,
         }}
       />
-    </>
+    </div>
   );
 }

@@ -7,7 +7,6 @@ import type { ReportOutboundFilterDTO } from "../../../@types/DTOs/ReportOutboun
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import SelectFormik from "../../../components/Formik/SelectFormik";
-import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
 import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";
 import { useQuery } from "@tanstack/react-query";
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
@@ -49,19 +48,32 @@ export default function FilterCard(props: FilterCardProps) {
         <div className="row row-cols-lg-2">
           <DateRangePickerFormik<ReportOutboundFilterDTO>
             dateFromProps={{
-              label: "Actual Check-in Date From",
-              name: "actualCheckInDateFrom",
+              label: "Pull Out Date",
+              name: "pullOutDateFrom",
             }}
             dateToProps={{
               label: "To",
-              name: "actualCheckInDateTo",
+              name: "pullOutDateTo",
             }}
           />
-
+          <DatePickerFormik<ReportOutboundFilterDTO>
+            label="Actual Check In"
+            name="actualCheckInDate"
+          />
+          <InputFormik<ReportOutboundFilterDTO>
+            prefix={"PL-"}
+            label="Pick List No"
+            name="pickListDetailsId"
+          />
+          <InputFormik<ReportOutboundFilterDTO>
+            prefix={"GI-"}
+            label="Good Issue"
+            name="goodIssueId"
+          />
+          <InputFormik<ReportOutboundFilterDTO> label="OCR" name="ocrNumber" />
           <InputFormik<ReportOutboundFilterDTO>
             label="ICR Reference Number"
             name="icrReferenceNumber"
-            askterisk
           />
           <PrincipalProductSelect<ReportOutboundFilterDTO>
             principalProps={{
@@ -86,10 +98,6 @@ export default function FilterCard(props: FilterCardProps) {
             label="PRO Number"
             name="proNumber"
           />
-          <InputFormik<ReportOutboundFilterDTO>
-            label="Delivery Note"
-            name="deliveryNote"
-          />
           <SelectFormik<ReportOutboundFilterDTO, RefUnitOfMeasurement>
             label="Unit of Measurement"
             name="unitOfMeasurementId"
@@ -100,17 +108,6 @@ export default function FilterCard(props: FilterCardProps) {
           <InputFormik<ReportOutboundFilterDTO>
             label="Batch No"
             name="batchNo"
-          />
-          <DatePickerFormik<ReportOutboundFilterDTO>
-            label="Expiration Date"
-            name="expirationDate"
-          />
-          <SelectFormik<ReportOutboundFilterDTO, ShelfDetails>
-            label="Bin Location"
-            name="shelfDetailsId"
-            keyValue="id"
-            keyLabel="name"
-            option={[]}
           />
         </div>
         <div className="d-flex justify-content-end">

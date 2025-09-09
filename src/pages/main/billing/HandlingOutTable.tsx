@@ -54,8 +54,9 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
       title: "Total CBM/Day",
       dataIndex: "totalCbmPerDay",
       key: "totalCbmPerDay",
-      render: (value: number) => {
-        if (value == 1) return <Text type="danger">{value}</Text>;
+      render: (value: number, record: HandlingOutDetails) => {
+        if (record.isAdjusted && value)
+          return <Text type="danger">{value}</Text>;
         else if (!value) return <span></span>;
         else return value;
       },

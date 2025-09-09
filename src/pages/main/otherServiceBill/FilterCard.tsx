@@ -24,7 +24,7 @@ export default function FilterCard(props: FilterCardProps) {
   });
 
   return (
-    <Card className="mb-2">
+    <Card>
       <h6>Filters</h6>
       <FormikProvider value={formik}>
         <Form>

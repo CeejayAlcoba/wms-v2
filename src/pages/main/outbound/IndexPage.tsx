@@ -39,10 +39,33 @@ export default function IndexPage() {
 
   const columns: TableProps<ReportOutboundDTO>["columns"] = [
     {
-      title: "Actual Check-in Date",
+      title: "Pull Out Date",
+      dataIndex: "pullOutDate",
+      key: "pullOutDate",
+      render: (value) => dayjs(value).format("YYYY-MM-DD"),
+    },
+    {
+      title: "Check-in Date",
       dataIndex: "actualCheckInDate",
       key: "actualCheckInDate",
       render: (value) => dayjs(value).format("YYYY-MM-DD"),
+    },
+    {
+      title: "GI",
+      dataIndex: "goodIssueDetailsId",
+      key: "goodIssueDetailsId",
+      render: (value) => `GI-${value}`,
+    },
+    {
+      title: "OCR",
+      dataIndex: "ocrNumber",
+      key: "ocrNumber",
+    },
+    {
+      title: "PL",
+      dataIndex: "pickListDetailsId",
+      key: "pickListDetailsId",
+      render: (value) => `PL-${value}`,
     },
     {
       title: "ICR",
@@ -58,6 +81,11 @@ export default function IndexPage() {
       title: "SKU",
       dataIndex: "skuCode",
       key: "skuCode",
+    },
+    {
+      title: "PRO",
+      dataIndex: "proNumber",
+      key: "proNumber",
     },
     {
       title: "Principal",
@@ -106,7 +134,7 @@ export default function IndexPage() {
       },
     },
     {
-      title: "Unit of Measurement",
+      title: "UOM",
       dataIndex: "unitOfMeasurement",
       key: "unitOfMeasurement",
     },
@@ -140,8 +168,8 @@ export default function IndexPage() {
     <>
       <FilterCard onSearch={handleSearch} />
       <TableComponent<ReportOutboundDTO>
-        print={{ onBeforePrint: async() => await handleUnpaginate() }}
-        pdf={{onChange: async() => await handleUnpaginate()}}
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
         headerTitle={pageTitle}
         columns={columns}
         dataSource={reports.items}

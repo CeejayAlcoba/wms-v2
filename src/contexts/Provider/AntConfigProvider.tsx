@@ -21,9 +21,9 @@ export const AntConfigProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsDarkMode(!isDarkMode);
     localStorage.setItem(THEME_MODE, newMode);
   };
-  const {windowWidth} =useWindowWidth()
+  const { windowWidth } = useWindowWidth();
 
-  const cardPadding = windowWidth> 425 ? 20 : 5;
+  const cardPadding = windowWidth > 425 ? 20 : 10;
   return (
     <ConfigProvider
       theme={{

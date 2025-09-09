@@ -86,7 +86,7 @@ export default function IndexPage() {
 
   const handleAfterSaveOtherServices = () => {
     filterFormik.submitForm();
-    setOtherServicesSaveModal(false)
+    setOtherServicesSaveModal(false);
   };
 
   const extendedTable = <T extends object = any>(): TableComponentProps<T> => {
@@ -114,11 +114,11 @@ export default function IndexPage() {
   });
   useEffect(() => {
     setIsSearched(false);
-    setBilling(null)
+    setBilling(null);
   }, [filterFormik.values]);
 
   return (
-    <>
+    <div className="row row-cols-1 gap-2">
       <IndexDocumentLayout billing={billing} ref={ref} />
       <FilterCard
         filterFormik={filterFormik}
@@ -185,13 +185,13 @@ export default function IndexPage() {
         disabledHeaders={true}
         open={otherServicesSaveModal}
         onAfterSave={handleAfterSaveOtherServices}
-        onCancel={()=>setOtherServicesSaveModal(false)}
+        onCancel={() => setOtherServicesSaveModal(false)}
         selectedData={billing?.billingStatement ?? null}
       />
 
       <OtherServicesTable
         add={{
-          disabled:!isSearched,
+          disabled: !isSearched,
           onClick: () => setOtherServicesSaveModal(true),
           children: "Edit",
           icon: <EditOutlined />,
@@ -206,6 +206,6 @@ export default function IndexPage() {
         loading={isLoading}
       />
       <BillingFooter billing={billing} />
-    </>
+    </div>
   );
 }

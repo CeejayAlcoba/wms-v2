@@ -89,8 +89,16 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
       <FormikProvider value={formik}>
         <Form>
           <div className="row row-cols-lg-1">
-            <InputFormik<GoodIssueDetails> label="OCR No." name="ocrNumber" />
-            <InputFormik<GoodIssueDetails> label="DOF No." name="dofNumber" />
+            <InputFormik<GoodIssueDetails>
+              label="OCR No."
+              askterisk
+              name="ocrNumber"
+            />
+            <InputFormik<GoodIssueDetails>
+              label="DOF No."
+              askterisk
+              name="dofNumber"
+            />
             <InputFormik<GoodIssueDetails> label="Note" name="note" />
           </div>
         </Form>

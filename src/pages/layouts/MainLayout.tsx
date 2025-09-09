@@ -5,32 +5,28 @@ import HeaderLayout from "./HeaderLayout";
 import DrawerLayout from "./DrawerLayout";
 import useWindowWidth from "../../hooks/useWindowWidth";
 
-const { Content } = Layout;
-
 const MainLayout = () => {
   const {
-    token: { colorBgLayout, borderRadiusLG },
+    token: { borderRadiusLG },
   } = theme.useToken();
 
-  const {windowWidth} =useWindowWidth();
+  const { windowWidth } = useWindowWidth();
   return (
     <Layout style={{ height: "100vh", overflow: "hidden" }}>
       <SidebarLayout />
       <Layout style={{ overflow: "hidden" }}>
         <HeaderLayout />
         <DrawerLayout />
-        <Content
+        <Layout
           style={{
             flex: 1,
-            padding: windowWidth > 768 ? 24 : 0,
-            margin: 16,
+            padding: windowWidth > 768 ? 24 : 14,
             overflow: "auto",
-            background: colorBgLayout,
             borderRadius: borderRadiusLG,
           }}
         >
           <Outlet />
-        </Content>
+        </Layout>
       </Layout>
     </Layout>
   );

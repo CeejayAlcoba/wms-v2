@@ -2,8 +2,9 @@ import type { ReportOutboundFilterDTO } from "../../../../@types/DTOs/ReportOutb
 import { PAGINATION_FILTER } from "../../../../constants/PAGINATION";
 
 export const EMPTY_FORM: ReportOutboundFilterDTO = {
-  actualCheckInDateFrom: null,
-  actualCheckInDateTo: null,
+  pullOutDateFrom: null,
+  pullOutDateTo: null,
+  actualCheckInDate: null,
   icrReferenceNumber: null,
   principalId: null,
   productCategoryId: null,
