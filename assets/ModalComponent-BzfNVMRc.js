@@ -1,0 +1,1 @@
+import{j as n,bt as s}from"./index-DQRBYlEC.js";function e(o){const t={maskClosable:!1};return n.jsx(s,{...t,...o,okButtonProps:{...o.okButtonProps,htmlType:"submit"},children:o.children})}export{e as M};
