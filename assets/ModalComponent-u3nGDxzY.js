@@ -1,0 +1,1 @@
+import{j as n,bt as s}from"./index-9AH1K3u7.js";function e(o){const t={maskClosable:!1};return n.jsx(s,{...t,...o,okButtonProps:{...o.okButtonProps,htmlType:"submit"},children:o.children})}export{e as M};
