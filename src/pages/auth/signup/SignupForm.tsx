@@ -37,8 +37,8 @@ export const SignupForm: React.FC = () => {
         showConfirmButton: true,
         timer: undefined,
       });
+      formikHelpers.resetForm();
     } catch (error: any) {
-      console.log(error);
       formikHelpers.setStatus(error?.response?.data || "Signup failed.");
     }
   };

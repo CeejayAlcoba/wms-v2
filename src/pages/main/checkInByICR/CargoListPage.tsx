@@ -13,6 +13,7 @@ import { handleRoundOff } from "../../../utils/handleRoundOff";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";
+// import ExcelHandler from "../../../components/Documents/excel/ExcelHandler";
 
 const { Panel } = Collapse;
 
@@ -35,54 +36,65 @@ export default function CargoListPage() {
     }
   }, [errors.cargoDetails && touched.cargoDetails]);
 
+  // const formatColumns = ["SKU","PRO Number","Description","Delivery Note","Unit of packaging",];
   return (
-    <FieldArray name="cargoDetails">
-      {({ push, remove }) => (
-        <>
-          <Collapse activeKey={activeKey} onChange={onChange}>
-            {values.cargoDetails.map((cargo, index) => {
-              return (
-                <Panel
-                  header={
-                    <div className="d-flex justify-content-between">
-                      <div>
-                        {index + 1}. {cargo.skuCode ?? ""}
+    <>
+      {/* <ExcelHandler
+        className="mb-2 d-flex justify-content-end"
+        columns={[]}
+        data={[]}
+        onUpload={function (record: Record<string, any>[]): void {
+          throw new Error("Function not implemented.");
+        }}
+      /> */}
+      <FieldArray name="cargoDetails">
+        {({ push, remove }) => (
+          <>
+            <Collapse activeKey={activeKey} onChange={onChange}>
+              {values.cargoDetails.map((cargo, index) => {
+                return (
+                  <Panel
+                    header={
+                      <div className="d-flex justify-content-between">
+                        <div>
+                          {index + 1}. {cargo.skuCode ?? ""}
+                        </div>
+                        <Tooltip title="Remove">
+                          <Button
+                            icon={<DeleteOutlined />}
+                            danger
+                            type="link"
+                            onClick={() => remove(index)}
+                          />
+                        </Tooltip>
                       </div>
-                      <Tooltip title="Remove">
-                        <Button
-                          icon={<DeleteOutlined />}
-                          danger
-                          type="link"
-                          onClick={() => remove(index)}
-                        />
-                      </Tooltip>
-                    </div>
-                  }
-                  key={index}
-                >
-                  <CargoForm
-                    arrayName={`cargoDetails[${index}]`}
-                    index={index}
-                  />
-                </Panel>
-              );
-            })}
-          </Collapse>
+                    }
+                    key={index}
+                  >
+                    <CargoForm
+                      arrayName={`cargoDetails[${index}]`}
+                      index={index}
+                    />
+                  </Panel>
+                );
+              })}
+            </Collapse>
 
-          <Button
-            type="primary"
-            style={{ marginTop: 12 }}
-            onClick={() => {
-              push(EMPTY_CARGO);
-              const nextIndex = values.cargoDetails.length.toString();
-              setActiveKey([nextIndex]);
-            }}
-          >
-            Add Cargo
-          </Button>
-        </>
-      )}
-    </FieldArray>
+            <Button
+              type="primary"
+              style={{ marginTop: 12 }}
+              onClick={() => {
+                push(EMPTY_CARGO);
+                const nextIndex = values.cargoDetails.length.toString();
+                setActiveKey([nextIndex]);
+              }}
+            >
+              Add Cargo
+            </Button>
+          </>
+        )}
+      </FieldArray>
+    </>
   );
 }
 

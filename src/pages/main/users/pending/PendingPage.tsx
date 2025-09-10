@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { userService } from "../../../../services/userService";
 import TableComponent from "../../../../components/Table/TableComponent";
-import { Button, Tooltip, type TableProps } from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
+import { CheckCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import type { UserDTO } from "../../../../@types/DTOs/UserDTO";
 import SaveModal from "../SaveModal";
+import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
 
 export default function PendingPage(props: { search: UserDTO }) {
   const { search } = props;
@@ -30,6 +31,15 @@ export default function PendingPage(props: { search: UserDTO }) {
   const handleCancel = () => {
     setSaveModal(false);
     setSelectedData(null);
+  };
+
+  const handleDelete = async (record: UserDTO) => {
+    if (!record.id) throw new Error("Id is null");
+    await userService.Delete(record.id);
+    SweetAlert({
+      title: "Successfully deleted",
+    });
+    refetch();
   };
 
   const columns: TableProps<UserDTO>["columns"] = [
@@ -62,6 +72,20 @@ export default function PendingPage(props: { search: UserDTO }) {
               onClick={() => handleClickApprove(record)}
             />
           </Tooltip>
+          <Popconfirm
+            title="Are you sure to delete this item?"
+            onConfirm={() => handleDelete(record)}
+            onCancel={() => console.log("Cancelled")}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              color="danger"
+              shape="circle"
+              variant="solid"
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>
         </div>
       ),
     },

@@ -1,19 +1,23 @@
-import { DownloadOutlined } from "@ant-design/icons";
-import { Button, Input } from "antd";
+import { DownloadOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Tooltip, Upload } from "antd";
 import React from "react";
 import * as XLSX from "xlsx";
 
-interface ExcelHandlerProps<T> {
+type ExcelHandlerProps<T> = {
   columns: string[];
   data: T[];
   onUpload: (record: Record<string, any>[]) => void;
   onInvalidUpload?: (message: string) => void;
-}
+} & React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>;
 
 const ExcelHandler = <T extends Record<string, any>>({
   columns,
   onUpload,
   onInvalidUpload,
+  ...rest
 }: ExcelHandlerProps<T>) => {
   const handleDownload = () => {
     const ws = XLSX.utils.json_to_sheet([], { header: columns });
@@ -24,10 +28,7 @@ const ExcelHandler = <T extends Record<string, any>>({
     XLSX.writeFile(wb, "format.xlsx");
   };
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const handleUpload = (file: File) => {
     const reader = new FileReader();
     reader.onload = (evt) => {
       const binaryStr = evt.target?.result;
@@ -41,9 +42,10 @@ const ExcelHandler = <T extends Record<string, any>>({
 
       if (jsonData.length === 0) {
         console.error("Uploaded file is empty.");
-        onInvalidUpload && onInvalidUpload("Uploaded file is empty.");
+        onInvalidUpload?.("Uploaded file is empty.");
         return;
       }
+
       const uploadedColumns = Object.keys(jsonData[0]);
       const missingColumns = columns.filter(
         (col) => !uploadedColumns.includes(col)
@@ -51,33 +53,37 @@ const ExcelHandler = <T extends Record<string, any>>({
 
       if (missingColumns.length > 0) {
         console.error("Invalid file format. Missing columns:", missingColumns);
-        onInvalidUpload &&
-          onInvalidUpload(
-            `Invalid file format. Missing columns: ${missingColumns}`
-          );
+        onInvalidUpload?.(
+          `Invalid file format. Missing columns: ${missingColumns.join(", ")}`
+        );
         return;
       }
+
       onUpload(jsonData);
       console.log("Uploaded Data:", jsonData);
     };
 
     reader.readAsBinaryString(file);
+    return false;
   };
 
   return (
-    <div style={{ display: "flex", gap: "1rem" }}>
-      <Button icon={<DownloadOutlined />} onClick={handleDownload}>
-        Format
-      </Button>
-      <label style={{ cursor: "pointer" }}>
-        <Input
-          type="file"
-          accept=".xlsx, .xls"
-          style={{ display: "none" }}
-          onChange={handleUpload}
-        />
-        <span>Upload Excel</span>
-      </label>
+    <div style={{ display: "flex", gap: "1rem" }} {...rest}>
+      <Tooltip title="Download Format">
+        <Button icon={<DownloadOutlined />} onClick={handleDownload}>
+          Format
+        </Button>
+      </Tooltip>
+      <Upload
+        accept=".xlsx, .xls"
+        showUploadList={false}
+        beforeUpload={(file) => {
+          handleUpload(file);
+          return false;
+        }}
+      >
+        <Button icon={<UploadOutlined />}>Upload Excel</Button>
+      </Upload>
     </div>
   );
 };

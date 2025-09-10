@@ -1,15 +1,25 @@
 // src/components/layout/DrawerLayout.tsx
 
-import { Drawer, Space, Typography, Divider, Switch, Button } from "antd";
+import { Drawer, Space, Typography, Switch, Button, Menu } from "antd";
 import useDrawer from "../../contexts/useDrawer";
-import { UserOutlined, LogoutOutlined, BulbOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LogoutOutlined,
+  BulbOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import useUser from "../../contexts/useUser";
 import SweetAlert from "../../components/SweetAlert/SweetAlert";
 import { useNavigate } from "react-router-dom";
 import { useAntConfig } from "../../contexts/useAntConfig";
+import type { ItemType, MenuItemType } from "antd/es/menu/interface";
 
 const { Text, Title } = Typography;
 
+type MenuType = {
+  path?: string;
+  onClick?: () => void;
+} & ItemType<MenuItemType>;
 const DrawerLayout = () => {
   const { isDrawerOpen, closeDrawer } = useDrawer();
   const { user, setUser } = useUser();
@@ -36,6 +46,29 @@ const DrawerLayout = () => {
     });
   };
 
+  const menuItems: MenuType[] = [
+    {
+      key: "editProfile",
+      icon: <EditOutlined />,
+      label: "Edit Profile",
+      path: "/profile",
+      onClick: () => closeDrawer(),
+    },
+    {
+      key: "darkMode",
+      icon: <BulbOutlined />,
+      label: (
+        <Space
+          align="center"
+          style={{ justifyContent: "space-between", width: "100%" }}
+        >
+          <Text>Dark Mode</Text>
+          <Switch onChange={toggleTheme} defaultChecked={isDarkMode} />
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <Drawer
       title={
@@ -55,17 +88,19 @@ const DrawerLayout = () => {
       onClose={closeDrawer}
       open={isDrawerOpen}
     >
-      <Divider />
-      <Space
-        align="center"
-        style={{ justifyContent: "space-between", width: "100%" }}
-      >
-        <BulbOutlined />
-        <Text>Dark Mode</Text>
-        <Switch onChange={toggleTheme} defaultChecked={isDarkMode} />
-      </Space>
-
-      <Divider />
+      <Menu
+        mode="inline"
+        style={{ backgroundColor: "transparent" }}
+        selectable={false}
+        items={menuItems.map((m) => ({
+          ...m,
+          className: "mb-2",
+          onClick: () => {
+            m.onClick && m.onClick();
+            m.path && navigate(m.path);
+          },
+        }))}
+      />
       <Button
         type="primary"
         danger

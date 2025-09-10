@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { userService } from "../../../../services/userService";
 import TableComponent from "../../../../components/Table/TableComponent";
-import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
+import { Button, Popconfirm, Tag, Tooltip, type TableProps } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import type { UserDTO } from "../../../../@types/DTOs/UserDTO";
@@ -66,7 +66,30 @@ export default function ApprovedPage(props: { search: UserDTO }) {
       title: "Roles",
       dataIndex: "roles",
       key: "roles",
-      render: (value: RefRole[]) => value.map((v) => v.name).join(","),
+      render: (value: RefRole[]) => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "6px",
+            }}
+          >
+            {value.map((v, index) => (
+              <Tag
+                color="blue"
+                key={index}
+                style={{
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                }}
+              >
+                {v.name}
+              </Tag>
+            ))}
+          </div>
+        );
+      },
     },
     {
       title: "Action",

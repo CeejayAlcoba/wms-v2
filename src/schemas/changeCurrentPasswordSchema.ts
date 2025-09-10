@@ -1,10 +1,11 @@
+import type { ChangePasswordDTO } from "../@types/DTOs/ChangePasswordDTO";
 import * as yup from "yup";
 import { requiredMessage } from "./yupInitials";
-import type { ChangePasswordDTO } from "../@types/DTOs/ChangePasswordDTO";
 
-export const changePasswordSchema: yup.Schema<ChangePasswordDTO> = yup
+export const changeCurrentPasswordSchema: yup.Schema<ChangePasswordDTO> = yup
   .object()
   .shape({
+    currentPassword: yup.string().required(requiredMessage),
     password: yup
       .string()
       .required(requiredMessage)
