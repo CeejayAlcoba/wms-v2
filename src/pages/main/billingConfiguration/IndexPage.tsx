@@ -173,6 +173,7 @@ export default function IndexPage() {
   return (
     <>
       <SaveModal
+        billings={billingConfigurations}
         open={saveModalOpen}
         onAfterSave={handleAfterSave}
         onCancel={handleClickCancel}

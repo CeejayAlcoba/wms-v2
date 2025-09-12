@@ -119,6 +119,10 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     element: lazy(() => import("../../pages/main/profile/IndexPage")),
   },
   {
+    key: "AudiLogs",
+    element: lazy(() => import("../../pages/main/auditLogs/IndexPage")),
+  },
+  {
     key: "Test",
     element: lazy(() => import("../../pages/main/test/TestPage")),
   },

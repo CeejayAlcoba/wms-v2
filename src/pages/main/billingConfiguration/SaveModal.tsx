@@ -22,6 +22,7 @@ type SaveModalProps = {
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: BillingConfiguration | null;
+  billings: BillingConfiguration[];
 };
 
 type BilltypeOptionProps = {
@@ -30,14 +31,22 @@ type BilltypeOptionProps = {
 };
 
 export default function SaveModal(props: SaveModalProps) {
-  const { open, onAfterSave, onCancel, selectedData, title } = props;
+  const { open, onAfterSave, onCancel, selectedData, title, billings } = props;
   const { title: pageTitle } = usePage();
 
   const { data: principals } = useQuery({
-    queryKey: ["principals"],
-    queryFn: async () => await principalService.GetAll(),
+    queryKey: ["principals", billings, selectedData],
+    queryFn: async () => {
+      const res = await principalService.GetAll();
+      return res.filter(
+        (r) =>
+          !billings.some((b) => b.principalId === r.id) ||
+          r.id === selectedData?.principalId
+      );
+    },
     initialData: [],
   });
+
   const { data: billTypes } = useQuery({
     queryKey: ["billTypes"],
     queryFn: async () => {

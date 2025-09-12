@@ -51,7 +51,7 @@ export default function IndexPage() {
 
   const handleDelete = async (record: RoleDTO) => {
     if (!record.id) throw new Error("Id is null");
-    await antIconService.Delete(record.id);
+    await roleService.Delete(record.id);
     await refetch();
     SweetAlert({
       title: "Successfully deleted.",

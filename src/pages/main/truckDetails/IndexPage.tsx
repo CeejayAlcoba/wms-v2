@@ -10,6 +10,7 @@ import { truckDetailsService } from "../../../services/truckDetailsService";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import SaveModal from "./SaveModal";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
+import type { TruckDetailsDTO } from "../../../@types/DTOs/TruckDetailsDTO";
 
 export default function IndexPage() {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
@@ -26,9 +27,8 @@ export default function IndexPage() {
     isFetching,
   } = useQuery({
     queryKey: ["truckDetails", search],
-    queryFn: async ({ queryKey }) => {
-      const [, searchParam] = queryKey;
-      return await truckDetailsService.GetAll(searchParam as RefTruckDetails);
+    queryFn: async () => {
+      return await truckDetailsService.GetAll(search);
     },
     initialData: [],
   });
@@ -68,11 +68,21 @@ export default function IndexPage() {
     await refetch();
   };
 
-  const columns: TableProps<RefTruckDetails>["columns"] = [
+  const columns: TableProps<TruckDetailsDTO>["columns"] = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "Plate Number",
+      dataIndex: "plateNumber",
+      key: "plateNumber",
+    },
+    {
+      title: "Driver Name",
+      dataIndex: "driverName",
+      key: "driverName",
+    },
+    {
+      title: "Truck Type",
+      dataIndex: "truckType",
+      key: "truckType",
     },
     {
       title: "Action",
@@ -116,7 +126,7 @@ export default function IndexPage() {
         selectedData={selectedData}
       />
       <FilterCard onSearch={handleSearch} />
-      <TableComponent<RefTruckDetails>
+      <TableComponent<TruckDetailsDTO>
         headerTitle={pageTitle}
         columns={columns}
         dataSource={truckDetails}
