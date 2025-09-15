@@ -1,7 +1,6 @@
 import { Button, Card } from "antd";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
 import InputFormik from "../../../components/Formik/InputFormik";
-import type { AuditLogs } from "../../../@types/tables/AuditLogs";
 import { SearchOutlined } from "@ant-design/icons";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import SelectFormik from "../../../components/Formik/SelectFormik";

@@ -89,6 +89,7 @@ export default function BillingInformation() {
         onCancel={handleCancelModal}
         onAfterSave={handleAfterSave}
         selectedData={billingConfiguration}
+        billings={[]}
       />
       <Alert
         type="warning"

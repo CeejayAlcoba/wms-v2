@@ -1,6 +1,5 @@
 import { Button, Popconfirm, Tag, Tooltip, type TableProps } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { antIconService } from "../../../services/antIconService";
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import TableComponent from "../../../components/Table/TableComponent";

@@ -2,7 +2,7 @@ import type { AuditLogsFilterDTO } from "../../../../@types/DTOs/AuditLogsFilter
 
 export const EMPTY_FORM: AuditLogsFilterDTO = {
   tableName: null,
-  tableId: null,
+  recordId: null,
   pageName: null,
   description: null,
   oldValue: null,
