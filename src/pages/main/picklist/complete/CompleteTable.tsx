@@ -16,7 +16,6 @@ import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListD
 import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
 import type { PickListDetailsGetDTO } from "../../../../@types/DTOs/PickListDetailsGetDTO";
 import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
-import { reportService } from "../../../../services/reportService";
 
 type CompleteTableProps = {
   renderAdditionalAction?: (

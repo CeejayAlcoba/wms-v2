@@ -16,13 +16,11 @@ import { pickListDetailsService } from "../../../../services/pickListDetailsServ
 import { indexDbService } from "../../../../services/indexDbService";
 import { EMPTY_PICKLIST_DETAILS } from "../__constants__/EMPTY_PICKLIST_DETAILS";
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
-import AddPendingModal from "../SavePickListRecordDetailsModal";
 import InputFormik from "../../../../components/Formik/InputFormik";
 import SelectFormik from "../../../../components/Formik/SelectFormik";
 import type { RefTruckDetails } from "../../../../@types/tables/RefTruckDetails";
 import TableComponent from "../../../../components/Table/TableComponent";
 import SavePickListRecordDetailsModal from "../SavePickListRecordDetailsModal";
-import { pickListDetailsRecordService } from "../../../../services/pickListDetailsRecordService";
 import { reportService } from "../../../../services/reportService";
 
 type ShowPendingModalProps = {
