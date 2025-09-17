@@ -11,16 +11,16 @@ import { handleMoney } from "../../../../utils/handleMoney";
 import { EMPTY_FILTER } from "../__constants__/EMPTY_FILTER";
 import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PickListDetailsRecordDTO";
 import { indexDbService } from "../../../../services/indexDbService";
-import AddPendingModal from "./AddPendingModal";
 import { EMPTY_PICKLIST_RECORD } from "../__constants__/EMPTY_PICKLIST_RECORD";
 import ShowPendingModal from "./ShowPendingModal";
 import FilterCard from "./FilterCard";
 import type { ReportPickListFilterDTO } from "../../../../@types/DTOs/ReportPickListFilterDTO";
 import TableTotalFooter from "../../../../components/Table/TableTotalFooter";
 import { TABLE_TOTAL_FOOTER } from "../../../../constants/TABLE_TOTAL_FOOTER";
+import SavePickListRecordDetailsModal from "../SavePickListRecordDetailsModal";
 
 export default function PendingTable() {
-  const [addPendingModalOpen, setAddPendingModalOpen] =
+  const [savePickListDetailsRecordModal, setSavePickListDetailsRecordModalOpen] =
     useState<boolean>(false);
   const [showPendingModalOpen, setShowPendingModalOpen] =
     useState<boolean>(false);
@@ -47,7 +47,7 @@ export default function PendingTable() {
 
   const handleClickAdd = (record: ReportPickListDTO) => {
     setSelectedData(record);
-    setAddPendingModalOpen(true);
+    setSavePickListDetailsRecordModalOpen(true);
   };
 
   const handleClickPending = () => {
@@ -56,7 +56,7 @@ export default function PendingTable() {
 
   const handleClickCancel = () => {
     setSelectedData(null);
-    setAddPendingModalOpen(false);
+    setSavePickListDetailsRecordModalOpen(false);
   };
 
   const handlePickListRecord = (values: PickListDetailsRecordDTO) => {
@@ -64,7 +64,7 @@ export default function PendingTable() {
       ...prev,
       { ...values, cargoDetailsId: values.report?.id },
     ]);
-    setAddPendingModalOpen(false);
+    setSavePickListDetailsRecordModalOpen(false);
   };
 
   const handleSearch = async (value: ReportPickListFilterDTO) => {
@@ -216,8 +216,9 @@ export default function PendingTable() {
 
   return (
     <>
-      <AddPendingModal
-        open={addPendingModalOpen}
+      <SavePickListRecordDetailsModal
+        status={"Pending"}    
+        open={savePickListDetailsRecordModal}
         onAfterSave={handlePickListRecord}
         onCancel={handleClickCancel}
         selectedData={{

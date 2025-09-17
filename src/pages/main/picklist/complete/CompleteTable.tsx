@@ -1,28 +1,33 @@
-import { Button, Tooltip, type TableProps } from "antd";
+import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
 import { useQuery, type DefinedUseQueryResult } from "@tanstack/react-query";
 import { useState, type JSX } from "react";
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useSearchParams } from "react-router-dom";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import usePage from "../../../../hooks/usePage";
 import { pickListDetailsService } from "../../../../services/pickListDetailsService";
 import { pickListDetailsRecordService } from "../../../../services/pickListDetailsRecordService";
 import SaveGoodIssueModal from "../../goodIssue/SaveGoodIssueModal";
-import UpdateModal from "../../goodIssue/pending/UpdateModal";
+import UpdateModal from "../UpdatePickListModal";
 import FilterCard from "./FilterCard";
 import TableComponent from "../../../../components/Table/TableComponent";
 import PickListDetailsRecordTable from "./PickListDetailsRecordTable";
 import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListDetailsFilterDTO";
 import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
 import type { PickListDetailsGetDTO } from "../../../../@types/DTOs/PickListDetailsGetDTO";
+import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
+import { reportService } from "../../../../services/reportService";
 
 type CompleteTableProps = {
-  renderAction?: (value: any, record: PickListDetailsGetDTO) => JSX.Element;
+  renderAdditionalAction?: (
+    value: any,
+    record: PickListDetailsGetDTO
+  ) => JSX.Element;
   queryResult?: DefinedUseQueryResult<PickListDetailsGetDTO[], Error>;
 };
 
 export default function CompleteTable(props: CompleteTableProps) {
-  const { renderAction, queryResult } = props;
+  const { renderAdditionalAction, queryResult } = props;
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [saveGoodIssueModal, setSaveGoodIssueModal] = useState<boolean>(false);
   const [selectedData, setSelectedData] =
@@ -50,7 +55,8 @@ export default function CompleteTable(props: CompleteTableProps) {
     },
     initialData: [],
   });
-  const handleClickEdit = (record: PickListDetailsGetDTO) => {
+
+  const handleClickEdit = async(record: PickListDetailsGetDTO) => {
     setSelectedData(record);
     setUpdateModalOpen(true);
   };
@@ -67,6 +73,39 @@ export default function CompleteTable(props: CompleteTableProps) {
     refetch();
   };
 
+  const handleDelete = async (record: PickListDetailsGetDTO) => {
+    SweetAlert({
+      title: "Are you sure?",
+      text: `All items in this Picklist ${record.id} will also be deleted!`,
+      icon: "warning",
+      timer: undefined,
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          if (!record.id) throw new Error("Id is null");
+          await pickListDetailsService.Delete(record.id);
+          SweetAlert({
+            title: "Successfully deleted.",
+          });
+          refetch();
+        } catch (e: any) {
+          SweetAlert({
+            icon: "error",
+            title: "Something went wrong!",
+            timer: undefined,
+            text: e?.response?.data || "",
+            showConfirmButton: true,
+          });
+        }
+      }
+    });
+  };
+
   const handleSearch = async (value: PickListDetailsFilterDTO) => {
     await setSearch(value);
     await refetch();
@@ -81,13 +120,13 @@ export default function CompleteTable(props: CompleteTableProps) {
     },
     {
       title: "PO Number",
-      dataIndex: "pONumber",
-      key: "pONumber",
+      dataIndex: "poNumber",
+      key: "poNumber",
     },
     {
       title: "DO Number",
-      dataIndex: "dONumber",
-      key: "dONumber",
+      dataIndex: "doNumber",
+      key: "doNumber",
     },
     {
       title: "Remarks",
@@ -111,17 +150,17 @@ export default function CompleteTable(props: CompleteTableProps) {
     },
 
     {
-      title: "Salesman",
+      title: "Sales Man",
       dataIndex: "salesMan",
       key: "salesMan",
     },
     {
-      title: "ocr",
+      title: "OCR",
       dataIndex: "ocr",
       key: "ocr",
     },
     {
-      title: "goodIssue",
+      title: "Good Issue",
       dataIndex: "goodIssue",
       key: "goodIssue",
       render: (value) =>
@@ -131,22 +170,36 @@ export default function CompleteTable(props: CompleteTableProps) {
       title: "Action",
       key: "action",
       fixed: "right",
-      render: (_, record) =>
-        renderAction ? (
-          renderAction(_, record)
-        ) : (
-          <div className="d-flex gap-1">
-            <Tooltip title="Edit">
+      render: (_, record) => (
+        <div className="d-flex gap-1">
+          <Tooltip title="Edit">
+            <Button
+              color="primary"
+              shape="circle"
+              variant="solid"
+              icon={<EditOutlined />}
+              onClick={() => handleClickEdit(record)}
+            />
+          </Tooltip>
+          {!record.goodIssue && (
+            <Popconfirm
+              title="Are you sure to delete this item?"
+              onConfirm={() => handleDelete(record)}
+              onCancel={() => console.log("Cancelled")}
+              okText="Yes"
+              cancelText="No"
+            >
               <Button
-                color="primary"
+                color="danger"
                 shape="circle"
                 variant="solid"
-                icon={<EditOutlined />}
-                onClick={() => handleClickEdit(record)}
+                icon={<DeleteOutlined />}
               />
-            </Tooltip>
-          </div>
-        ),
+            </Popconfirm>
+          )}
+          {renderAdditionalAction && renderAdditionalAction(_, record)}
+        </div>
+      ),
     },
   ];
 
@@ -212,6 +265,7 @@ export default function CompleteTable(props: CompleteTableProps) {
         expandable={{
           expandedRowRender: (record) => (
             <PickListDetailsRecordTable
+              setPickListRecords={setPickListRecords}
               pickListRecords={pickListRecords}
               record={record}
             />

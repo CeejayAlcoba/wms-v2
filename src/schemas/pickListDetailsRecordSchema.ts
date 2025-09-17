@@ -15,7 +15,7 @@ export const pickListDetailsRecordSchema: yup.Schema<PickListDetailsRecordDTO> =
         "min",
         "Quantity must not exceed the available limit.",
         async function (value) {
-          return this.parent.report.balanceQuantity >= value;
+          return (this.parent?.report?.balanceQuantity ?? 0) >= value;
         }
       ),
     cubicMeter: yup.number().required(requiredMessage),
@@ -27,7 +27,9 @@ export const pickListDetailsRecordSchema: yup.Schema<PickListDetailsRecordDTO> =
         "min",
         "Pallete must not exceed the available limit.",
         async function (value) {
-          return this.parent.report.balancePalleteCount >= (value??0);
+          return (
+            (this.parent?.report?.balancePalleteCount ?? 0) >= (value ?? 0)
+          );
         }
       ),
     pullOutDate: yup.date().required(requiredMessage),

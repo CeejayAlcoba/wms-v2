@@ -1,31 +1,37 @@
-import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
+import ModalComponent from "../../../components/ModalComponent/ModalComponent";
 import { Form, FormikProvider, useFormik, type FormikHelpers } from "formik";
-import usePage from "../../../../hooks/usePage";
+import usePage from "../../../hooks/usePage";
 import { useQuery } from "@tanstack/react-query";
-import { unitOfMeasurementService } from "../../../../services/unitOfMeasurementService";
-import SelectFormik from "../../../../components/Formik/SelectFormik";
-import type { RefUnitOfMeasurement } from "../../../../@types/tables/RefUnitOfMeasurement";
-import DatePickerFormik from "../../../../components/Formik/DatePicker";
-import InputNumberFormik from "../../../../components/Formik/InputNumberFormik";
+import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";
+import SelectFormik from "../../../components/Formik/SelectFormik";
+import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
+import DatePickerFormik from "../../../components/Formik/DatePicker";
+import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import { useEffect } from "react";
-import { handleRoundOff } from "../../../../utils/handleRoundOff";
-import type { PickListDetailsRecord } from "../../../../@types/tables/PickListDetailsRecord";
-import { pickListDetailsRecordSchema } from "../../../../schemas/pickListDetailsRecordSchema";
-import type { PickListDetailsRecordDTO } from "../../../../@types/DTOs/PickListDetailsRecordDTO";
-import { Alert, Card } from "antd";
-import { indexDbService } from "../../../../services/indexDbService";
-import { EMPTY_PICKLIST_RECORD } from "../__constants__/EMPTY_PICKLIST_RECORD";
+import { handleRoundOff } from "../../../utils/handleRoundOff";
+import type { PickListDetailsRecord } from "../../../@types/tables/PickListDetailsRecord";
+import { pickListDetailsRecordSchema } from "../../../schemas/pickListDetailsRecordSchema";
+import type { PickListDetailsRecordDTO } from "../../../@types/DTOs/PickListDetailsRecordDTO";
+import { Alert, Card, type ModalProps } from "antd";
+import { indexDbService } from "../../../services/indexDbService";
+import { EMPTY_PICKLIST_RECORD } from "./__constants__/EMPTY_PICKLIST_RECORD";
+import { pickListDetailsRecordService } from "../../../services/pickListDetailsRecordService";
+import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 
-type AddPendingModalProps = {
+type SavePickListRecordDetailsModalProps = {
   open: boolean;
   onAfterSave: (values: PickListDetailsRecordDTO) => void;
   onCancel: () => void;
   selectedData: PickListDetailsRecordDTO | null;
+  status: "Pending" | "Completed";
   type: "Add" | "Update";
-};
+} & ModalProps;
 
-export default function AddPendingModal(props: AddPendingModalProps) {
-  const { open, onAfterSave, onCancel, selectedData, type } = props;
+export default function SavePickListRecordDetailsModal(
+  props: SavePickListRecordDetailsModalProps
+) {
+  const { open, onAfterSave, onCancel, selectedData, type, status, ...rest } =
+    props;
   const { title: pageTitle } = usePage();
 
   const { data: unitOfMeasurements } = useQuery({
@@ -59,18 +65,51 @@ export default function AddPendingModal(props: AddPendingModalProps) {
     formik: FormikHelpers<PickListDetailsRecordDTO>
   ) => {
     formik.setSubmitting(true);
-    await indexDbService.updateItem("pendingPickList", value?.report?.id ?? 0, {
-      ...value,
-      cargoDetailsId: value.report?.id,
-      id: value?.report?.id ?? 0,
-    });
+    if (!value.id) {
+      await indexDbService.updateItem(
+        "pendingPickList",
+        value?.report?.id ?? 0,
+        {
+          ...value,
+          cargoDetailsId: value.report?.id,
+          id: value?.report?.id ?? 0,
+        }
+      );
+    } else {
+      await pickListDetailsRecordService.Update(value.id, value);
+    }
+
     onAfterSave(value);
+    SweetAlert({ title: "Successfully updated." });
     formik.resetForm();
     formik.setSubmitting(false);
   };
 
+  const handleInitialValues = (): PickListDetailsRecordDTO => {
+    if (!selectedData) return EMPTY_PICKLIST_RECORD;
+    else if (status == "Completed") {
+      return {
+        ...selectedData,
+        report: {
+          ...selectedData.report,
+          balanceQuantity:
+            (selectedData.report?.balanceQuantity ?? 0) +
+            (selectedData.quantity ?? 0),
+          balancePalleteCount:
+            (selectedData.report?.balancePalleteCount ?? 0) +
+            (selectedData.palleteCount ?? 0),
+          balanceCubicMeter:
+            (selectedData.report?.balanceCubicMeter ?? 0) +
+            (selectedData.cubicMeter ?? 0),
+          totalItems: 0,
+        },
+      };
+    }
+    return selectedData;
+  };
+
   const formik = useFormik({
-    initialValues: selectedData ? selectedData : EMPTY_PICKLIST_RECORD,
+    initialValues: handleInitialValues(),
     enableReinitialize: true,
     validationSchema: pickListDetailsRecordSchema,
     onSubmit: type == "Add" ? handleAddToCart : handleUpdate,
@@ -78,7 +117,6 @@ export default function AddPendingModal(props: AddPendingModalProps) {
   const { getFieldProps, setFieldValue, values } = formik;
 
   useEffect(() => {
-    console.log(values);
     const lengthCm = Number(getFieldProps(`report.lengthCm`).value || 0);
     const heightCm = Number(getFieldProps(`report.heightCm`).value || 0);
     const widthCm = Number(getFieldProps(`report.widthCm`).value || 0);
@@ -104,6 +142,7 @@ export default function AddPendingModal(props: AddPendingModalProps) {
       okText={type}
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}
+      {...rest}
     >
       {type == "Add" && (
         <Alert

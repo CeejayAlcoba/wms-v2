@@ -5,7 +5,7 @@ export type PickListDetails = {
   soldTo?: string | null;
   deliveredTo?: string | null;
   pickUpBy?: string | null;
-  pONumber?: string | null;
-  dONumber?: string | null;
+  poNumber?: string | null;
+  doNumber?: string | null;
   salesMan?: string | null;
 };

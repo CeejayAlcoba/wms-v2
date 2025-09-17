@@ -1,23 +1,23 @@
-import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
-import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
+import ModalComponent from "../../../components/ModalComponent/ModalComponent";
+import type { PickListDetails } from "../../../@types/tables/PickListDetails";
 import { FormikProvider, useFormik, type FormikHelpers } from "formik";
-import InputFormik from "../../../../components/Formik/InputFormik";
-import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
-import { pickListDetailsService } from "../../../../services/pickListDetailsService";
+import InputFormik from "../../../components/Formik/InputFormik";
+import SweetAlert from "../../../components/SweetAlert/SweetAlert";
+import { pickListDetailsService } from "../../../services/pickListDetailsService";
 import { useQuery } from "@tanstack/react-query";
-import SelectFormik from "../../../../components/Formik/SelectFormik";
+import SelectFormik from "../../../components/Formik/SelectFormik";
 import { Form } from "antd";
-import type { RefTruckDetails } from "../../../../@types/tables/RefTruckDetails";
-import { truckDetailsService } from "../../../../services/truckDetailsService";
+import type { RefTruckDetails } from "../../../@types/tables/RefTruckDetails";
+import { truckDetailsService } from "../../../services/truckDetailsService";
 
-type UpdateModalProps = {
+type UpdatePickListModalProps = {
   open: boolean;
   onAfterSave: () => void;
   onCancel: () => void;
   selectedData: PickListDetails | null;
 };
 
-export default function UpdateModal(props: UpdateModalProps) {
+export default function UpdatePickListModal(props: UpdatePickListModalProps) {
   const { open, onAfterSave, onCancel, selectedData } = props;
 
   const { data: truckDetails } = useQuery({
@@ -76,8 +76,8 @@ export default function UpdateModal(props: UpdateModalProps) {
               name="deliveredTo"
             />
             <InputFormik<PickListDetails> label="Pick Up By" name="pickUpBy" />
-            <InputFormik<PickListDetails> label="PO Number" name="pONumber" />
-            <InputFormik<PickListDetails> label="DO Number" name="dONumber" />
+            <InputFormik<PickListDetails> label="PO Number" name="poNumber" />
+            <InputFormik<PickListDetails> label="DO Number" name="doNumber" />
             <InputFormik<PickListDetails> label="Salesman" name="salesMan" />
             <SelectFormik<PickListDetails, RefTruckDetails>
               label="Truck Plate Number"

@@ -8,7 +8,6 @@ export const EMPTY_FILTER: ReportPickListFilterDTO = {
   productCategoryId: null,
   goodsReceiptId: null,
   allowZeroBalance: false,
-  allowNullGoodIssue: true,
   id: null,
   name: null,
   description: null,

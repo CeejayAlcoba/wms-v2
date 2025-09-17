@@ -8,7 +8,7 @@ import {
 } from "../../../../components/Grid/GridList";
 import type { GoodIssueDetails } from "../../../../@types/tables/GoodIssueDetails";
 
-export default function PickListDetailsRecordTable(props: {
+export default function GoodIssueDetailsRecordTable(props: {
   pickListRecords: PickListDetailsRecordGetDTO[];
   record: GoodIssueDetails;
 }) {
@@ -58,19 +58,23 @@ export default function PickListDetailsRecordTable(props: {
   const gridColumns: GridListColumnsProps<GoodIssueDetails> = [
     {
       key: "id",
-      render: (value) => value && `GI-${value}`,
+      label:"Good Issue",
     },
     {
       key: "ocrNumber",
-      render: (value) => value && `OCR : ${value}`,
+      label:"OCR"
     },
     {
       key: "pickListDetailsId",
-      render: (value) => `PL-${value}`,
+      label:"Pick List"
     },
     {
       key: "dofNumber",
-      render: (value) => value && `DOF : ${value}`,
+      label:"DOF",
+    },
+     {
+      key: "note",
+      label:"Note"
     },
   ];
   return (

@@ -1,7 +1,7 @@
-import { Button, Tooltip, type TableProps } from "antd";
+import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import type { PickListDetails } from "../../../../@types/tables/PickListDetails";
 import SaveGoodIssueModal from "../SaveGoodIssueModal";
 import { goodIssueDetailsService } from "../../../../services/goodIssueDetailsService";
@@ -12,7 +12,8 @@ import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickLi
 import { pickListDetailsRecordService } from "../../../../services/pickListDetailsRecordService";
 import FilterCard from "./FilterCard";
 import { EMPTY_FORM } from "../__constants__/EMPTY_FORM";
-import PickListDetailsRecordTable from "./PickListDetailsRecordTable";
+import GoodIssueDetailsRecordTable from "./GoodIssueDetailsRecordTable";
+import SweetAlert from "../../../../components/SweetAlert/SweetAlert";
 
 export default function CompleteTable() {
   const [saveGoodIssueModal, setSaveGoodIssueModal] = useState<boolean>(false);
@@ -66,6 +67,14 @@ export default function CompleteTable() {
     }
   };
 
+  const handleDelete = async (record: GoodIssueDetails) => {
+    if (!record.id) throw new Error("Id is null");
+    await goodIssueDetailsService.Delete(record.id);
+    await refetch();
+    SweetAlert({
+      title: "Successfully deleted.",
+    });
+  };
   const columns: TableProps<GoodIssueDetails>["columns"] = [
     {
       title: "GI #",
@@ -110,20 +119,20 @@ export default function CompleteTable() {
               onClick={() => handleClickEdit(record)}
             />
           </Tooltip>
-          {/* <Popconfirm
-          title="Are you sure to delete this item?"
-          onConfirm={() => handleDelete(record)}
-          onCancel={() => console.log("Cancelled")}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button
-            color="danger"
-            shape="circle"
-            variant="solid"
-            icon={<DeleteOutlined />}
-          />
-        </Popconfirm> */}
+          <Popconfirm
+            title="Are you sure to delete this item?"
+            onConfirm={() => handleDelete(record)}
+            onCancel={() => console.log("Cancelled")}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              color="danger"
+              shape="circle"
+              variant="solid"
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>
         </div>
       ),
     },
@@ -146,7 +155,7 @@ export default function CompleteTable() {
         rowKey="id"
         expandable={{
           expandedRowRender: (record) => (
-            <PickListDetailsRecordTable
+            <GoodIssueDetailsRecordTable
               pickListRecords={pickListRecords}
               record={record}
             />

@@ -31,8 +31,9 @@ function _reportService() {
     return data;
   };
 
-  const PickListGetAll = async (filters: ReportPickListFilterDTO) => {
-    const queryParams = objectToQueryParam(filters);
+  const PickListGetAll = async (filters:  Partial<ReportPickListFilterDTO>) => {
+    const initialFilters: Partial<ReportPickListFilterDTO>={...filters, allowNullGoodIssue:true}
+    const queryParams = objectToQueryParam(initialFilters);
     const { data } = await axiosInstance.get<ReportPickListDTO[]>(
       `${path}/picklist/list?${queryParams}`
     );

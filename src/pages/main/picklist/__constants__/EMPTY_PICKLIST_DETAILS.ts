@@ -7,7 +7,7 @@ export const EMPTY_PICKLIST_DETAILS: PickListDetails = {
   soldTo: null,
   deliveredTo: null,
   pickUpBy: null,
-  pONumber: null,
-  dONumber: null,
+  poNumber: null,
+  doNumber: null,
   salesMan: null,
 };

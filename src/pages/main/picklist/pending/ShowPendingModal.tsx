@@ -16,11 +16,14 @@ import { pickListDetailsService } from "../../../../services/pickListDetailsServ
 import { indexDbService } from "../../../../services/indexDbService";
 import { EMPTY_PICKLIST_DETAILS } from "../__constants__/EMPTY_PICKLIST_DETAILS";
 import ModalComponent from "../../../../components/ModalComponent/ModalComponent";
-import AddPendingModal from "./AddPendingModal";
+import AddPendingModal from "../SavePickListRecordDetailsModal";
 import InputFormik from "../../../../components/Formik/InputFormik";
 import SelectFormik from "../../../../components/Formik/SelectFormik";
 import type { RefTruckDetails } from "../../../../@types/tables/RefTruckDetails";
 import TableComponent from "../../../../components/Table/TableComponent";
+import SavePickListRecordDetailsModal from "../SavePickListRecordDetailsModal";
+import { pickListDetailsRecordService } from "../../../../services/pickListDetailsRecordService";
+import { reportService } from "../../../../services/reportService";
 
 type ShowPendingModalProps = {
   open: boolean;
@@ -44,7 +47,7 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
   const [records, setRecords] = useState<PickListDetailsRecordDTO[]>([]);
   const [selectedData, setSectedData] =
     useState<PickListDetailsRecordDTO | null>(null);
-  const [openSavePendingModal, setOpenSavePendingModal] =
+  const [savePickListDetailsRecordModal, setSavePickListDetailsRecordModal] =
     useState<boolean>(false);
   const columns: ColumnsType<PickListDetailsRecordDTO> = [
     {
@@ -126,6 +129,7 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
       ),
     },
   ];
+
   const handleComplete = async (values: PickListDetails) => {
     try {
       const combined: PickListDetailsDTO = {
@@ -165,9 +169,20 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
     }
   };
 
-  const handleClickEdit = (record: PickListDetailsRecordDTO) => {
-    setSectedData(record);
-    setOpenSavePendingModal(true);
+  const handleClickEdit = async (record: PickListDetailsRecordDTO) => {
+    const pickLists = await reportService.PickListGetAll({
+      id: record.cargoDetailsId,
+    });
+    setSectedData({
+      ...record,
+      report: {
+        ...record?.report,
+        balancePalleteCount: pickLists?.[0]?.balancePalleteCount??0,
+        balanceQuantity: pickLists?.[0]?.balanceQuantity??0,
+        totalItems: 0,
+      },
+    });
+    setSavePickListDetailsRecordModal(true);
   };
   const handleCancel = () => {
     onCancel();
@@ -176,7 +191,7 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
   const handleUpdate = async (value: PickListDetailsRecordDTO) => {
     const filtered = records.filter((r) => r.id != value.id);
     setRecords([...filtered, value]);
-    setOpenSavePendingModal(false);
+    setSavePickListDetailsRecordModal(false);
     SweetAlert({
       title: "Successfully updated",
     });
@@ -202,13 +217,15 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
       open={open}
       onOk={() => formik.submitForm()}
       okText={"Complete"}
+      okButtonProps={{ disabled: records.length == 0 }}
       confirmLoading={formik.isSubmitting}
       onCancel={handleCancel}
     >
-      <AddPendingModal
-        open={openSavePendingModal}
+      <SavePickListRecordDetailsModal
+        status={"Pending"}
+        open={savePickListDetailsRecordModal}
         onAfterSave={(val) => handleUpdate(val)}
-        onCancel={() => setOpenSavePendingModal(false)}
+        onCancel={() => setSavePickListDetailsRecordModal(false)}
         selectedData={selectedData}
         type="Update"
       />
@@ -216,12 +233,12 @@ export default function ShowPendingModal(props: ShowPendingModalProps) {
         <FormikProvider value={formik}>
           <Form>
             <div className="row row-cols-lg-3">
-              <InputFormik<PickListDetails> label="DO number" name="dONumber" />
+              <InputFormik<PickListDetails> label="DO number" name="doNumber" />
               <InputFormik<PickListDetails>
                 label="Delivered To"
                 name="deliveredTo"
               />
-              <InputFormik<PickListDetails> label="PO Number" name="pONumber" />
+              <InputFormik<PickListDetails> label="PO Number" name="poNumber" />
               <InputFormik<PickListDetails>
                 label="Pick Up By"
                 name="pickUpBy"
