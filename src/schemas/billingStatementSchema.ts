@@ -3,7 +3,6 @@ import { minZeroMessage, requiredMessage } from "./yupInitials";
 import type { BillingStatementWithServiceReportDTO } from "../@types/DTOs/BillingStatementWithServiceReportDTO";
 import type { OtherServiceBillDTO } from "../@types/DTOs/OtherServiceBillDTO";
 import validateBillingReference from "./utils/validateBillingReference";
-import { billingStatementService } from "../services/billingStatementService";
 
 const otherServiceBillDTOSchema: yup.Schema<OtherServiceBillDTO> = yup
   .object()
@@ -53,25 +52,4 @@ export const billingStatementSchema: yup.Schema<BillingStatementWithServiceRepor
         .min(0)
         .default([]),
     })
-    .test(
-      "unique-date",
-      "A billing statement with this date range already exists.",
-      async function (value) {
-        if (!value) return true;
-        const { id, dateFrom, dateTo } = value;
-
-        const billingStatements = await billingStatementService.GetAll({
-          dateFrom,
-          dateTo,
-        });
-
-        if (!billingStatements) return true;
-        if (billingStatements[0].id != id) {
-          return this.createError({
-            path: "dateFrom",
-            message: "Date range already exists.",
-          });
-        }
-        return true;
-      }
-    );
+    

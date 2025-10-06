@@ -11,6 +11,7 @@ import OtherServiceBillArray from "./OtherServiceBillArray";
 import { billingStatementService } from "../../../services/billingStatementService";
 import { useEffect } from "react";
 import { billingStatementSchema } from "../../../schemas/billingStatementSchema";
+import type { BillingStatementDTO } from "../../../@types/DTOs/BillingStatementDTO";
 
 type SaveModalProps = {
   open: boolean;
@@ -30,11 +31,41 @@ export default function SaveModal(props: SaveModalProps) {
   } = props;
   const { title: pageTitle } = usePage();
 
+  const handleCheckDuplicate = async (
+    values: BillingStatementWithServiceReportDTO
+  ) => {
+    const billingStatements: BillingStatementDTO[] =
+      await billingStatementService.GetAll({
+        ...values,
+        id: null,
+        referenceNumber: null,
+      });
+    console.log(values, billingStatements);
+    if (billingStatements.length == 0) return false;
+    else if (billingStatements.length > 1 || billingStatements?.[0]?.id !== values.id) {
+      const error: string = "Duplicate entry found, please try another.";
+      SweetAlert({
+        icon: "error",
+        showConfirmButton: true,
+        timer: undefined,
+        title: "Duplicate entry found, please try another.",
+      });
+      formik.setFieldError("dateTo", error);
+      formik.setFieldError("dateFrom", error);
+      return true;
+    }
+
+    return false;
+  };
+
   const handleSave = async (
     values: BillingStatementWithServiceReportDTO,
     formik: FormikHelpers<BillingStatementWithServiceReportDTO>
   ) => {
     try {
+      const isDuplicate = await handleCheckDuplicate(values);
+      if (isDuplicate) return;
+
       formik.setSubmitting(true);
       if (values.id) {
         await billingStatementService.Update(values.id, values);
@@ -57,7 +88,7 @@ export default function SaveModal(props: SaveModalProps) {
     formik.resetForm();
   };
 
-  const formik = useFormik({
+  const formik = useFormik<BillingStatementWithServiceReportDTO>({
     initialValues: selectedData?.id ? selectedData : EMPTY_FORM,
     enableReinitialize: true,
     validationSchema: billingStatementSchema,

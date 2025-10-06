@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { principalService } from "../../services/principalService";
 import { useFormikContext } from "formik";
 import SelectFormik, { type SelectFormikProps } from "../Formik/SelectFormik";
+import { productCategoryService } from "../../services/productCategoryService";
 
 export type PrincipalProductSelectProps<T = any> = {
   principalProps: Omit<
@@ -24,10 +25,6 @@ export default function PrincipalProductSelect<T = any>(
   const principalName = principalProps.name;
   const productCategoryName = productCategoryProps.name;
 
-  const [productCategories, setProductCategories] = useState<
-    RefProductCategory[]
-  >([]);
-
   const { getFieldProps, setFieldValue } = useFormikContext<T>();
 
   const { data: principals } = useQuery({
@@ -36,19 +33,17 @@ export default function PrincipalProductSelect<T = any>(
     initialData: [],
   });
 
-  useEffect(() => {
-    const principalId = getFieldProps(principalName).value;
-    const prods =
-      principals.find((p) => p.id == principalId)?.productCategories ?? [];
-    setProductCategories(prods);
-  }, [getFieldProps(principalName as string).value]);
+  const { data: productCategories } = useQuery({
+    queryKey: ["productCategories", getFieldProps(principalName).value],
+    queryFn: async () =>
+      await productCategoryService.GetAll({
+        principalId: getFieldProps(principalName).value,
+      }),
+    initialData: [],
+  });
 
-  const handleChangePrincipal = (principalId: number) => {
+  const handleChangePrincipal = () => {
     setFieldValue(productCategoryName, null);
-    if (!principalId) {
-      setProductCategories([]);
-      return;
-    }
   };
 
   return (
@@ -58,7 +53,7 @@ export default function PrincipalProductSelect<T = any>(
         keyValue="id"
         keyLabel="name"
         option={principals}
-        onChange={(val) => handleChangePrincipal(val)}
+        onChange={() => handleChangePrincipal()}
         {...principalProps}
       />
       <SelectFormik<any, RefProductCategory>

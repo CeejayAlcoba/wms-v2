@@ -76,7 +76,7 @@ export default function SelectFormik<T = unknown, TOption = any>({
         fieldValue !== null &&
         keyLabel in fieldValue
       ) {
-        return fieldValue[keyLabel];
+        return fieldValue[keyValue];
       }
       return fieldValue;
     }
