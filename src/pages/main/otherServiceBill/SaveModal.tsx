@@ -9,7 +9,7 @@ import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFor
 import PrincipalProductSelect from "../../../components/Select/PrincipalCategorySelect";
 import OtherServiceBillArray from "./OtherServiceBillArray";
 import { billingStatementService } from "../../../services/billingStatementService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { billingStatementSchema } from "../../../schemas/billingStatementSchema";
 import type { BillingStatementDTO } from "../../../@types/DTOs/BillingStatementDTO";
 
@@ -31,6 +31,7 @@ export default function SaveModal(props: SaveModalProps) {
   } = props;
   const { title: pageTitle } = usePage();
 
+  const [loading, setLoading] = useState<boolean>(false);
   const handleCheckDuplicate = async (
     values: BillingStatementWithServiceReportDTO
   ) => {
@@ -40,9 +41,11 @@ export default function SaveModal(props: SaveModalProps) {
         id: null,
         referenceNumber: null,
       });
-    console.log(values, billingStatements);
     if (billingStatements.length == 0) return false;
-    else if (billingStatements.length > 1 || billingStatements?.[0]?.id !== values.id) {
+    else if (
+      billingStatements.length > 1 ||
+      billingStatements?.[0]?.id !== values.id
+    ) {
       const error: string = "Duplicate entry found, please try another.";
       SweetAlert({
         icon: "error",
@@ -96,12 +99,14 @@ export default function SaveModal(props: SaveModalProps) {
   });
 
   const handleBillingStatement = async () => {
+    setLoading(true);
     if (!selectedData?.id) {
       formik.setValues({ ...selectedData });
-      return;
+    } else {
+      const billing = await billingStatementService.GetById(selectedData.id);
+      formik.setValues(billing);
     }
-    const billing = await billingStatementService.GetById(selectedData.id);
-    formik.setValues(billing);
+    setLoading(false);
   };
   useEffect(() => {
     handleBillingStatement();
@@ -109,6 +114,7 @@ export default function SaveModal(props: SaveModalProps) {
 
   return (
     <ModalComponent
+      loading={loading}
       width={1500}
       title={`${selectedData ? "Update" : "Add"} ${pageTitle}`}
       open={open}

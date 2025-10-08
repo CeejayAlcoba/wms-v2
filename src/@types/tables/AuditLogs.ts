@@ -3,6 +3,8 @@ export type AuditLogs = {
   tableName?: string | null;
   recordId?: number | null;
   pageName?: string | null;
+  targetName?: string | null;
+  targetValue?: string | null;
   actionType?: string | null;
   description?: string | null;
   columnAffected?: string | null;
@@ -10,7 +12,7 @@ export type AuditLogs = {
   newValue?: string | null;
   columnDisplay?: string | null;
   oldDisplayValue?: string | null;
-  newDiplayValue?: string | null;
+  newDisplayValue?: string | null;
   auditBy?: number | null;
   auditDate?: Date | null;
 };

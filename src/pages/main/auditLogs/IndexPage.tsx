@@ -49,7 +49,7 @@ export default function IndexPage() {
 
   const columns: TableProps<AuditLogsDTO>["columns"] = [
     {
-      title: "Page",
+      title: "Module",
       dataIndex: "pageName",
       key: "pageName",
     },
@@ -63,6 +63,18 @@ export default function IndexPage() {
       },
     },
     {
+      title: "Target",
+      dataIndex: "targetName",
+      key: "targetName",
+      render: (targetName: string, record: AuditLogsDTO) => {
+        return (
+          <span>
+            {targetName} <strong>{record?.targetValue}</strong>
+          </span>
+        );
+      },
+    },
+    {
       title: "Description",
       dataIndex: "description",
       key: "description",
@@ -73,18 +85,11 @@ export default function IndexPage() {
             <>
               Updated <b>{handleToNormalWords(record.columnDisplay ?? "")}</b>{" "}
               from <b>{record.oldDisplayValue ?? "NULL"}</b> →{" "}
-              <b>{record.newDiplayValue ?? "NULL"}</b>
+              <b>{record.newDisplayValue ?? "NULL"}</b>
             </>
           );
         }
-        return (
-          <>
-            {description},{" "}
-            <b>
-              { record.columnDisplay && `${handleToNormalWords(record.columnDisplay??"")} :`}  {record.newDiplayValue}
-            </b>
-          </>
-        );
+        return description;
       },
     },
 
