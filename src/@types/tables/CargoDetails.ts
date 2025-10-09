@@ -7,7 +7,7 @@ export type CargoDetails = {
   deliveryNote?: string | null;
   unitOfMeasurementId?: number | null;
   batchNo?: string | null;
-  expirationDate?: Date | null;
+  expirationDate?: string | null;
   palleteCount?: number | null;
   quantity?: number | null;
   lengthCm?: number | null;

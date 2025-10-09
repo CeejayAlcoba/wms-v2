@@ -51,8 +51,8 @@ export default function CargoHistoryTable(props: {
     },
     {
       title: "OCR",
-      dataIndex: "oCRNumber",
-      key: "oCRNumber",
+      dataIndex: "ocrNumber",
+      key: "ocrNumber",
     },
     {
       title: "Status",

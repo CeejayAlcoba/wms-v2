@@ -13,12 +13,24 @@ import { handleRoundOff } from "../../../utils/handleRoundOff";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { unitOfMeasurementService } from "../../../services/unitOfMeasurementService";
+import ExcelHandler, {
+  type ExcelColumn,
+} from "../../../components/Documents/excel/ExcelHandler";
+import type { CargoDetails } from "../../../@types/tables/CargoDetails";
+import SweetAlert from "../../../components/SweetAlert/SweetAlert";
+import dayjs from "dayjs";
 // import ExcelHandler from "../../../components/Documents/excel/ExcelHandler";
 
 const { Panel } = Collapse;
 
+type ExcelColumnType = {
+  uom: string;
+  shelfDetails: string;
+} & CargoDetails;
+
 export default function CargoListPage() {
-  const { values, errors, touched } = useFormikContext<CheckInByICRDTO>();
+  const { values, errors, touched, setValues } =
+    useFormikContext<CheckInByICRDTO>();
 
   const [activeKey, setActiveKey] = useState<string[]>(["0"]);
   const onChange = (key: string | string[]) => {
@@ -35,18 +47,156 @@ export default function CargoListPage() {
       }
     }
   }, [errors.cargoDetails && touched.cargoDetails]);
+  const { data: unitOfMeasurements } = useQuery({
+    queryKey: ["unitOfMeasurements"],
+    queryFn: async () => unitOfMeasurementService.GetAll(),
+    initialData: [],
+  });
+  const formatColumns: ExcelColumn<ExcelColumnType>[] = [
+    {
+      label: "SKU",
+      key: "skuCode",
+      type: "string",
+    },
+    {
+      label: "PRO Number",
+      key: "proNumber",
+      type: "string",
+    },
+    {
+      label: "Description",
+      key: "description",
+      type: "string",
+    },
+    {
+      label: "Delivery Note",
+      key: "deliveryNote",
+      type: "string",
+    },
+    {
+      label: "UOM",
+      key: "uom",
+      type: "string",
+    },
+    {
+      label: "Batch No",
+      key: "batchNo",
+      type: "string",
+    },
+    {
+      label: "Expiration Date",
+      key: "expirationDate",
+      type: "date",
+    },
+    {
+      label: "Pallete Count",
+      key: "palleteCount",
+      type: "number",
+      validate: (value: number) => value > 0,
+      invalidMessage: (label: string, row: number) =>
+        `Ivalid ${label} in (row: ${row}), ${label} must more than 0`,
+    },
+    {
+      label: "Quantity",
+      key: "quantity",
+      type: "number",
+      validate: (value: number) => value > 0,
+      invalidMessage: (label: string, row: number) =>
+        `Invalid ${label} in (row: ${row}), ${label} must more than 0`,
+    },
+    {
+      label: "Length (Cm)",
+      key: "lengthCm",
+      type: "number",
+      validate: (value: number) => value > 0,
+      invalidMessage: (label: string, row: number) =>
+        `Invalid ${label} in (row: ${row}), ${label} must more than 0`,
+    },
+    {
+      label: "Height (Cm)",
+      key: "heightCm",
+      type: "number",
+      validate: (value: number) => value > 0,
+      invalidMessage: (label: string, row: number) =>
+        `Invalid ${label} in (row: ${row}), ${label} must more than 0`,
+    },
+    {
+      label: "Width (Cm)",
+      key: "widthCm",
+      type: "number",
+      validate: (value: number) => value > 0,
+      invalidMessage: (label: string, row: number) =>
+        `Invalid ${label} in (row: ${row}), ${label} must more than 0`,
+    },
+    {
+      label: "Customer Name",
+      key: "customerName",
+      type: "string",
+    },
+    {
+      label: "Storage Location",
+      key: "shelfDetails",
+      type: "string",
+    },
+    {
+      label: "Total Amount",
+      key: "totalAmount",
+      type: "number",
+    },
+  ];
 
-  // const formatColumns = ["SKU","PRO Number","Description","Delivery Note","Unit of packaging",];
+  const handleUpload = (records: ExcelColumnType[]) => {
+    records?.map((r) => {
+      setValues({
+        ...values,
+        cargoDetails: [
+          ...values.cargoDetails,
+          {
+            description: r?.description ?? "",
+            skuCode: r?.skuCode ?? "",
+            proNumber: r?.proNumber ?? null,
+            deliveryNote: r?.deliveryNote ?? null,
+            unitOfMeasurementId:
+              unitOfMeasurements?.find((f) => f.name == r.uom)?.id || null,
+            batchNo: r?.batchNo ?? null,
+            expirationDate: r?.expirationDate
+              ? dayjs(r?.expirationDate).format("YYYY-MM-DD")
+              : null,
+            palleteCount: r?.palleteCount ?? null,
+            quantity: r?.quantity ?? null,
+            lengthCm: r?.lengthCm ?? null,
+            heightCm: r?.heightCm ?? null,
+            widthCm: r?.widthCm ?? null,
+            cubicMeter: r?.cubicMeter ?? null,
+            customerName: r?.customerName ?? null,
+            shelfDetailsId: r?.shelfDetailsId ?? null,
+            totalAmount: r?.totalAmount ?? null,
+            bookingDetailsId: r?.bookingDetailsId ?? null,
+          },
+        ],
+      });
+    });
+  };
+
   return (
     <>
-      {/* <ExcelHandler
+      <ExcelHandler<ExcelColumnType>
         className="mb-2 d-flex justify-content-end"
-        columns={[]}
+        columns={formatColumns}
         data={[]}
-        onUpload={function (record: Record<string, any>[]): void {
-          throw new Error("Function not implemented.");
+        onUpload={handleUpload}
+        onInvalidUpload={(messages: string[]) => {
+          SweetAlert({
+            icon: "error",
+            title: "Invalid Format",
+
+            html: messages.join("<br/>"),
+            width: 600,
+            timer: undefined,
+            showConfirmButton: true,
+          });
         }}
-      /> */}
+      />
       <FieldArray name="cargoDetails">
         {({ push, remove }) => (
           <>
@@ -74,6 +224,7 @@ export default function CargoListPage() {
                     <CargoForm
                       arrayName={`cargoDetails[${index}]`}
                       index={index}
+                      unitOfMeasurements={unitOfMeasurements}
                     />
                   </Panel>
                 );
@@ -98,8 +249,12 @@ export default function CargoListPage() {
   );
 }
 
-function CargoForm(props: { arrayName: string; index: number }) {
-  const { arrayName } = props;
+function CargoForm(props: {
+  arrayName: string;
+  index: number;
+  unitOfMeasurements: RefUnitOfMeasurement[];
+}) {
+  const { arrayName, unitOfMeasurements } = props;
 
   const { getFieldProps, setFieldValue } = useFormikContext<CheckInByICRDTO>();
 
@@ -120,11 +275,6 @@ function CargoForm(props: { arrayName: string; index: number }) {
     getFieldProps(`${arrayName}.quantity`).value,
   ]);
 
-  const { data: unitOfMeasurements } = useQuery({
-    queryKey: ["unitOfMeasurements"],
-    queryFn: async () => unitOfMeasurementService.GetAll(),
-    initialData: [],
-  });
   return (
     <div className="row row-cols-lg-4">
       <InputFormik<any> label="SKU" name={`${arrayName}.skuCode`} askterisk />

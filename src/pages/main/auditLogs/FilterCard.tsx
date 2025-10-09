@@ -42,10 +42,7 @@ export default function FilterCard(props: FilterCardProps) {
               dateFromProps={{ name: "dateFrom", label: "Date From" }}
               dateToProps={{ name: "dateTo", label: "Date From" }}
             />
-            <InputFormik<AuditLogsFilterDTO>
-              label="Page Name"
-              name="pageName"
-            />
+            <InputFormik<AuditLogsFilterDTO> label="Module" name="pageName" />
             <SelectFormik<AuditLogsFilterDTO, ActionType>
               label="Action Type"
               name="actionType"
