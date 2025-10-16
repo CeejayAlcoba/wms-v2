@@ -218,8 +218,6 @@ export default function IndexPage() {
         pagination={{
           total: reports?.[0]?.totalItems,
           onChange: handlePaginate,
-          current: search.currentPage ?? 1,
-          pageSize: search.pageSize ?? 10,
         }}
         footer={() => (
           <TableTotalFooter<ReportInboundDTO>

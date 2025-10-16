@@ -240,8 +240,6 @@ export default function IndexPage() {
         pagination={{
           total: inventories?.[0]?.totalItems,
           onChange: handlePaginate,
-          current: search.currentPage ?? 1,
-          pageSize: search.pageSize ?? 10,
         }}
         expandable={{
           expandedRowRender: (record) => (

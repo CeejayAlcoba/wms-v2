@@ -15,11 +15,12 @@ import {
   type InputProps,
 } from "antd";
 import type { TableProps } from "antd/es/table";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { usePrint } from "../../hooks/usePrint";
 import { usePDF } from "../../hooks/usePDF";
 import DocumentTable from "../Documents/DocumentTable";
+import { useSearchParams } from "react-router-dom";
 
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
@@ -36,26 +37,43 @@ export type TableComponentProps<T extends object = any> = TableProps<T> & {
   } & ButtonProps;
 };
 
+type PaginationParams = {
+  page: string;
+  pageSize: string;
+};
 const { Text } = Typography;
 
-export default function TableComponent<T extends object = any>(
-  props: TableComponentProps<T>
-) {
-  const initialProps: TableComponentProps<T> = {
-    size: "small",
-    indexedColumn: true,
-    ...props,
-  };
-  const {
-    headerTitle,
-    search,
-    indexedColumn,
-    add,
-    print,
-    pdf,
-    columns,
-    ...rest
-  } = initialProps;
+export default function TableComponent<T extends object = any>({
+  size = "small",
+  indexedColumn = true,
+  add,
+  print,
+  pdf,
+  columns,
+  headerTitle,
+  search,
+  ...props
+}: TableComponentProps<T>) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [pagination, setPagination] = useState<PaginationParams>({
+    page: searchParams.get("page") ?? "1",
+    pageSize: searchParams.get("pageSize") ?? "10",
+  });
+  // const initialProps: TableComponentProps<T> = {
+  //   size: "small",
+  //   indexedColumn: true,
+  //   ...props,
+  // };
+  // const {
+  //   headerTitle,
+  //   search,
+  //   indexedColumn,
+  //   add,
+  //   print,
+  //   pdf,
+  //   columns,
+  //   ...rest
+  // } = initialProps;
 
   const { handlePrint: onPrint, componentRef: refPrint } = usePrint({
     onBeforePrint: print?.onBeforePrint,
@@ -80,12 +98,9 @@ export default function TableComponent<T extends object = any>(
           title: "#",
           key: "#",
           render: (__, _, index) =>
-            props.pagination && props.pagination.onChange
-              ? ((props.pagination.current ?? 0) - 1) *
-                  (props.pagination.pageSize ?? 0) +
-                index +
-                1
-              : index + 1,
+            index +
+            1 +
+            (parseInt(pagination.page) - 1) * parseInt(pagination.pageSize),
         },
         ...newColumns,
       ];
@@ -121,6 +136,19 @@ export default function TableComponent<T extends object = any>(
     } else {
       onDownloadPdf(headerTitle);
     }
+  };
+
+  useEffect(() => {
+    if (!props.pagination) return;
+    handleChangePagination();
+  }, []);
+
+  const handleChangePagination = ({
+    page = "1",
+    pageSize = "10",
+  }: Partial<PaginationParams> = {}) => {
+    setSearchParams({ page, pageSize });
+    setPagination({ page, pageSize });
   };
 
   return (
@@ -177,33 +205,45 @@ export default function TableComponent<T extends object = any>(
 
       <Table<T>
         columns={handleUpdateColumns()}
-        {...rest}
+        size={size}
+        {...props}
         pagination={
-          rest.pagination == false
+          props.pagination == false
             ? false
             : {
+                ...props.pagination,
+                onChange: (page, pageSize) => {
+                  props.pagination &&
+                    props.pagination.onChange &&
+                    props.pagination.onChange(page, pageSize);
+                  handleChangePagination({
+                    page: page.toString(),
+                    pageSize: pageSize.toString(),
+                  });
+                },
                 showSizeChanger: true,
-                ...rest.pagination,
               }
         }
         scroll={{ x: "max-content" }}
       />
       <DocumentTable<T>
         ref={refPdf}
+        size={size}
         className="light-table"
         headerTitle={headerTitle}
         {...props}
         expandable={undefined}
-        dataSource={rest.dataSource}
+        dataSource={props.dataSource}
         columns={handleColumnDocument()}
       />
       <DocumentTable<T>
         ref={refPrint}
+        size={size}
         className="light-table"
         headerTitle={headerTitle}
         {...props}
         expandable={undefined}
-        dataSource={rest.dataSource}
+        dataSource={props.dataSource}
         columns={handleColumnDocument()}
       />
     </Card>

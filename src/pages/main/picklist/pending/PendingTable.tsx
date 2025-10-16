@@ -20,8 +20,10 @@ import { TABLE_TOTAL_FOOTER } from "../../../../constants/TABLE_TOTAL_FOOTER";
 import SavePickListRecordDetailsModal from "../SavePickListRecordDetailsModal";
 
 export default function PendingTable() {
-  const [savePickListDetailsRecordModal, setSavePickListDetailsRecordModalOpen] =
-    useState<boolean>(false);
+  const [
+    savePickListDetailsRecordModal,
+    setSavePickListDetailsRecordModalOpen,
+  ] = useState<boolean>(false);
   const [showPendingModalOpen, setShowPendingModalOpen] =
     useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<ReportPickListDTO | null>(
@@ -217,7 +219,7 @@ export default function PendingTable() {
   return (
     <>
       <SavePickListRecordDetailsModal
-        status={"Pending"}    
+        status={"Pending"}
         open={savePickListDetailsRecordModal}
         onAfterSave={handlePickListRecord}
         onCancel={handleClickCancel}
@@ -264,8 +266,6 @@ export default function PendingTable() {
         pagination={{
           total: pickLists?.[0]?.totalItems,
           onChange: handlePaginate,
-          current: search.currentPage ?? 1,
-          pageSize: search.pageSize ?? 10,
         }}
         footer={() => (
           <TableTotalFooter<ReportPickListDTO>

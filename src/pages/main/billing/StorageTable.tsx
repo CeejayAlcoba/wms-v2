@@ -41,21 +41,21 @@ export default function StorageTable(props: StorageTableProps) {
       key: "palleteCount",
     },
     {
-      title: "IN (CBM)",
+      title: `IN (${storage?.totals?.billType})`,
       dataIndex: "inCbm",
       key: "inCbm",
       render: (value: number) =>
         value ? <Text type="success">{value}</Text> : "",
     },
     {
-      title: "OUT (CBM)",
+      title: `OUT (${storage?.totals?.billType})`,
       dataIndex: "outCbm",
       key: "outCbm",
       render: (value: number) =>
         value ? <Text type="danger">{value}</Text> : "",
     },
     {
-      title: "BAL (CBM)",
+      title: `BAL (${storage?.totals?.billType})`,
       dataIndex: "balanceCbm",
       key: "balanceCbm",
     },
@@ -84,7 +84,7 @@ export default function StorageTable(props: StorageTableProps) {
       render: (_, record) => {
         return (
           <span>
-            {handleMoney(record?.storageRate)}/{record?.billType}
+            {handleMoney(record?.storageRate)}/{record?.billType}/day
           </span>
         );
       },

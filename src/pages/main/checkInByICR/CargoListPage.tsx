@@ -19,6 +19,7 @@ import ExcelHandler, {
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import dayjs from "dayjs";
+import { shelfDetailsService } from "../../../services/shelfDetailsService";
 // import ExcelHandler from "../../../components/Documents/excel/ExcelHandler";
 
 const { Panel } = Collapse;
@@ -50,6 +51,11 @@ export default function CargoListPage() {
   const { data: unitOfMeasurements } = useQuery({
     queryKey: ["unitOfMeasurements"],
     queryFn: async () => unitOfMeasurementService.GetAll(),
+    initialData: [],
+  });
+  const { data: shelfDetails } = useQuery({
+    queryKey: ["shelfDetails"],
+    queryFn: async () => shelfDetailsService.GetAll(),
     initialData: [],
   });
   const formatColumns: ExcelColumn<ExcelColumnType>[] = [
@@ -146,6 +152,7 @@ export default function CargoListPage() {
   ];
 
   const handleUpload = (records: ExcelColumnType[]) => {
+    console.log(records);
     records?.map((r) => {
       setValues({
         ...values,
@@ -157,7 +164,9 @@ export default function CargoListPage() {
             proNumber: r?.proNumber ?? null,
             deliveryNote: r?.deliveryNote ?? null,
             unitOfMeasurementId:
-              unitOfMeasurements?.find((f) => f.name == r.uom)?.id || null,
+              unitOfMeasurements?.find(
+                (f) => f.name?.replace(/\s/g, "") == r.uom
+              )?.id || null,
             batchNo: r?.batchNo ?? null,
             expirationDate: r?.expirationDate
               ? dayjs(r?.expirationDate).format("YYYY-MM-DD")
@@ -169,7 +178,12 @@ export default function CargoListPage() {
             widthCm: r?.widthCm ?? null,
             cubicMeter: r?.cubicMeter ?? null,
             customerName: r?.customerName ?? null,
-            shelfDetailsId: r?.shelfDetailsId ?? null,
+            shelfDetailsId:
+              shelfDetails?.find(
+                (f) =>
+                  f.name?.replace(/\s/g, "") ==
+                  r.shelfDetails?.replace(/\s/g, "")
+              )?.id || null,
             totalAmount: r?.totalAmount ?? null,
             bookingDetailsId: r?.bookingDetailsId ?? null,
           },
@@ -225,6 +239,7 @@ export default function CargoListPage() {
                       arrayName={`cargoDetails[${index}]`}
                       index={index}
                       unitOfMeasurements={unitOfMeasurements}
+                      shelfDetails={shelfDetails}
                     />
                   </Panel>
                 );
@@ -253,8 +268,9 @@ function CargoForm(props: {
   arrayName: string;
   index: number;
   unitOfMeasurements: RefUnitOfMeasurement[];
+  shelfDetails: ShelfDetails[];
 }) {
-  const { arrayName, unitOfMeasurements } = props;
+  const { arrayName, unitOfMeasurements, shelfDetails } = props;
 
   const { getFieldProps, setFieldValue } = useFormikContext<CheckInByICRDTO>();
 
@@ -352,7 +368,7 @@ function CargoForm(props: {
         name={`${arrayName}.shelfDetailsId`}
         keyValue="id"
         keyLabel="name"
-        option={[]}
+        option={shelfDetails}
       />
       <InputNumberFormik<any>
         prefix="₱"

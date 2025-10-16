@@ -4,5 +4,5 @@ export const EMPTY_FORM: RefServiceField = {
   id: null,
   jsonKey: null,
   name: null,
-  value: 0,
+  value: null,
 };
