@@ -1,4 +1,3 @@
-
 import type { BillingDTO } from "../../../../@types/DTOs/BillingDTO";
 import BodyLayout, { type ContentType } from "./BodyLayout";
 import { handleMoney } from "../../../../utils/handleMoney";
@@ -54,8 +53,11 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
         <div>{c?.outCbm}</div>,
         <div>{c?.quantity}</div>,
         <div className="text-success">{c?.balanceCbm || ""}</div>,
-        <div style={{width:100}}> {dayjs(c.cutOff).format("DD-MMM-YY")}</div>,
-        <div > {c.noOfDays}</div>,
+        <div style={{ width: 100 }}>
+          {" "}
+          {dayjs(c.cutOff).format("DD-MMM-YY")}
+        </div>,
+        <div> {c.noOfDays}</div>,
         <div> {handleMoney(c.bill)}</div>,
       ],
     })) ?? [];
@@ -67,9 +69,11 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
     return decimal === "00" ? "ONLY" : `AND ${decimal}/100 ONLY`;
   };
   return (
-    <div className="bg-light d-none" style={{fontSize:11}}>
+    <div className="bg-light d-none" style={{ fontSize: 11 }}>
       <DocumentLayout ref={ref} headerTitle="BILLING STATEMENT">
-        <BillingTableHeader record={billing?.billingStatement as BillingStatementDTO}/>
+        <BillingTableHeader
+          record={billing?.billingStatement as BillingStatementDTO}
+        />
         <table className="table table-bordered mt-2">
           <TableHeaderLayout />
           <tbody>
@@ -130,7 +134,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
                   <strong className="text-danger">OUT (cbm)</strong>,
                   <strong className="text-danger"> QTY</strong>,
                   <strong className="text-danger"> BAL (cbm)</strong>,
-                  <strong  className="text-danger"> CUT OFF</strong>,
+                  <strong className="text-danger"> CUT OFF</strong>,
                   <strong className="text-danger"> # of days</strong>,
                   <div></div>,
                 ],
@@ -149,7 +153,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
                   </div>
                   <div>
                     {handleMoney(billing?.storage?.totals?.storageRate)}/
-                    {billing?.storage?.totals?.billType}
+                    {billing?.storage?.totals?.billType}/day
                   </div>
                 </div>
               }
@@ -157,7 +161,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
           </tbody>
         </table>
         <OtherServicesTable
-          style={{fontSize:12}}
+          style={{ fontSize: 12 }}
           forPrinting={true}
           record={billing?.billingStatement as BillingStatementDTO}
           otherServices={billing?.billingStatement?.otherServiceBills ?? []}
@@ -173,7 +177,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
             {handleDecimalText()}
           </span>
         </div>
-        <SignatoriesLayout signatories={billing?.signatoriesConfigs}/>
+        <SignatoriesLayout signatories={billing?.signatoriesConfigs} />
       </DocumentLayout>
     </div>
   );
