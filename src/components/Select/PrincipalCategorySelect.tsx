@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import type { RefPrincipal } from "../../@types/tables/RefPrincipal";
 import type { RefProductCategory } from "../../@types/tables/RefProductCategory";
 import { useQuery } from "@tanstack/react-query";

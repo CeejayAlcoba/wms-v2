@@ -11,7 +11,7 @@ export const cargoDetailsSchema: yup.Schema<CargoDetails> = yup.object().shape({
   deliveryNote: yup.string().nullable(),
   unitOfMeasurementId: yup.number().required(requiredMessage),
   batchNo: yup.string().nullable(),
-  expirationDate: yup.date().required(requiredMessage),
+  expirationDate: yup.string().required(requiredMessage),
   palleteCount: yup.number().required(requiredMessage),
   quantity: yup.number().required(requiredMessage),
   lengthCm: yup.number().required(requiredMessage),
