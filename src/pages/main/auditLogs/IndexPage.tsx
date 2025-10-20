@@ -83,9 +83,9 @@ export default function IndexPage() {
         if (record.actionType === "UPDATE") {
           return (
             <>
-              Updated <b>{handleToNormalWords(record.columnDisplay ?? "")}</b>{" "}
-              from <b>{record.oldDisplayValue ?? "NULL"}</b> →{" "}
-              <b>{record.newDisplayValue ?? "NULL"}</b>
+              Updated <b>{handleToNormalWords(record.columnDisplay ?? "_")}</b>{" "}
+              from <b>{record.oldDisplayValue ?? "_"}</b> →{" "}
+              <b>{record.newDisplayValue ?? "_"}</b>
             </>
           );
         }
