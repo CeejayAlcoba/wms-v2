@@ -55,7 +55,7 @@ export default function CompleteTable(props: CompleteTableProps) {
     initialData: [],
   });
 
-  const handleClickEdit = async(record: PickListDetailsGetDTO) => {
+  const handleClickEdit = async (record: PickListDetailsGetDTO) => {
     setSelectedData(record);
     setUpdateModalOpen(true);
   };
@@ -257,8 +257,6 @@ export default function CompleteTable(props: CompleteTableProps) {
         pagination={{
           total: pickListDetails?.[0]?.totalItems,
           onChange: handlePaginate,
-          current: search.currentPage ?? 1,
-          pageSize: search.pageSize ?? 10,
         }}
         rowKey="id"
         expandable={{

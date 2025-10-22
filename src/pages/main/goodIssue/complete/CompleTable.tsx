@@ -137,6 +137,19 @@ export default function CompleteTable() {
       ),
     },
   ];
+  const handlePaginate = (page: number, pageSize: number) => {
+    setSearch((prev) => ({ ...prev, currentPage: page, pageSize }));
+  };
+
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+    await refetch();
+  };
+
   return (
     <>
       <SaveGoodIssueModal
@@ -153,6 +166,12 @@ export default function CompleteTable() {
         dataSource={goodIssues}
         loading={isFetching}
         rowKey="id"
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
+        pagination={{
+          total: goodIssues?.[0]?.totalItems,
+          onChange: handlePaginate,
+        }}
         expandable={{
           expandedRowRender: (record) => (
             <GoodIssueDetailsRecordTable

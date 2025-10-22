@@ -17,12 +17,15 @@ export default function PendingTable() {
   );
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-
+  const page = searchParams.get("page");
+  const pageSize = searchParams.get("pageSize");
   const picklistQueryResult = useQuery({
-    queryKey: ["pickListDetailsGoodIssue", id],
+    queryKey: ["pickListDetailsGoodIssue", id, pageSize, page],
     queryFn: async () => {
       return await pickListDetailsService.GetAll({
         id: id,
+        pageSize,
+        currentPage: page,
         isNullGoodIssue: true,
       } as PickListDetailsFilterDTO);
     },
@@ -46,15 +49,15 @@ export default function PendingTable() {
   };
 
   const renderAdditionalAction = (_: any, record: PickListDetails) => (
-      <Tooltip title="Good issue">
-        <Button
-          className="bg-success text-light"
-          shape="circle"
-          variant="solid"
-          icon={<PlusOutlined />}
-          onClick={() => handleClickAdd(record)}
-        />
-      </Tooltip>
+    <Tooltip title="Good issue">
+      <Button
+        className="bg-success text-light"
+        shape="circle"
+        variant="solid"
+        icon={<PlusOutlined />}
+        onClick={() => handleClickAdd(record)}
+      />
+    </Tooltip>
   );
 
   return (

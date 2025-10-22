@@ -4,14 +4,13 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import type { ReportPickListFilterDTO } from "../../../../@types/DTOs/ReportPickListFilterDTO";
 import { EMPTY_FILTER } from "../__constants__/EMPTY_FILTER";
-import { goodsReceiptService } from "../../../../services/goodsReceiptService";
 import InputFormik from "../../../../components/Formik/InputFormik";
 import PrincipalProductSelect from "../../../../components/Select/PrincipalCategorySelect";
 import SelectFormik from "../../../../components/Formik/SelectFormik";
-import type { GoodsReceipt } from "../../../../@types/tables/GoodsReceipt";
 import type { ShelfDetails } from "../../../../@types/tables/ShelfDetails";
 import DateRangePickerFormik from "../../../../components/Formik/DateRangePickerFormik";
 import SwitchFormik from "../../../../components/Formik/SwitchFormik";
+import { shelfDetailsService } from "../../../../services/shelfDetailsService";
 
 export type FilterCardProps = {
   onSearch: (
@@ -29,9 +28,9 @@ export default function FilterCard(props: FilterCardProps) {
     onSubmit: onSearch,
   });
 
-  const { data: goodsReceipts } = useQuery({
-    queryKey: ["goodsReceipts"],
-    queryFn: async () => await goodsReceiptService.GetAll(),
+  const { data: shelves } = useQuery({
+    queryKey: ["shelves"],
+    queryFn: async () => await shelfDetailsService.GetAll(),
     initialData: [],
   });
 
@@ -62,12 +61,10 @@ export default function FilterCard(props: FilterCardProps) {
               name: "productCategoryId",
             }}
           />
-          <SelectFormik<ReportPickListFilterDTO, GoodsReceipt>
+          <InputFormik<ReportPickListFilterDTO>
             label="Goods Receipt"
             name="goodsReceiptId"
-            keyValue="id"
-            keyLabel="name"
-            option={goodsReceipts}
+            prefix="GR-"
           />
           <InputFormik<ReportPickListFilterDTO>
             label="SKU Code"
@@ -86,7 +83,7 @@ export default function FilterCard(props: FilterCardProps) {
             name="shelfDetailsId"
             keyValue="id"
             keyLabel="name"
-            option={[]}
+            option={shelves}
           />
           <SwitchFormik<ReportPickListFilterDTO>
             label="Show Zero Balances"
