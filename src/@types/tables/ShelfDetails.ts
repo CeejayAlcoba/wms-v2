@@ -1,10 +1,10 @@
 export type ShelfDetails = {
-  id?: number;
-  name?: string;
-  shelfDetailsStatusId?: number;
-  isOccupied?: boolean;
-  bayDetailsId?: number;
-  contentTypeId?: number;
-  shelfDetailsTagId?: number;
-  contentValue?: number;
+  id?: number | null;
+  name?: string | null;
+  shelfDetailsStatusId?: number | null;
+  isOccupied?: boolean | null;
+  bayDetailsId?: number | null;
+  contentTypeId?: number | null;
+  shelfDetailsTagId?: number | null;
+  contentValue?: number | null;
 };

@@ -1,7 +1,8 @@
 export type BayDetails = {
   id?: number;
-  name?: string;
-  bayDetailsStatusId?: number;
-  numberOfShelves?: number;
-  numberOfOccupiedShelves?: number;
+  name?: string | null;
+  bayDetailsStatusId?: number | null;
+  numberOfShelves?: number | null;
+  numberOfOccupiedShelves?: number | null;
+  rackDetailsId?: number | null;
 };

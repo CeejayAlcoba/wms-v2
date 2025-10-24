@@ -19,7 +19,8 @@ export default function genericService<T = any>(path: string) {
     return data;
   };
 
-  const Update = async (id: number, data: T) => {
+  const Update = async (id: number | undefined, data: T) => {
+    checkNotNullId(id);
     const { data: reponseData } = await axiosInstance.patch<T>(
       `${path}/${id}`,
       data
@@ -30,11 +31,16 @@ export default function genericService<T = any>(path: string) {
     const { data: reponseData } = await axiosInstance.post<T>(path, data);
     return reponseData;
   };
-  const Delete = async (id: number) => {
+  const Delete = async (id: number | undefined) => {
+    checkNotNullId(id);
     const { data: reponseData } = await axiosInstance.delete<T>(
       `${path}/${id}`
     );
     return reponseData;
+  };
+
+  const checkNotNullId = (id: number | undefined) => {
+    if (!id) throw new Error("Id is null");
   };
 
   return { GetAll, GetById, Update, Add, Delete, GetSingle };

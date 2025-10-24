@@ -1,0 +1,10 @@
+.grid-background {
+  position: relative;
+  width: 10000px;
+  height: 10000px;
+  background-image: repeating-linear-gradient(to right,
+      #ccc 0 1px,
+      transparent 1px 100vw),
+    repeating-linear-gradient(to bottom, #ccc 0 1px, transparent 1px 100vw);
+  background-size: 30px 30px;
+}

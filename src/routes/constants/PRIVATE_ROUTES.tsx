@@ -123,6 +123,10 @@ const PRIVATE_ROUTES: PageRouteType[] = [
     element: lazy(() => import("../../pages/main/auditLogs/IndexPage")),
   },
   {
+    key: "RackDesigner",
+    element: lazy(() => import("../../pages/main/rackDesigner/IndexPage")),
+  },
+  {
     key: "Test",
     element: lazy(() => import("../../pages/main/test/TestPage")),
   },
