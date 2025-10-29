@@ -1,7 +1,9 @@
+import RackDesignerLayout from "../rackDesigner/IndexPage";
+
 export default function IndexPage() {
   return (
-    <>
-      <h1> Dashboard</h1>
-    </>
+    <div>
+      <RackDesignerLayout readonly />
+    </div>
   );
 }

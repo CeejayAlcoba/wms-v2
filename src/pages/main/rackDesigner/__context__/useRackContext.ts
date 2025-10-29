@@ -1,12 +1,9 @@
 import { createContext, useContext } from "react";
 import type { RackDetailsDTO } from "../../../../@types/DTOs/RackDetailsDTO";
 import type { BayDetailsGetDTO } from "../../../../@types/DTOs/BayDetailsGetDTO";
-import type {
-  QueryObserverResult,
-  RefetchOptions,
-} from "@tanstack/react-query";
 
 type RackContextType = {
+  readonly: boolean;
   rackSaveModal: boolean;
   setRackSaveModal: React.Dispatch<React.SetStateAction<boolean>>;
   selectedRack: RackDetailsDTO | null;
@@ -15,9 +12,7 @@ type RackContextType = {
   setSelectedBay: React.Dispatch<React.SetStateAction<BayDetailsGetDTO | null>>;
   levelSaveModal: boolean;
   setLevelSaveModal: React.Dispatch<React.SetStateAction<boolean>>;
-  refetch: (
-    options?: RefetchOptions | undefined
-  ) => Promise<QueryObserverResult<RackDetailsDTO[], Error>>;
+  refetch: (isSingle?: boolean) => void;
 };
 
 export const RackContext = createContext<RackContextType | null>(null);

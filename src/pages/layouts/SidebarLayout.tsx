@@ -84,7 +84,6 @@ export default function SidebarLayout() {
         </div>
       ) : (
         <Menu
-          style={{fontSize:14}}
           mode="inline"
           theme="dark"
           defaultSelectedKeys={[location.pathname]}

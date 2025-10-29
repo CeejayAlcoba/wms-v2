@@ -1,4 +1,11 @@
-import { useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Button, theme } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import BoxGridLayout from "../../../components/BoxGridLayout/BoxGridLayout";
@@ -12,22 +19,51 @@ import type { RackDetailsDTO } from "../../../@types/DTOs/RackDetailsDTO";
 import type { BayDetailsGetDTO } from "../../../@types/DTOs/BayDetailsGetDTO";
 import LevelSaveModal from "./modal/LevelSaveModal";
 import { bayDetailsService } from "../../../services/bayDetailsService";
+import type { IPaginationFilter } from "../../../@types/pagination/IPaginationFilter";
 
-export default function IndexPage() {
+type RackDesignerProps = {
+  readonly?: boolean;
+};
+
+export default function IndexPage({ readonly = false }: RackDesignerProps) {
   const [rackSaveModal, setRackSaveModal] = useState<boolean>(false);
   const [levelSaveModal, setLevelSaveModal] = useState<boolean>(false);
   const [selectedRack, setSelectedRack] = useState<RackDetailsDTO | null>(null);
   const [selectedBay, setSelectedBay] = useState<BayDetailsGetDTO | null>(null);
 
-  const { data: rackDetails, refetch } = useQuery({
+  const [rackDetails, setRackDetails] = useState<RackDetailsDTO[]>([]);
+  const [filter, setFilter] = useState<IPaginationFilter>({
+    currentPage: 1,
+    pageSize: 1,
+  });
+  const [totalItems, setTotalItems] = useState<number>(0);
+
+  const refetch = async (isSingle?: boolean) => {
+    const result = await rackDetailsService.GetAll(
+      isSingle ? { ...filter } : { currentPage: 1, pageSize: totalItems }
+    );
+    setTotalItems(result?.[0].totalItems);
+    if (isSingle) {
+      setRackDetails((prev) => [...prev, ...result]);
+      setFilter((prev) => ({
+        ...prev,
+        currentPage: (prev.currentPage || 1) + 1,
+      }));
+    } else {
+      setRackDetails(result);
+    }
+
+    return result;
+  };
+  useQuery({
     queryKey: ["rackDetails"],
     queryFn: async () => {
-      const racks = await rackDetailsService.GetAll();
-
-      return racks;
+      if (totalItems < (filter.currentPage || 1) && totalItems != 0) return [];
+      return await refetch(true);
     },
-    initialData: [],
+    refetchInterval: 1000,
   });
+
   const { token } = theme.useToken();
   const handleDragStop = async (rack: RackDetailsDTO, x: number, y: number) => {
     await rackDetailsService.UpdateRackOnly(rack.id, {
@@ -37,38 +73,16 @@ export default function IndexPage() {
     });
   };
 
-  const handleResizeStop = async (rack: RackDetailsDTO, ref: any) => {
-    await rackDetailsService.UpdateRackOnly(rack.id, {
-      ...rack,
-      width: ref.offsetWidth,
-      height: ref.offsetHeight,
-    });
-  };
-
-  const handleGetBayDetailsMaxShelves = (bayDetails: BayDetailsGetDTO[]) =>
-    Math.max(...(bayDetails?.map((b) => b.numberOfShelves || 0) || [0]));
-
-  const handleSaveRack = async (
-    values: RackDetailsDTO,
-    formikHelpers: FormikHelpers<RackDetailsDTO>
-  ) => {
-    formikHelpers.setSubmitting(true);
-
-    if (values.id) {
-      await rackDetailsService.Update(values.id, values);
-    } else {
-      await rackDetailsService.Add({
-        ...values,
-        locationTop: 0,
-        locationSide: 0,
-        height: 25 * values.bayDetails.length,
-        width: 80 * handleGetBayDetailsMaxShelves(values.bayDetails),
+  const handleResizeStop = useCallback(
+    async (rack: RackDetailsDTO, ref: HTMLElement) => {
+      await rackDetailsService.UpdateRackOnly(rack.id, {
+        ...rack,
+        width: ref.offsetWidth,
+        height: ref.offsetHeight,
       });
-    }
-    refetch();
-    formikHelpers.setSubmitting(false);
-    setRackSaveModal(false);
-  };
+    },
+    []
+  );
 
   const handleSaveBay = async (
     values: BayDetailsGetDTO,
@@ -85,14 +99,21 @@ export default function IndexPage() {
     setSelectedRack(null);
     setRackSaveModal(true);
   };
+  const rackStyle = useMemo(
+    () => ({
+      backgroundColor: token.colorBgBase,
+    }),
+    [token.colorBgBase]
+  );
+
   return (
     <>
-      <RackSaveModal
+      {/* <RackSaveModal
         selectedRack={selectedRack}
         open={rackSaveModal}
         onCancel={() => setRackSaveModal(false)}
         onSubmit={handleSaveRack}
-      />
+      /> */}
       <LevelSaveModal
         selectedBay={selectedBay}
         open={levelSaveModal}
@@ -110,13 +131,16 @@ export default function IndexPage() {
           setSelectedBay,
           levelSaveModal,
           setLevelSaveModal,
+          readonly,
         }}
       >
-        <div className="mb-2">
-          <Button type="primary" onClick={() => handleClickNewRack()}>
-            New Rack
-          </Button>
-        </div>
+        {!readonly && (
+          <div className="mb-2">
+            <Button type="primary" onClick={() => handleClickNewRack()}>
+              New Rack
+            </Button>
+          </div>
+        )}
 
         <div className="overflow-auto" style={{ height: "80vh" }}>
           <BoxGridLayout id="grid-layout">
@@ -125,9 +149,7 @@ export default function IndexPage() {
                 key={rack.id}
                 bounds="#grid-layout"
                 className="shadow-sm rounded"
-                style={{
-                  backgroundColor: token.colorBgBase,
-                }}
+                style={rackStyle}
                 initialX={rack.locationSide || 0}
                 initialY={rack.locationTop || 0}
                 minHeight={rack.height}

@@ -18,6 +18,7 @@ export default function BayFormikArray() {
     bay: BayDetailsGetDTO,
     index: number
   ) => {
+    console.log(bay, value);
     const currentLength = bay.shelfDetails.length;
     if (bay.id && currentLength > value) {
       const slicedShelfDetails = bay.shelfDetails.slice(0, value);

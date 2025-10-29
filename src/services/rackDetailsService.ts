@@ -1,4 +1,5 @@
 import type { RackDetailsDTO } from "../@types/DTOs/RackDetailsDTO";
+import type { RackDetailsFilterDTO } from "../@types/DTOs/RackDetailsFilterDTO";
 import type { RackDetails } from "../@types/tables/RackDetails";
 import axiosInstance from "./axiosIntance";
 import genericService from "./genericService";
@@ -7,7 +8,7 @@ import objectToQueryParam from "./utilities/objectToQueryParam";
 const path = "rack-details";
 
 function _rackDetailsService() {
-  const GetAll = async (filters?: Partial<RackDetails>) => {
+  const GetAll = async (filters?: Partial<RackDetailsFilterDTO>) => {
     const queryParams = objectToQueryParam(filters);
     const { data } = await axiosInstance.get<RackDetailsDTO[]>(
       `${path}/list?${queryParams}`

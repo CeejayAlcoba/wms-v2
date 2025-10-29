@@ -3,11 +3,10 @@ import "./BoxGridLayout.css";
 
 type BoxGridLayoutPorps = {
   children?: ReactNode;
-  id: string;
-};
-const BoxGridLayout = ({ children, id }: BoxGridLayoutPorps) => {
+} & React.HTMLAttributes<HTMLDivElement>;
+const BoxGridLayout = ({ children, ...rest }: BoxGridLayoutPorps) => {
   return (
-    <div id={id} className="grid-background">
+    <div className="grid-background" {...rest}>
       {children}
     </div>
   );
