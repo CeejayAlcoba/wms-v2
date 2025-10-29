@@ -4,7 +4,6 @@ import InputFormik from "../../../../components/Formik/InputFormik";
 import InputNumberFormik from "../../../../components/Formik/InputNumberFormik";
 import { Button, Collapse, Popconfirm, Space } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import type { ShelfDetails } from "../../../../@types/tables/ShelfDetails";
 import type { BayDetailsGetDTO } from "../../../../@types/DTOs/BayDetailsGetDTO";
 
 const { Panel } = Collapse;
@@ -18,39 +17,49 @@ export default function BayFormikArray() {
     bay: BayDetailsGetDTO,
     index: number
   ) => {
-    console.log(bay, value);
-    const currentLength = bay.shelfDetails.length;
-    if (bay.id && currentLength > value) {
-      const slicedShelfDetails = bay.shelfDetails.slice(0, value);
-      setFieldValue(`${bayDetails}[${index}].shelfDetails`, slicedShelfDetails);
-    } else if (bay.id) {
+    if (!value || value < 0) return;
+
+    const currentShelves = bay.shelfDetails || [];
+    const currentLength = currentShelves.length;
+
+    // Reduce shelves
+    if (value < currentLength) {
+      const trimmedShelves = currentShelves.slice(0, value);
+      setFieldValue(`${bayDetails}[${index}].shelfDetails`, trimmedShelves);
+      return;
+    }
+
+    // Add more shelves
+    if (value > currentLength) {
       const diff = value - currentLength;
-      const newShelves = Array.from({ length: diff }, () => ({
+      const newShelves = Array.from({ length: diff }).map(() => ({
         id: null,
-        name: null,
+        name: "",
         shelfDetailsStatusId: null,
-        isOccupied: null,
-        bayDetailsId: null,
+        isOccupied: false,
+        bayDetailsId: bay.id ?? null,
         contentTypeId: null,
         shelfDetailsTagId: null,
         contentValue: null,
       }));
-      const updatedShelfDetails = [...bay.shelfDetails, ...newShelves];
-      setFieldValue(
-        `${bayDetails}[${index}].shelfDetails`,
-        updatedShelfDetails
-      );
-    } else {
-      const emptyShelves = Array<ShelfDetails>(value).fill({
+
+      const updated = [...currentShelves, ...newShelves];
+      setFieldValue(`${bayDetails}[${index}].shelfDetails`, updated);
+      return;
+    }
+
+    //  New bay (no existing shelves)
+    if (currentLength === 0 && value > 0) {
+      const emptyShelves = Array.from({ length: value }).map(() => ({
         id: null,
-        name: null,
+        name: "",
         shelfDetailsStatusId: null,
-        isOccupied: null,
-        bayDetailsId: null,
+        isOccupied: false,
+        bayDetailsId: bay.id ?? null,
         contentTypeId: null,
         shelfDetailsTagId: null,
         contentValue: null,
-      });
+      }));
       setFieldValue(`${bayDetails}[${index}].shelfDetails`, emptyShelves);
     }
   };

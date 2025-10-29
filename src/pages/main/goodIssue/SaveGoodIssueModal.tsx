@@ -9,6 +9,7 @@ import { Form } from "antd";
 import usePage from "../../../hooks/usePage";
 import type { AxiosError } from "axios";
 import { goodIssueDetailsSchema } from "../../../schemas/goodIssueDetailsSchema";
+import { shelfDetailsService } from "../../../services/shelfDetailsService";
 
 type SaveGoodIssueModalProps = {
   open: boolean;
@@ -49,6 +50,7 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
       });
       formik.resetForm();
       onAfterSave();
+      await shelfDetailsService.UpdateOccupancyStatus();
     } catch (e: any) {
       let ex: AxiosError = e;
       SweetAlert({

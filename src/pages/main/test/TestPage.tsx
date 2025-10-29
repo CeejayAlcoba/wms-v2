@@ -5,7 +5,7 @@ export default function TestPage() {
     <>
       <div style={{ padding: 50 }}>
         <Draggable
-          onDragStop={(e, d) => console.log(d)}
+          onDragStop={(_, d) => console.log(d)}
           initialX={0}
           initialY={0}
         >

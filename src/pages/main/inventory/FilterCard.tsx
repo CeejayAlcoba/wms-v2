@@ -15,6 +15,7 @@ import type { GoodsReceipt } from "../../../@types/tables/GoodsReceipt";
 import { goodsReceiptService } from "../../../services/goodsReceiptService";
 import DateRangePickerFormik from "../../../components/Formik/DateRangePickerFormik";
 import SwitchFormik from "../../../components/Formik/SwitchFormik";
+import { shelfDetailsService } from "../../../services/shelfDetailsService";
 
 export type FilterCardProps = {
   onSearch: (
@@ -37,6 +38,13 @@ export default function FilterCard(props: FilterCardProps) {
     queryFn: async () => await unitOfMeasurementService.GetAll(),
     initialData: [],
   });
+
+  const { data: shelfDetails } = useQuery({
+    queryKey: ["shelfDetails"],
+    queryFn: async () => await shelfDetailsService.GetAll(),
+    initialData: [],
+  });
+
   const { data: goodsReceipts } = useQuery({
     queryKey: ["goodsReceipts"],
     queryFn: async () => await goodsReceiptService.GetAll(),
@@ -110,7 +118,7 @@ export default function FilterCard(props: FilterCardProps) {
             name="shelfDetailsId"
             keyValue="id"
             keyLabel="name"
-            option={[]}
+            option={shelfDetails}
           />
           <SwitchFormik<ReportInventoryFilterDTO>
             label="Show Zero Balances"

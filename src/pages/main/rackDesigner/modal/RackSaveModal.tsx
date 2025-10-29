@@ -14,6 +14,7 @@ type RackSaveModalProps = {
 
 const EMPTY_FORM: RackDetailsDTO = {
   bayDetails: [],
+  totalItems: 0,
 };
 
 export default function RackSaveModal({

@@ -7,11 +7,15 @@ import React from "react";
 
 type PalleteProps = {
   shelf: ShelfDetails;
+  onClickPallete?: (shelf: ShelfDetails) => void;
 };
 
 const { Text } = Typography;
 
-export default React.memo(function Pallete({ shelf }: PalleteProps) {
+export default React.memo(function Pallete({
+  shelf,
+  onClickPallete,
+}: PalleteProps) {
   const { token } = theme.useToken();
   const { readonly } = useRackContext();
   const [shelfDetails, setShelfDetails] = useState<ShelfDetails>(shelf);
@@ -25,9 +29,14 @@ export default React.memo(function Pallete({ shelf }: PalleteProps) {
 
   return (
     <div
+      onClick={() => {
+        onClickPallete && onClickPallete(shelf);
+      }}
       className="col p-1"
       style={{
-        backgroundColor: token.colorPrimary,
+        cursor: readonly ? "pointer" : "none",
+        backgroundColor:
+          shelf.isOccupied && readonly ? token.colorError : token.colorPrimary,
       }}
     >
       {readonly ? (

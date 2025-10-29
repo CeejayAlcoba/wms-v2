@@ -4,18 +4,17 @@ import Level from "./Level";
 import type { RackDetailsDTO } from "../../../@types/DTOs/RackDetailsDTO";
 import useRackContext from "./__context__/useRackContext";
 import { rackDetailsService } from "../../../services/rackDetailsService";
-import React, { useMemo, useState } from "react";
-import RackSaveModal from "./modal/RackSaveModal";
-import type { BayDetailsGetDTO } from "../../../@types/DTOs/BayDetailsGetDTO";
-import type { FormikHelpers } from "formik";
+import React from "react";
+import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
 
 type RackProps = {
   rack: RackDetailsDTO;
+  onClickPallete?: (shelf: ShelfDetails) => void;
 };
 const { Text } = Typography;
-export default React.memo(function Rack({ rack }: RackProps) {
-  const [rackSaveModal, setRackSaveModal] = useState<boolean>(false);
-  const { setSelectedRack, refetch, selectedRack, readonly } = useRackContext();
+export default React.memo(function Rack({ rack, onClickPallete }: RackProps) {
+  const { setRackSaveModal, setSelectedRack, refetch, selectedRack, readonly } =
+    useRackContext();
   const handleDelete = async () => {
     await rackDetailsService.Delete(selectedRack?.id);
     refetch();
@@ -29,40 +28,9 @@ export default React.memo(function Rack({ rack }: RackProps) {
   const handleClickDelete = () => {
     setSelectedRack(rack);
   };
-  const handleGetBayDetailsMaxShelves = useMemo(
-    () => (bayDetails: BayDetailsGetDTO[]) =>
-      Math.max(...(bayDetails?.map((b) => b.numberOfShelves || 0) || [0])),
-    []
-  );
-  const handleSaveRack = async (
-    values: RackDetailsDTO,
-    formikHelpers: FormikHelpers<RackDetailsDTO>
-  ) => {
-    formikHelpers.setSubmitting(true);
 
-    if (values.id) {
-      await rackDetailsService.Update(values.id, values);
-    } else {
-      await rackDetailsService.Add({
-        ...values,
-        locationTop: 0,
-        locationSide: 0,
-        height: 25 * values.bayDetails.length,
-        width: 80 * handleGetBayDetailsMaxShelves(values.bayDetails),
-      });
-    }
-    refetch();
-    formikHelpers.setSubmitting(false);
-    setRackSaveModal(false);
-  };
   return (
     <>
-      <RackSaveModal
-        selectedRack={selectedRack}
-        open={rackSaveModal}
-        onCancel={() => setRackSaveModal(false)}
-        onSubmit={handleSaveRack}
-      />
       <div className="d-flex align-items-center">
         {!readonly && (
           <>
@@ -101,7 +69,7 @@ export default React.memo(function Rack({ rack }: RackProps) {
         }}
       >
         {rack.bayDetails.map((bay) => (
-          <Level bayDetails={bay} />
+          <Level bayDetails={bay} onClickPallete={onClickPallete} />
         ))}
       </div>
     </>

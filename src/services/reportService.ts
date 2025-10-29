@@ -23,7 +23,9 @@ function _reportService() {
     return data;
   };
 
-  const InventoryGetAll = async (filters: ReportInventoryFilterDTO) => {
+  const InventoryGetAll = async (
+    filters?: Partial<ReportInventoryFilterDTO>
+  ) => {
     const queryParams = objectToQueryParam(filters);
     const { data } = await axiosInstance.get<ReportInventoryDTO[]>(
       `${path}/inventory/list?${queryParams}`
@@ -31,8 +33,11 @@ function _reportService() {
     return data;
   };
 
-  const PickListGetAll = async (filters:  Partial<ReportPickListFilterDTO>) => {
-    const initialFilters: Partial<ReportPickListFilterDTO>={...filters, allowNullGoodIssue:true}
+  const PickListGetAll = async (filters: Partial<ReportPickListFilterDTO>) => {
+    const initialFilters: Partial<ReportPickListFilterDTO> = {
+      ...filters,
+      allowNullGoodIssue: true,
+    };
     const queryParams = objectToQueryParam(initialFilters);
     const { data } = await axiosInstance.get<ReportPickListDTO[]>(
       `${path}/picklist/list?${queryParams}`

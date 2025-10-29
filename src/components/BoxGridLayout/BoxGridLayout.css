@@ -8,3 +8,10 @@
     repeating-linear-gradient(to bottom, #ccc 0 1px, transparent 1px 100vw);
   background-size: 30px 30px;
 }
+
+.grid-background-readonly {
+  position: relative;
+  width: 10000px;
+  height: 10000px;
+
+}
