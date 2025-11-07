@@ -32,7 +32,6 @@ export default function IndexPage() {
       formik.resetForm();
       setCurrentStep(0);
       await indexDbService.deleteItem("checkInByICR", 1);
-      await shelfDetailsService.UpdateOccupancyStatus();
     } catch {
       SweetAlert({
         title: "Error Occurs",

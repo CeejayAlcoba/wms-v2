@@ -1,0 +1,6 @@
+@media (orientation: landscape) {
+    .no-vertical-overflow-landscape {
+        overflow-y: hidden !important;
+
+    }
+}

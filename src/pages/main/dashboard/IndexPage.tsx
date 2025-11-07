@@ -2,6 +2,7 @@ import { useState } from "react";
 import RackDesigner from "../rackDesigner/RackDesigner";
 import ShelfCargoInfoModal from "./modal/ShelfCargoInfoModal";
 import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
+import Summaries from "./SummaryCards";
 
 export default function IndexPage() {
   const [shelfCargoInfoModal, setShelfCargoInfoModal] =
@@ -10,6 +11,7 @@ export default function IndexPage() {
     useState<ShelfDetails | null>(null);
   return (
     <div>
+      <Summaries />
       <ShelfCargoInfoModal
         shelfDetails={selectedShelfDetails}
         open={shelfCargoInfoModal}
@@ -18,13 +20,14 @@ export default function IndexPage() {
         }}
         onSubmit={() => {}}
       />
-      <RackDesigner
+
+      {/* <RackDesigner
         readonly
         onClickPallete={(shelf) => {
           setSelectedShelfDetails(shelf);
           setShelfCargoInfoModal(true);
         }}
-      />
+      /> */}
     </div>
   );
 }

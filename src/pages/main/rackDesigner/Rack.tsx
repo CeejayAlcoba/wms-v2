@@ -1,32 +1,56 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Tooltip, Typography } from "antd";
+import { Button, Card, Popconfirm, Tooltip, Typography } from "antd";
 import Level from "./Level";
-import type { RackDetailsDTO } from "../../../@types/DTOs/RackDetailsDTO";
 import useRackContext from "./__context__/useRackContext";
 import { rackDetailsService } from "../../../services/rackDetailsService";
 import React from "react";
 import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
+import type { RackDetails } from "../../../@types/tables/RackDetails";
+import type { BayDetails } from "../../../@types/tables/BayDetails";
+import useRackQueries from "./__context__/useRackQueries";
 
 type RackProps = {
-  rack: RackDetailsDTO;
+  rack: RackDetails;
+  bayDetails: BayDetails[];
+  shelfDetails: ShelfDetails[];
   onClickPallete?: (shelf: ShelfDetails) => void;
 };
 const { Text } = Typography;
-export default React.memo(function Rack({ rack, onClickPallete }: RackProps) {
-  const { setRackSaveModal, setSelectedRack, refetch, selectedRack, readonly } =
+export default React.memo(function Rack({
+  rack,
+  bayDetails,
+  shelfDetails,
+  onClickPallete,
+}: RackProps) {
+  const { setRackSaveModal, setSelectedRack, selectedRack, readonly } =
     useRackContext();
+
+  const { rackQuery } = useRackQueries();
+
   const handleDelete = async () => {
     await rackDetailsService.Delete(selectedRack?.id);
-    refetch();
+    rackQuery.refetch();
+  };
+
+  const rackDTO = {
+    ...rack,
+    bayDetails: bayDetails.map((b) => ({
+      ...b,
+      shelfDetails: shelfDetails.filter((s) => s.bayDetailsId == b.id),
+    })),
   };
 
   const handleClickEdit = () => {
     setRackSaveModal(true);
-    setSelectedRack(rack);
+    setSelectedRack(rackDTO);
   };
 
   const handleClickDelete = () => {
-    setSelectedRack(rack);
+    setSelectedRack(rackDTO);
+  };
+
+  const handleGetShelfDetailsByBayId = (bayId?: number) => {
+    return shelfDetails.filter((s) => s.bayDetailsId == bayId) ?? [];
   };
 
   return (
@@ -68,8 +92,11 @@ export default React.memo(function Rack({ rack, onClickPallete }: RackProps) {
           height: "90%",
         }}
       >
-        {rack.bayDetails.map((bay) => (
-          <Level bayDetails={bay} onClickPallete={onClickPallete} />
+        {bayDetails.map((bay) => (
+          <Level
+            shelfDetails={handleGetShelfDetailsByBayId(bay.id)}
+            onClickPallete={onClickPallete}
+          />
         ))}
       </div>
     </>

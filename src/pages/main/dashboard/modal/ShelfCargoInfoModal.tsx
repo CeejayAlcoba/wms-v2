@@ -34,8 +34,13 @@ export default function ShelfCargoInfoModal({
   );
   const { data: inventories, isFetching } = useQuery({
     queryKey: ["inventories", shelfDetails?.id],
-    queryFn: async () =>
-      await reportService.InventoryGetAll({ shelfDetailsId: shelfDetails?.id }),
+    queryFn: async () => {
+      if (shelfDetails?.id)
+        return await reportService.InventoryGetAll({
+          shelfDetailsId: shelfDetails?.id,
+        });
+      return [];
+    },
     initialData: [],
   });
   const handleOk = async () => {

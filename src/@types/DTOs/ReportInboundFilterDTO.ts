@@ -8,4 +8,6 @@ export type ReportInboundFilterDTO = {
   principalId?: number | null;
   productCategoryId?: number | null;
   goodsReceiptId?: number | null;
-} & CargoDetails & IPaginationFilter;
+  isStaging?: boolean | null;
+} & CargoDetails &
+  IPaginationFilter;

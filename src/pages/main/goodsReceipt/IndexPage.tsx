@@ -12,25 +12,10 @@ import type { BookingDetailsFilterDTO } from "../../../@types/DTOs/BookingDetail
 export type TabKey = "Pending" | "Completed";
 
 export default function IndexPage() {
-  const [search, setSearch] = useState<BookingDetailsFilterDTO>(
+  const [search, setSearch] = useState<Partial<BookingDetailsFilterDTO>>(
     EMPTY_BOOKING_DETAILS
   );
   const [activeKey, setActiveKey] = useState<TabKey>("Pending");
-  const {
-    data: bookingDetails,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["products", search, activeKey],
-    queryFn: async () => {
-      if (activeKey == "Pending") {
-        return await bookingDetailsService.GetAllGoodsReceiptPending(search);
-      } else {
-        return await bookingDetailsService.GetAllGoodsReceipCompleted(search);
-      }
-    },
-    initialData: [],
-  });
 
   const handleTab = (key: string) => {
     setActiveKey(key as TabKey);
@@ -42,7 +27,6 @@ export default function IndexPage() {
   ) => {
     formikHelpers.setSubmitting(true);
     await setSearch(values);
-    await refetch();
     formikHelpers.setSubmitting(false);
   };
   return (
@@ -52,9 +36,6 @@ export default function IndexPage() {
       <PendingCompleteTable
         search={search}
         setSearch={setSearch}
-        bookingDetails={bookingDetails}
-        refetch={refetch}
-        isFetching={isFetching}
         activeKey={activeKey}
       />
     </>

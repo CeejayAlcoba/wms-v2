@@ -1,20 +1,22 @@
 import Pallete from "./Pallete";
-import type { BayDetailsGetDTO } from "../../../@types/DTOs/BayDetailsGetDTO";
 import React from "react";
 import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
+import { Card } from "antd";
 
 type LevelProps = {
-  bayDetails: BayDetailsGetDTO;
+  shelfDetails: ShelfDetails[];
   onClickPallete?: (shelf: ShelfDetails) => void;
 };
 
 export default React.memo(function Level({
-  bayDetails,
+  shelfDetails,
   onClickPallete,
 }: LevelProps) {
+  if (shelfDetails.length == 0) return <Card loading />;
+
   return (
     <div className="d-flex gap-1">
-      {bayDetails.shelfDetails.map((shelf) => (
+      {shelfDetails.map((shelf) => (
         <Pallete key={shelf.id} shelf={shelf} onClickPallete={onClickPallete} />
       ))}
     </div>

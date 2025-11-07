@@ -3,6 +3,7 @@ import { Modal, type ModalProps } from "antd";
 import type { RackDetailsDTO } from "../../../../@types/DTOs/RackDetailsDTO";
 import InputFormik from "../../../../components/Formik/InputFormik";
 import BayFormikArray from "./BayFormikArray";
+import type { RackDetails } from "../../../../@types/tables/RackDetails";
 
 type RackSaveModalProps = {
   selectedRack?: RackDetailsDTO | null;
@@ -14,7 +15,6 @@ type RackSaveModalProps = {
 
 const EMPTY_FORM: RackDetailsDTO = {
   bayDetails: [],
-  totalItems: 0,
 };
 
 export default function RackSaveModal({

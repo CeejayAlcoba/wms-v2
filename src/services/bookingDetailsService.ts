@@ -1,4 +1,5 @@
 import type { BookingDetailsDTO } from "../@types/DTOs/BookingDetailsDTO";
+import type { BookingDetailsFilterDTO } from "../@types/DTOs/BookingDetailsFilterDTO";
 import type { BookingDetails } from "../@types/tables/BookingDetails";
 import axiosInstance from "./axiosIntance";
 import genericService from "./genericService";
@@ -14,14 +15,18 @@ function _bookingDetailsService() {
     );
     return data;
   };
-  const GetAllGoodsReceiptPending = async (filters?: BookingDetails) => {
+  const GetAllGoodsReceiptPending = async (
+    filters?: Partial<BookingDetailsFilterDTO>
+  ) => {
     const queryParams = objectToQueryParam(filters);
     const { data } = await axiosInstance.get<BookingDetailsDTO[]>(
       `${path}/list/goods-receipt/pending?${queryParams}`
     );
     return data;
   };
-  const GetAllGoodsReceipCompleted = async (filters?: BookingDetails) => {
+  const GetAllGoodsReceipCompleted = async (
+    filters?: Partial<BookingDetailsFilterDTO>
+  ) => {
     const queryParams = objectToQueryParam(filters);
     const { data } = await axiosInstance.get<BookingDetailsDTO[]>(
       `${path}/list/goods-receipt/completed?${queryParams}`

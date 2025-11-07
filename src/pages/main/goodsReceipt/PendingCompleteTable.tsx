@@ -1,7 +1,9 @@
 import { Button, Tooltip, type TableProps } from "antd";
 import { useState } from "react";
 import { CheckCircleOutlined, EditOutlined } from "@ant-design/icons";
-import TableComponent from "../../../components/Table/TableComponent";
+import TableComponent, {
+  type TableComponentProps,
+} from "../../../components/Table/TableComponent";
 import type { BookingDetailsDTO } from "../../../@types/DTOs/BookingDetailsDTO";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import { cargoDetailsService } from "../../../services/cargoDetailsService";
@@ -10,24 +12,44 @@ import { INITIAL_COLUMNS } from "./__constants__/INITIAL_COLUMNS";
 import type { TabKey } from "./IndexPage";
 import SaveModal from "./SaveModal";
 import type { BookingDetailsFilterDTO } from "../../../@types/DTOs/BookingDetailsFilterDTO";
+import { useQuery } from "@tanstack/react-query";
+import { bookingDetailsService } from "../../../services/bookingDetailsService";
 
-export default function PendingCompleteTable(props: {
-  search: BookingDetailsFilterDTO;
-  setSearch: React.Dispatch<React.SetStateAction<BookingDetailsFilterDTO>>;
-  bookingDetails: BookingDetailsDTO[];
-  refetch: () => void;
-  isFetching: boolean;
+type PendingCompleteTableProps = {
+  search: Partial<BookingDetailsFilterDTO>;
+  setSearch: React.Dispatch<
+    React.SetStateAction<Partial<BookingDetailsFilterDTO>>
+  >;
   activeKey: TabKey;
-}) {
-  const { bookingDetails, search, setSearch, refetch, isFetching, activeKey } =
-    props;
+  headerTitle?: string;
+};
+
+export default function PendingCompleteTable({
+  search,
+  setSearch,
+  activeKey,
+  headerTitle,
+}: PendingCompleteTableProps) {
   const [saveModalOpen, setSaveModalOpen] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<BookingDetailsDTO | null>(
     null
   );
-
   const [cargoDetails, setCargoDetails] = useState<CargoDetails[]>([]);
-
+  const {
+    data: bookingDetails,
+    refetch,
+    isFetching,
+  } = useQuery({
+    queryKey: ["products", search, activeKey],
+    queryFn: async () => {
+      if (activeKey == "Pending") {
+        return await bookingDetailsService.GetAllGoodsReceiptPending(search);
+      } else {
+        return await bookingDetailsService.GetAllGoodsReceipCompleted(search);
+      }
+    },
+    initialData: [],
+  });
   const handleClickAdd = (record: BookingDetailsDTO) => {
     setSelectedData(record);
     setSaveModalOpen(true);
@@ -125,6 +147,10 @@ export default function PendingCompleteTable(props: {
     },
   ];
 
+  const getHeaderTitle = (): string => {
+    if (headerTitle) return headerTitle;
+    return `${getHeaderTitle()}  Good Receipt`;
+  };
   return (
     <>
       <SaveModal
@@ -141,8 +167,8 @@ export default function PendingCompleteTable(props: {
         pagination={{
           total: bookingDetails?.[0]?.totalItems,
           onChange: handlePaginate,
-          current: search.currentPage ?? 1,
-          pageSize: search.pageSize ?? 10,
+          current: search?.currentPage ?? 1,
+          pageSize: search?.pageSize ?? 10,
         }}
         expandable={{
           expandedRowRender: (record) => (
@@ -150,9 +176,7 @@ export default function PendingCompleteTable(props: {
           ),
           onExpand: handleExpand,
         }}
-        headerTitle={`${
-          activeKey == "Completed" ? "Completed" : "Pending"
-        }  Good Receipt`}
+        headerTitle={getHeaderTitle()}
         columns={activeKey == "Completed" ? completedColumns : pendingColumns}
         dataSource={bookingDetails}
         loading={isFetching}

@@ -50,7 +50,6 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
       });
       formik.resetForm();
       onAfterSave();
-      await shelfDetailsService.UpdateOccupancyStatus();
     } catch (e: any) {
       let ex: AxiosError = e;
       SweetAlert({

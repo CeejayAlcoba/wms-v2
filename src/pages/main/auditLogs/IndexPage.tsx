@@ -9,7 +9,7 @@ import type { AuditLogsDTO } from "../../../@types/DTOs/AuditLogsDTO";
 import type { AuditLogsFilterDTO } from "../../../@types/DTOs/AuditLogsFilterDTO";
 import { auditLogsService } from "../../../services/auditLogsService";
 import dayjs from "dayjs";
-import handleToNormalWords from "../../../utils/hadnleToNormalWords";
+import handleToNormalWords from "../../../utils/handleToNormalWords";
 import { ACTION_TYPES } from "./__constants__/ACTION_TYPE";
 
 export default function IndexPage() {
