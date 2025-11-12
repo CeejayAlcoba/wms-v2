@@ -12,5 +12,6 @@ export type ReportOutboundFilterDTO = {
   pickListDetailsId?: number | null;
   goodIssueId?: number | null;
   ocrNumber?: string | null;
+  isStaging?: boolean | null;
 } & CargoDetails &
   IPaginationFilter;

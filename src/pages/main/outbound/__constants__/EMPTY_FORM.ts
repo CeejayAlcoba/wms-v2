@@ -31,5 +31,6 @@ export const EMPTY_FORM: ReportOutboundFilterDTO = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
+  isStaging: false,
   ...PAGINATION_FILTER,
 };

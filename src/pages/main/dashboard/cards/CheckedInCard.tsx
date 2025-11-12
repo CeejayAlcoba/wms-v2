@@ -1,9 +1,7 @@
-import { ExportOutlined, InboxOutlined } from "@ant-design/icons";
+import { ExportOutlined } from "@ant-design/icons";
 import { Card, Modal, Statistic } from "antd";
-import { useState, type SetStateAction } from "react";
-import InventoryTable from "../../inventory/InventoryTable";
+import { useState } from "react";
 import { EMPTY_FORM } from "../../inbound/__constants__/EMPTY_FORM";
-import type { ReportInventoryFilterDTO } from "../../../../@types/DTOs/ReportInventoryFilterDTO";
 import InboundTable from "../../inbound/InboundTable";
 import type { ReportInboundFilterDTO } from "../../../../@types/DTOs/ReportInboundFilterDTO";
 

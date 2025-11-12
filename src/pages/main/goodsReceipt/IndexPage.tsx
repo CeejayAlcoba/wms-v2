@@ -1,8 +1,6 @@
 import { Tabs } from "antd";
 import { useState } from "react";
-import { bookingDetailsService } from "../../../services/bookingDetailsService";
 import { EMPTY_BOOKING_DETAILS } from "./__constants__/EMPTY_BOOKING_DETAILS";
-import { useQuery } from "@tanstack/react-query";
 import FilterCard from "./FilterCard";
 import type { FormikHelpers } from "formik";
 import { TAB_ITEMS } from "./__constants__/TAB_ITEMS";

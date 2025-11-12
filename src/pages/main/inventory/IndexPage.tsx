@@ -1,7 +1,4 @@
-import { Button, Popconfirm, Tooltip, type TableProps } from "antd";
-import { useQuery } from "@tanstack/react-query";
-import { useState, type SetStateAction } from "react";
-
+import { useState } from "react";
 import FilterCard from "./FilterCard";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import type { ReportInventoryFilterDTO } from "../../../@types/DTOs/ReportInventoryFilterDTO";

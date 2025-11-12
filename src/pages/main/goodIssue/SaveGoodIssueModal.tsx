@@ -9,7 +9,6 @@ import { Form } from "antd";
 import usePage from "../../../hooks/usePage";
 import type { AxiosError } from "axios";
 import { goodIssueDetailsSchema } from "../../../schemas/goodIssueDetailsSchema";
-import { shelfDetailsService } from "../../../services/shelfDetailsService";
 
 type SaveGoodIssueModalProps = {
   open: boolean;

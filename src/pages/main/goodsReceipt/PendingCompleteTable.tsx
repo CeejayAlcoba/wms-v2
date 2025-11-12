@@ -1,9 +1,7 @@
 import { Button, Tooltip, type TableProps } from "antd";
 import { useState } from "react";
 import { CheckCircleOutlined, EditOutlined } from "@ant-design/icons";
-import TableComponent, {
-  type TableComponentProps,
-} from "../../../components/Table/TableComponent";
+import TableComponent from "../../../components/Table/TableComponent";
 import type { BookingDetailsDTO } from "../../../@types/DTOs/BookingDetailsDTO";
 import type { CargoDetails } from "../../../@types/tables/CargoDetails";
 import { cargoDetailsService } from "../../../services/cargoDetailsService";
@@ -149,8 +147,9 @@ export default function PendingCompleteTable({
 
   const getHeaderTitle = (): string => {
     if (headerTitle) return headerTitle;
-    return `${getHeaderTitle()}  Good Receipt`;
+    return `${activeKey}  Good Receipt`;
   };
+
   return (
     <>
       <SaveModal

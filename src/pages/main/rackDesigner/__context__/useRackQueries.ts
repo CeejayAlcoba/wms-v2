@@ -1,6 +1,4 @@
 import { createContext, useContext } from "react";
-import type { RackDetailsDTO } from "../../../../@types/DTOs/RackDetailsDTO";
-import type { BayDetailsGetDTO } from "../../../../@types/DTOs/BayDetailsGetDTO";
 import type { RackDetails } from "../../../../@types/tables/RackDetails";
 import type { DefinedUseQueryResult } from "@tanstack/react-query";
 import type { BayDetails } from "../../../../@types/tables/BayDetails";

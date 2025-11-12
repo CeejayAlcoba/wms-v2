@@ -1,4 +1,3 @@
-import type { BayDetails } from "../tables/BayDetails";
 import type { RackDetails } from "../tables/RackDetails";
 import type { BayDetailsGetDTO } from "./BayDetailsGetDTO";
 

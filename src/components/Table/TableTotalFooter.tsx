@@ -15,8 +15,8 @@ export default function TableTotalFooter<T = any>(props: {
   return (
     <div className="d-flex justify-content-start">
       <div className={`row row-cols-lg-${size}`}>
-        {values?.map((p) => (
-          <div>
+        {values?.map((p, index) => (
+          <div key={index}>
             <span>{`${p.label} : `}</span>
             <strong>
               {p.value ?? data?.[0]?.[p.name as keyof T] ?? "N/A"}

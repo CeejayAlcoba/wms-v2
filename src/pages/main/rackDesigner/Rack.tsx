@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Card, Popconfirm, Tooltip, Typography } from "antd";
+import { Button, Popconfirm, Tooltip, Typography } from "antd";
 import Level from "./Level";
 import useRackContext from "./__context__/useRackContext";
 import { rackDetailsService } from "../../../services/rackDetailsService";

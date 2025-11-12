@@ -1,14 +1,3 @@
-import { useState } from "react";
-import { Card, Statistic } from "antd";
-import {
-  InboxOutlined,
-  ExportOutlined,
-  CheckCircleOutlined,
-  RetweetOutlined,
-  ArrowUpOutlined,
-  AppstoreOutlined,
-} from "@ant-design/icons";
-import type { DashboardSummaryDTO } from "../../../@types/DTOs/DashboardSummaryDTO";
 import InboundStagingCard from "./cards/InboundStagingCard";
 import OutboundStagingCard from "./cards/OutboundStagingCard";
 import CheckedInCard from "./cards/CheckedInCard";
@@ -23,14 +12,14 @@ export default function SummaryCards() {
     queryKey: ["summaries"],
     queryFn: async () => await dashboardService.GetSummary(),
     initialData: {
-      returned: 12,
-      checkedIn: 45,
-      pullOut: 8,
-      inboundStaging: 23,
-      outboundStaging: 10,
+      returned: 0,
+      checkedIn: 0,
+      pullOut: 0,
+      inboundStaging: 0,
+      outboundStaging: 0,
       shelf: {
-        occupied: 120,
-        empty: 30,
+        occupied: 0,
+        empty: 0,
       },
     },
   });

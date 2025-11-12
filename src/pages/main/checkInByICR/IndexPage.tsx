@@ -10,7 +10,6 @@ import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 import { checkInByICRService } from "../../../services/checkInByICRService";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import { indexDbService } from "../../../services/indexDbService";
-import { shelfDetailsService } from "../../../services/shelfDetailsService";
 
 export default function IndexPage() {
   const [currentStep, setCurrentStep] = useState<number>(0);

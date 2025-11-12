@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 import type { RackDetailsDTO } from "../../../../@types/DTOs/RackDetailsDTO";
 import type { BayDetailsGetDTO } from "../../../../@types/DTOs/BayDetailsGetDTO";
-import type { RackDetails } from "../../../../@types/tables/RackDetails";
 
 type RackContextType = {
   readonly: boolean;

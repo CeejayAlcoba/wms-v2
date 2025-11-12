@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Button, Card, theme } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import BoxGridLayout from "../../../components/BoxGridLayout/BoxGridLayout";

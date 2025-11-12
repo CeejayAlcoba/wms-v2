@@ -21,13 +21,13 @@ export default function IndexPage() {
         onSubmit={() => {}}
       />
 
-      {/* <RackDesigner
+      <RackDesigner
         readonly
         onClickPallete={(shelf) => {
           setSelectedShelfDetails(shelf);
           setShelfCargoInfoModal(true);
         }}
-      /> */}
+      />
     </div>
   );
 }

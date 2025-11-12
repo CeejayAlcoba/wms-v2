@@ -69,6 +69,7 @@ export default function CargoDetailTable(props: {
         title={() => (
           <GridList<BookingDetailsDTO> columns={titleColumns} data={record} />
         )}
+        indexedColumn={false}
         columns={columns}
         rowKey="id"
         scroll={{ x: "max-content" }}
