@@ -153,43 +153,40 @@ export default function CargoListPage() {
 
   const handleUpload = (records: ExcelColumnType[]) => {
     console.log(records);
-    records?.map((r) => {
-      setValues({
-        ...values,
-        cargoDetails: [
-          ...values.cargoDetails,
-          {
-            description: r?.description ?? "",
-            skuCode: r?.skuCode ?? "",
-            proNumber: r?.proNumber ?? null,
-            deliveryNote: r?.deliveryNote ?? null,
-            unitOfMeasurementId:
-              unitOfMeasurements?.find(
-                (f) => f.name?.replace(/\s/g, "") == r.uom
-              )?.id || null,
-            batchNo: r?.batchNo ?? null,
-            expirationDate: r?.expirationDate
-              ? dayjs(r?.expirationDate).format("YYYY-MM-DD")
-              : null,
-            palleteCount: r?.palleteCount ?? null,
-            quantity: r?.quantity ?? null,
-            lengthCm: r?.lengthCm ?? null,
-            heightCm: r?.heightCm ?? null,
-            widthCm: r?.widthCm ?? null,
-            cubicMeter: r?.cubicMeter ?? null,
-            customerName: r?.customerName ?? null,
-            shelfDetailsId:
-              shelfDetails?.find(
-                (f) =>
-                  f.name?.replace(/\s/g, "") ==
-                  r.shelfDetails?.replace(/\s/g, "")
-              )?.id || null,
-            totalAmount: r?.totalAmount ?? null,
-            bookingDetailsId: r?.bookingDetailsId ?? null,
-          },
-        ],
-      });
-    });
+
+    const newCargoDetails = records.map((r) => ({
+      description: r?.description ?? "",
+      skuCode: r?.skuCode ?? "",
+      proNumber: r?.proNumber ?? null,
+      deliveryNote: r?.deliveryNote ?? null,
+      unitOfMeasurementId:
+        unitOfMeasurements?.find(
+          (f) => f.name?.replace(/\s/g, "") === r.uom?.replace(/\s/g, "")
+        )?.id || null,
+      batchNo: r?.batchNo ?? null,
+      expirationDate: r?.expirationDate
+        ? dayjs(r?.expirationDate).format("YYYY-MM-DD")
+        : null,
+      palleteCount: r?.palleteCount ?? null,
+      quantity: r?.quantity ?? null,
+      lengthCm: r?.lengthCm ?? null,
+      heightCm: r?.heightCm ?? null,
+      widthCm: r?.widthCm ?? null,
+      cubicMeter: r?.cubicMeter ?? null,
+      customerName: r?.customerName ?? null,
+      shelfDetailsId:
+        shelfDetails?.find(
+          (f) =>
+            f.name?.replace(/\s/g, "") === r.shelfDetails?.replace(/\s/g, "")
+        )?.id || null,
+      totalAmount: r?.totalAmount ?? null,
+      bookingDetailsId: r?.bookingDetailsId ?? null,
+    }));
+
+    setValues((prev) => ({
+      ...prev,
+      cargoDetails: [...prev.cargoDetails, ...newCargoDetails],
+    }));
   };
 
   return (
