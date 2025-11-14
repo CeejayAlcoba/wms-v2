@@ -96,7 +96,6 @@ export default function SaveGoodIssueModal(props: SaveGoodIssueModalProps) {
             />
             <InputFormik<GoodIssueDetails>
               label="DOF No."
-              askterisk
               name="dofNumber"
             />
             <InputFormik<GoodIssueDetails> label="Note" name="note" />

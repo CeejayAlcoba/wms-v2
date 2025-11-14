@@ -17,6 +17,6 @@ export const goodIssueDetailsSchema: yup.Schema<GoodIssueDetails> = yup
         const isDuplicate = goodIssues.some((d: any) => d.id !== id);
         return !isDuplicate;
       }),
-    note: yup.string().notRequired(),
-    dofNumber: yup.string().required(requiredMessage),
+    note: yup.string().nullable(),
+    dofNumber: yup.string().nullable(),
   });
