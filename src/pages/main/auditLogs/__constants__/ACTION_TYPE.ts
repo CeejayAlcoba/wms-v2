@@ -23,7 +23,7 @@ export type ActionType = {
 export const ACTION_TYPES: ActionType[] = [
   { label: "CREATE", value: "CREATE", color: "blue" },
   { label: "UPDATE", value: "UPDATE", color: "green" },
-  { label: "APPROVED", value: "UPDATE", color: "green" },
+  { label: "APPROVED", value: "APPROVED", color: "yellow-inverse" },
   { label: "DELETE", value: "DELETE", color: "red" },
   { label: "CHECK IN", value: "CHECK IN", color: "geekblue" },
   { label: "GOOD RECEIPT", value: "GOOD RECEIPT", color: "volcano" },
