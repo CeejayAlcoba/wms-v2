@@ -147,7 +147,14 @@ export default function TableComponent<T extends object = any>({
     page = "1",
     pageSize = "10",
   }: Partial<PaginationParams> = {}) => {
-    setSearchParams({ page, pageSize });
+    const current = Object.fromEntries(searchParams.entries());
+
+    setSearchParams({
+      ...current,
+      page,
+      pageSize,
+    });
+
     setPagination({ page, pageSize });
   };
 
