@@ -119,7 +119,7 @@ export default function SelectFormik<T = unknown, TOption = any>({
             {...field}
             mode={mode}
             showSearch={!isMultiple}
-            placeholder={placeholder}
+            placeholder={!askterisk && !placeholder ? "N/A": placeholder}
             value={getDisplayValue(field.value)}
             onBlur={() => form.setFieldTouched(name, true)}
             onChange={(value) => {

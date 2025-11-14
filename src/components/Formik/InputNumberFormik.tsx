@@ -37,7 +37,7 @@ export default function InputNumberFormik<T = unknown>({
               onChange && onChange(value);
             }}
             onBlur={() => form.setFieldTouched(name, true)}
-            placeholder={placeholder}
+            placeholder={!askterisk && !placeholder ? "N/A": placeholder}
           />
         </Form.Item>
       )}

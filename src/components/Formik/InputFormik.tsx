@@ -20,7 +20,6 @@ export default function InputFormik<T = unknown>({
   onChange,
   ...rest
 }: InputFormikProps<T>) {
-
   return (
     <FastField name={name}>
       {({ field, form, meta }: FieldProps) => (
@@ -41,7 +40,7 @@ export default function InputFormik<T = unknown>({
             }}
             onBlur={() => form.setFieldTouched(name, true)}
             type={type}
-            placeholder={placeholder}
+            placeholder={!askterisk && !placeholder ? "N/A" : placeholder}
           />
         </Form.Item>
       )}

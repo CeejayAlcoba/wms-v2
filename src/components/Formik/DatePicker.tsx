@@ -30,6 +30,7 @@ export default function DatePickerFormik<T = unknown>({
             <DatePicker
               style={{ width: "100%" }}
               {...rest}
+              placeholder="YYYY-MM-DD"
               value={field.value ? dayjs(field.value) : null}
               onBlur={() => form.setFieldTouched(name, true)}
               onChange={(date) => {
