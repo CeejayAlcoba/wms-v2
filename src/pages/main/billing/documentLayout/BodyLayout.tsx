@@ -12,13 +12,17 @@ type BodyLayoutProps = {
   };
   rate?: ReactNode;
   bill?: ReactNode[];
-  footer?: ReactNode;
+  header?:ReactNode;
 };
 
-export default function BodyLayout({ particular, footer }: BodyLayoutProps) {
-  const footerBgColor = "#d9d9d9";
+export default function BodyLayout({ particular, header }: BodyLayoutProps) {
+  const headerBgColor = "#d9d9d9";
   return (
     <>
+    <tr>
+        <td style={{ backgroundColor: headerBgColor }}></td>
+        <td style={{ backgroundColor: headerBgColor }}>{header}</td>
+      </tr>
       <tr className="text-center">
         <td></td>
         <td className={`row row-cols-${particular?.headers.length}`}>
@@ -43,10 +47,7 @@ export default function BodyLayout({ particular, footer }: BodyLayoutProps) {
           </td>
         </tr>
       ))}
-      <tr>
-        <td style={{ backgroundColor: footerBgColor }}></td>
-        <td style={{ backgroundColor: footerBgColor }}>{footer}</td>
-      </tr>
+      
     </>
   );
 }

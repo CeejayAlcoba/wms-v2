@@ -22,6 +22,7 @@ import { usePDF } from "../../hooks/usePDF";
 import DocumentTable from "../Documents/DocumentTable";
 import { useSearchParams } from "react-router-dom";
 
+
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
   headerTitle?: string;
@@ -59,30 +60,8 @@ export default function TableComponent<T extends object = any>({
     page: searchParams.get("page") ?? "1",
     pageSize: searchParams.get("pageSize") ?? "10",
   });
-  // const initialProps: TableComponentProps<T> = {
-  //   size: "small",
-  //   indexedColumn: true,
-  //   ...props,
-  // };
-  // const {
-  //   headerTitle,
-  //   search,
-  //   indexedColumn,
-  //   add,
-  //   print,
-  //   pdf,
-  //   columns,
-  //   ...rest
-  // } = initialProps;
 
-  const { handlePrint: onPrint, componentRef: refPrint } = usePrint({
-    onBeforePrint: print?.onBeforePrint,
-    onAfterPrint: print?.onAfterPrint,
-  });
-  const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF({
-    onBeforeDownload: pdf?.onBeforeDownload,
-    onAfterDownload: pdf?.onAfterDownload,
-  });
+  
   const debouncedSearch = useMemo(
     () => debounce(search?.onChange ? search?.onChange : () => {}, 500),
     []
@@ -120,6 +99,17 @@ export default function TableComponent<T extends object = any>({
       (h) => h.title != "Action" && h.title != "#"
     );
   };
+
+  const { handlePrint: onPrint, componentRef: refPrint } = usePrint({
+    onBeforePrint: print?.onBeforePrint,
+    onAfterPrint: print?.onAfterPrint,
+    orientation: handleColumnDocument()?.length > 8 ? "landscape" : "portrait",
+  });
+  const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF({
+    onBeforeDownload: pdf?.onBeforeDownload,
+    onAfterDownload: pdf?.onAfterDownload,
+    orientation: handleColumnDocument()?.length > 8 ? "landscape" : "portrait",
+  });
 
   const handlePrint = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     if (print?.onChange) {
@@ -241,11 +231,13 @@ export default function TableComponent<T extends object = any>({
         {...props}
         expandable={undefined}
         dataSource={props.dataSource}
+        tableLayout="fixed"
         columns={handleColumnDocument()}
       />
       <DocumentTable<T>
         ref={refPrint}
         size={size}
+        tableLayout="fixed"
         className="light-table"
         headerTitle={headerTitle}
         {...props}

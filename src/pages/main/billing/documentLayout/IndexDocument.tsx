@@ -52,7 +52,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
         <div>{c?.inCbm}</div>,
         <div>{c?.outCbm}</div>,
         <div>{c?.quantity}</div>,
-        <div className="text-success">{c?.balanceCbm || ""}</div>,
+        <div>{c?.balanceCbm || ""}</div>,
         <div style={{ width: 100 }}>
           {" "}
           {dayjs(c.cutOff).format("DD-MMM-YY")}
@@ -78,16 +78,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
           <TableHeaderLayout />
           <tbody>
             <BodyLayout
-              particular={{
-                headers: [
-                  <strong className="text-danger">ICR</strong>,
-                  <strong className="text-danger">QTY</strong>,
-                  <strong className="text-danger"> CBM</strong>,
-                  <strong className="text-danger"> ADJ</strong>,
-                ],
-                contents: handlingInContent,
-              }}
-              footer={
+              header={
                 <div className="d-flex justify-content-around fw-bold">
                   <div>HANDLING IN CHARGES</div>
                   <div>
@@ -101,18 +92,18 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
                   <div>{handleMoney(billing?.handlingIn?.totals?.bill)}</div>
                 </div>
               }
-            />
-            <BodyLayout
               particular={{
                 headers: [
-                  <strong className="text-danger">OCR</strong>,
+                  <strong className="text-danger">ICR</strong>,
                   <strong className="text-danger">QTY</strong>,
                   <strong className="text-danger"> CBM</strong>,
                   <strong className="text-danger"> ADJ</strong>,
                 ],
-                contents: handlingOutContent,
+                contents: handlingInContent,
               }}
-              footer={
+            />
+            <BodyLayout
+              header={
                 <div className="d-flex justify-content-around fw-bold">
                   <div>HANDLING OUT CHARGES</div>
                   <div>
@@ -126,8 +117,30 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
                   <div>{handleMoney(billing?.handlingOut?.totals?.bill)}</div>
                 </div>
               }
+              particular={{
+                headers: [
+                  <strong className="text-danger">OCR</strong>,
+                  <strong className="text-danger">QTY</strong>,
+                  <strong className="text-danger"> CBM</strong>,
+                  <strong className="text-danger"> ADJ</strong>,
+                ],
+                contents: handlingOutContent,
+              }}
             />
             <BodyLayout
+              header={
+                <div className="d-flex justify-content-center gap-2 fw-bold">
+                  <div>STORAGE CHARGES</div>
+                  <div>
+                    (
+                    {handleFormatDateRange(
+                      billing?.billingStatement?.dateFrom,
+                      billing?.billingStatement?.dateTo
+                    )}
+                    )
+                  </div>               
+                </div>
+              }
               particular={{
                 headers: [
                   <strong className="text-danger">IN (cbm)</strong>,
@@ -140,23 +153,6 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
                 ],
                 contents: storageContent,
               }}
-              footer={
-                <div className="d-flex justify-content-center gap-2 fw-bold">
-                  <div>STORAGE CHARGES</div>
-                  <div>
-                    (
-                    {handleFormatDateRange(
-                      billing?.billingStatement?.dateFrom,
-                      billing?.billingStatement?.dateTo
-                    )}
-                    )
-                  </div>
-                  <div>
-                    {handleMoney(billing?.storage?.totals?.storageRate)}/
-                    {billing?.storage?.totals?.billType}/day
-                  </div>
-                </div>
-              }
             />
           </tbody>
         </table>
@@ -168,7 +164,6 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
         />
         <BillingFooter
           billing={billing}
-          className="bg-light text-dark border"
         />
         <div className="text-dark fw-bold mb-2">
           <span>Total Amount Due </span>

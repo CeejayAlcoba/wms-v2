@@ -1,12 +1,15 @@
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 
+type Orientation = 'portrait' | 'landscape';
+
 type UsePDFOptions = {
   ref?: React.RefObject<HTMLDivElement | null>;
   delay?: number;
   onBeforeDownload?: () => Promise<void> | void;
   onAfterDownload?: () => Promise<void> | void;
   fontSize?: number;
+  orientation?: Orientation; 
 };
 
 export function usePDF({
@@ -14,7 +17,8 @@ export function usePDF({
   delay = 500,
   onBeforeDownload,
   onAfterDownload,
-   fontSize,
+  fontSize,
+  orientation = 'portrait',
 }: UsePDFOptions) {
  const componentRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +32,6 @@ export function usePDF({
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
 
-    // ✅ Apply font size dynamically if provided
     if (fontSize) {
       element.style.fontSize = `${fontSize}px`;
     }
@@ -39,7 +42,7 @@ export function usePDF({
         margin: [0.5, 0.5, 0.5, 0.5],
         filename: `${title || "document"}.pdf`,
         html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+        jsPDF: { unit: "in", format: "a4", orientation },
       })
       .save();
 

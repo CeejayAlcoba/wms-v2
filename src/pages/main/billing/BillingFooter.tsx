@@ -4,23 +4,23 @@ import { handleMoney } from "../../../utils/handleMoney";
 
 type BillingFooterProps = {
   billing: BillingDTO | null;
-} & CardProps;
+};
 export default function BillingFooter(props: BillingFooterProps) {
-  const { billing,...rest } = props;
+  const { billing } = props;
 
   return (
-    <Card {...rest}>
-      <div>
-        <div>
-          <strong>Total :</strong> {handleMoney(billing?.unVatableAmount)}
-        </div>
-        <div>
-          <strong>VAT {billing?.vat}% :</strong> {handleMoney(billing?.vatCost)}
-        </div>
-        <div>
-          <strong>Total Amount: </strong> {handleMoney(billing?.vatableAmount)}
-        </div>
-      </div>
-    </Card>
+    
+  <div className="d-flex flex-column align-items-end">
+  <div>
+    <strong>Total </strong> {handleMoney(billing?.unVatableAmount)}
+  </div>
+  <div>
+    <strong>VAT {billing?.vat}% </strong> {handleMoney(billing?.vatCost)}
+  </div>
+  <div>
+    <strong>Total Amount </strong> {handleMoney(billing?.vatableAmount)}
+  </div>
+</div>
+
   );
 }

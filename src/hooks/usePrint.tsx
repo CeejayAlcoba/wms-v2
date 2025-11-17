@@ -1,11 +1,14 @@
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
+type Orientation = 'portrait' | 'landscape';
+
 type UsePrintOptions = {
   ref?: React.RefObject<any | null>;
   onBeforePrint?: (() => Promise<void>) | undefined;
   onAfterPrint?: (() => Promise<void>) | undefined;
   delay?: number;
+  orientation?: Orientation;
 };
 
 export function usePrint({
@@ -13,6 +16,7 @@ export function usePrint({
   onBeforePrint,
   onAfterPrint,
   delay = 500,
+  orientation = 'portrait',
 }: UsePrintOptions = {}) {
   const componentRef = useRef<any | null>(null);
 
@@ -29,7 +33,7 @@ export function usePrint({
     onAfterPrint,
     pageStyle: `
       @page {
-        size: A4; 
+        size: A4 ${orientation};
         margin: 11mm 5mm 11mm 5mm; 
       }
       *{

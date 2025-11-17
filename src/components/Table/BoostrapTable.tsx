@@ -5,15 +5,21 @@ export default function BootstrapTable<T extends object = any>(
   props: TableProps<T>
 ) {
   const { columns, dataSource } = props;
+
   return (
-    <table className="table table-bordered align-middle text-center">
-      <thead>
+   
+ <table className="table table-bordered align-middle text-center">
+  {
+    columns?.some(s=>s.title) && 
+    <thead>
         <tr>
           {columns?.map((c, colIdx) => (
             <th key={colIdx}>{(c.title as ReactNode) ?? ""}</th>
           ))}
         </tr>
       </thead>
+  }
+      
       <tbody>
         {dataSource?.map((record, rowIdx) => (
           <tr key={rowIdx}>
@@ -40,5 +46,7 @@ export default function BootstrapTable<T extends object = any>(
         ))}
       </tbody>
     </table>
+
+   
   );
 }
