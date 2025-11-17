@@ -108,7 +108,7 @@ export default function TableComponent<T extends object = any>({
   const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF({
     onBeforeDownload: pdf?.onBeforeDownload,
     onAfterDownload: pdf?.onAfterDownload,
-    orientation: handleColumnDocument()?.length > 7 ? "landscape" : "portrait",
+    orientation: handleColumnDocument()?.length > 5 ? "landscape" : "portrait",
   });
 
   const handlePrint = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {

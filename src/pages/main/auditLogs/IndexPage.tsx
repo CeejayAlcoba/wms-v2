@@ -78,15 +78,14 @@ export default function IndexPage() {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      ellipsis: true,
       render: (description: any, record: AuditLogsDTO) => {
         if (record.actionType === "UPDATE") {
           return (
-            <>
+            <span>
               Updated <b>{handleToNormalWords(record.columnDisplay ?? "_")}</b>{" "}
               from <b>{record.oldDisplayValue ?? "_"}</b> →{" "}
               <b>{record.newDisplayValue ?? "_"}</b>
-            </>
+            </span>
           );
         }
         return description;
