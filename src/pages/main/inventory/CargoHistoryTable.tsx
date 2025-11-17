@@ -129,7 +129,6 @@ export default function CargoHistoryTable(props: {
         dataSource={cargoHistories.filter((c) => c.id == record.id)}
         columns={columns}
         rowKey="id"
-        scroll={{ x: "max-content" }}
         bordered
         pagination={false}
         footer={() => (

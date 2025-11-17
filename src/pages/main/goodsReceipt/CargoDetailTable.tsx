@@ -72,7 +72,6 @@ export default function CargoDetailTable(props: {
         indexedColumn={false}
         columns={columns}
         rowKey="id"
-        scroll={{ x: "max-content" }}
         bordered
         pagination={false}
       />

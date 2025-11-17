@@ -15,19 +15,20 @@ export default function PendingTable() {
   const [selectedData, setSelectedData] = useState<PickListDetails | null>(
     null
   );
+
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const page = searchParams.get("page");
-  const pageSize = searchParams.get("pageSize");
+  const [search, setSearch] = useState<Partial<PickListDetailsFilterDTO>>({
+    id: parseInt(id || "0") || null,
+    currentPage: parseInt(searchParams.get("page") || "1"),
+    pageSize: parseInt(searchParams.get("pageSize") || "10"),
+    isNullGoodIssue: true,
+  });
+
   const picklistQueryResult = useQuery({
-    queryKey: ["pickListDetailsGoodIssue", id, pageSize, page],
+    queryKey: ["pickListDetailsGoodIssue", search],
     queryFn: async () => {
-      return await pickListDetailsService.GetAll({
-        id: id,
-        pageSize,
-        currentPage: page,
-        isNullGoodIssue: true,
-      } as PickListDetailsFilterDTO);
+      return await pickListDetailsService.GetAll(search);
     },
     initialData: [],
   });
@@ -60,6 +61,14 @@ export default function PendingTable() {
     </Tooltip>
   );
 
+  const handleUnpaginate = async () => {
+    await setSearch((prev) => ({
+      ...prev,
+      currentPage: null,
+      pageSize: null,
+    }));
+  };
+
   return (
     <>
       <SaveGoodIssueModal
@@ -71,6 +80,8 @@ export default function PendingTable() {
       <CompeleteTable
         queryResult={picklistQueryResult}
         renderAdditionalAction={renderAdditionalAction}
+        print={{ onBeforePrint: async () => await handleUnpaginate() }}
+        pdf={{ onChange: async () => await handleUnpaginate() }}
       />
     </>
   );

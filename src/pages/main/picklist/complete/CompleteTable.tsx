@@ -10,7 +10,7 @@ import { pickListDetailsRecordService } from "../../../../services/pickListDetai
 import SaveGoodIssueModal from "../../goodIssue/SaveGoodIssueModal";
 import UpdateModal from "../UpdatePickListModal";
 import FilterCard from "./FilterCard";
-import TableComponent from "../../../../components/Table/TableComponent";
+import TableComponent, { type TableComponentProps } from "../../../../components/Table/TableComponent";
 import PickListDetailsRecordTable from "./PickListDetailsRecordTable";
 import type { PickListDetailsFilterDTO } from "../../../../@types/DTOs/PickListDetailsFilterDTO";
 import type { PickListDetailsRecordGetDTO } from "../../../../@types/DTOs/PickListDetailsRecordGetDTO";
@@ -23,10 +23,10 @@ type CompleteTableProps = {
     record: PickListDetailsGetDTO
   ) => JSX.Element;
   queryResult?: DefinedUseQueryResult<PickListDetailsGetDTO[], Error>;
-};
+} & TableComponentProps<PickListDetailsGetDTO>;
 
 export default function CompleteTable(props: CompleteTableProps) {
-  const { renderAdditionalAction, queryResult } = props;
+  const { renderAdditionalAction, queryResult,...rest } = props;
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [saveGoodIssueModal, setSaveGoodIssueModal] = useState<boolean>(false);
   const [selectedData, setSelectedData] =
@@ -229,7 +229,6 @@ export default function CompleteTable(props: CompleteTableProps) {
       currentPage: null,
       pageSize: null,
     }));
-    await refetch();
   };
 
   return (
@@ -269,6 +268,7 @@ export default function CompleteTable(props: CompleteTableProps) {
           ),
           onExpand: handleExpand,
         }}
+        {...rest}
       />
     </>
   );

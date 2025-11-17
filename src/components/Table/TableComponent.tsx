@@ -21,7 +21,7 @@ import { usePrint } from "../../hooks/usePrint";
 import { usePDF } from "../../hooks/usePDF";
 import DocumentTable from "../Documents/DocumentTable";
 import { useSearchParams } from "react-router-dom";
-
+import "./TableComponent.css"
 
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
@@ -103,29 +103,27 @@ export default function TableComponent<T extends object = any>({
   const { handlePrint: onPrint, componentRef: refPrint } = usePrint({
     onBeforePrint: print?.onBeforePrint,
     onAfterPrint: print?.onAfterPrint,
-    orientation: handleColumnDocument()?.length > 8 ? "landscape" : "portrait",
+    orientation: handleColumnDocument()?.length > 7 ? "landscape" : "portrait",
   });
   const { handleDownloadPDF: onDownloadPdf, componentRef: refPdf } = usePDF({
     onBeforeDownload: pdf?.onBeforeDownload,
     onAfterDownload: pdf?.onAfterDownload,
-    orientation: handleColumnDocument()?.length > 8 ? "landscape" : "portrait",
+    orientation: handleColumnDocument()?.length > 7 ? "landscape" : "portrait",
   });
 
   const handlePrint = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     if (print?.onChange) {
-      print.onChange(e);
-    } else {
-      await onPrint();
+      await print.onChange(e);
     }
+      await onPrint();
   };
   const handleDownloadPDF = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     if (pdf?.onChange) {
-      pdf.onChange(e);
-    } else {
-      onDownloadPdf(headerTitle);
-    }
+      await pdf.onChange(e);
+    } 
+      await onDownloadPdf(headerTitle);
   };
 
   useEffect(() => {
@@ -231,13 +229,13 @@ export default function TableComponent<T extends object = any>({
         {...props}
         expandable={undefined}
         dataSource={props.dataSource}
-        tableLayout="fixed"
+        tableLayout="auto"
         columns={handleColumnDocument()}
       />
       <DocumentTable<T>
         ref={refPrint}
         size={size}
-        tableLayout="fixed"
+        tableLayout="auto"
         className="light-table"
         headerTitle={headerTitle}
         {...props}

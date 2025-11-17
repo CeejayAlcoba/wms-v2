@@ -102,7 +102,6 @@ export default function OtherServicesTable({
         title={() => <BillingTableHeader record={record} />}
         dataSource={handleGroupOtherServices(otherServices, record)}
         columns={columns}
-        scroll={{ x: "max-content" }}
         bordered
         pagination={false}
         {...rest}

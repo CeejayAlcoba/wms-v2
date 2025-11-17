@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
-type Orientation = 'portrait' | 'landscape';
+type Orientation = "portrait" | "landscape";
 
 type UsePrintOptions = {
   ref?: React.RefObject<any | null>;
@@ -16,7 +16,7 @@ export function usePrint({
   onBeforePrint,
   onAfterPrint,
   delay = 500,
-  orientation = 'portrait',
+  orientation = "portrait",
 }: UsePrintOptions = {}) {
   const componentRef = useRef<any | null>(null);
 
@@ -34,7 +34,7 @@ export function usePrint({
     pageStyle: `
       @page {
         size: A4 ${orientation};
-        margin: 11mm 5mm 11mm 5mm; 
+        margin: 5mm 5mm 5mm 5mm; 
       }
       *{
        font-size: 12px;
