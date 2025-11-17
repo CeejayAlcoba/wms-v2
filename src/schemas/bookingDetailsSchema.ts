@@ -13,13 +13,20 @@ export const bookingDetailsSchema: yup.Schema<BookingDetails> = yup
       .string()
       .required(requiredMessage)
       .min(4, "ICR must be at least 4 characters.")
-      .test("unique-icr", "ICR already exists.", async function (value) {
+      .test("unique-icr", "", async function (value) {
         const { id } = this.parent;
         if (!value) return true;
 
         const bookings: any = await validateICRReference(value);
         const isDuplicate = bookings.some((d: any) => d.id !== id);
-        return !isDuplicate;
+
+        if (isDuplicate) {
+          return this.createError({
+            message: `ICR ${value} already exists.`,
+          });
+        }
+
+        return true;
       }),
     principalId: yup.number().required(requiredMessage),
     productCategoryId: yup.number().required(requiredMessage),

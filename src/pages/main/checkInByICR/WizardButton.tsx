@@ -4,6 +4,7 @@ import { CHECK_IN_STEPS } from "./__constants__/CHECK_IN_STEPS";
 import { CheckOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useFormikContext } from "formik";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
+import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 
 type ButtonType = "Previous" | "Next" | "Submit";
 
@@ -54,7 +55,25 @@ export default function WizardButton() {
     );
     if (!isValidated) return;
     if (type == "Next") return handleNext();
-    if (type == "Submit") return submitForm();
+    if (type == "Submit") {
+      const errors = await validateForm();
+
+      if (Object.keys(errors).length > 0) {
+        const flatErrors = Object.values(errors).flatMap((err) =>
+          Object.values(err)
+        );
+        SweetAlert({
+          icon: "error",
+          title: "Form has errors",
+          timer: undefined,
+          showConfirmButton: true,
+          html: flatErrors?.join("<br/>"),
+        });
+        return;
+      }
+      submitForm();
+      return;
+    }
   };
   return (
     <>
@@ -81,7 +100,6 @@ export default function WizardButton() {
       {currentStep === CHECK_IN_STEPS.length - 1 && (
         <Button
           type="primary"
-          htmlType="submit"
           icon={<CheckOutlined />}
           onClick={() => handleClickButton("Submit")}
           loading={isSubmitting}

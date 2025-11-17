@@ -10,6 +10,7 @@ import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 import { checkInByICRService } from "../../../services/checkInByICRService";
 import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 import { indexDbService } from "../../../services/indexDbService";
+import type { AxiosError } from "axios";
 
 export default function IndexPage() {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -31,9 +32,10 @@ export default function IndexPage() {
       formik.resetForm();
       setCurrentStep(0);
       await indexDbService.deleteItem("checkInByICR", 1);
-    } catch {
+    } catch(ex:any) {
+      let e : AxiosError = ex;
       SweetAlert({
-        title: "Error Occurs",
+        title: e.response?.data ?? "Error Occurs",
         icon: "error",
         timer: undefined,
         showConfirmButton: true,

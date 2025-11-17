@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import { shelfDetailsService } from "../../../services/shelfDetailsService";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { IS_MANUAL_CBM } from "../../../constants/LOCAL_STORAGE_KEYS";
+import handleCaculateCBM from "./__utils__/handleCalculateCBM";
 // import ExcelHandler from "../../../components/Documents/excel/ExcelHandler";
 
 const { Panel } = Collapse;
@@ -187,7 +188,14 @@ export default function CargoListPage() {
       lengthCm: r?.lengthCm || null,
       heightCm: r?.heightCm || null,
       widthCm: r?.widthCm || null,
-      cubicMeter: isManualCbm ? handleRoundOff(r?.cubicMeter ?? 0) : null,
+      cubicMeter: isManualCbm
+        ? handleRoundOff(r?.cubicMeter ?? 0)
+        : handleCaculateCBM({
+            lengthCm: r?.lengthCm,
+            heightCm: r?.heightCm,
+            widthCm: r?.widthCm,
+            quantity: r?.quantity,
+          }),
       customerName: r?.customerName ?? null,
       shelfDetailsId:
         shelfDetails?.find(
@@ -331,7 +339,7 @@ function CargoForm(props: {
     [setFieldValue]
   );
 
-  const calculateCbm = useCallback(
+  const calculateCbmField = useCallback(
     ({ key, value }: InputNumberType) => {
       if (isManualCbm) return;
 
@@ -344,11 +352,12 @@ function CargoForm(props: {
 
       values[key] = value;
 
-      const cbm =
-        (values.lengthCm / 100) *
-        (values.heightCm / 100) *
-        (values.widthCm / 100) *
-        values.quantity;
+      const cbm = handleCaculateCBM({
+        lengthCm: values.lengthCm,
+        heightCm: values.heightCm,
+        widthCm: values.widthCm,
+        quantity: values.quantity,
+      });
 
       if (!isManualCbm) {
         setFieldValue(`${arrayName}.cubicMeter`, handleRoundOff(cbm));
@@ -391,7 +400,7 @@ function CargoForm(props: {
         label="quantity"
         name={`${arrayName}.quantity`}
         onChange={(value) =>
-          calculateCbm({ key: "quantity", value: Number(value) })
+          calculateCbmField({ key: "quantity", value: Number(value) })
         }
         askterisk
       />
@@ -401,7 +410,7 @@ function CargoForm(props: {
         name={`${arrayName}.lengthCm`}
         addonAfter="cm"
         onChange={(value) =>
-          calculateCbm({ key: "lengthCm", value: Number(value) })
+          calculateCbmField({ key: "lengthCm", value: Number(value) })
         }
         askterisk
       />
@@ -411,7 +420,7 @@ function CargoForm(props: {
         name={`${arrayName}.heightCm`}
         addonAfter="cm"
         onChange={(value) =>
-          calculateCbm({ key: "heightCm", value: Number(value) })
+          calculateCbmField({ key: "heightCm", value: Number(value) })
         }
         askterisk
       />
@@ -419,7 +428,7 @@ function CargoForm(props: {
         label="width"
         name={`${arrayName}.widthCm`}
         onChange={(value) =>
-          calculateCbm({ key: "widthCm", value: Number(value) })
+          calculateCbmField({ key: "widthCm", value: Number(value) })
         }
         addonAfter="cm"
         askterisk

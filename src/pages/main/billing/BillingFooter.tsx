@@ -1,4 +1,3 @@
-import { Card, type CardProps } from "antd";
 import type { BillingDTO } from "../../../@types/DTOs/BillingDTO";
 import { handleMoney } from "../../../utils/handleMoney";
 
