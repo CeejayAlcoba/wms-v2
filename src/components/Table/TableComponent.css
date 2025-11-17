@@ -1,3 +1,20 @@
 .ant-table-cell {
-  max-width: 200px; 
+    max-width: 120px;
+}
+
+table {
+    page-break-inside: auto;
+    margin: 0 5 0 5;
+}
+
+thead {
+    display: table-header-group;
+}
+
+tfoot {
+    display: table-footer-group;
+}
+
+tr {
+    page-break-inside: avoid;
 }

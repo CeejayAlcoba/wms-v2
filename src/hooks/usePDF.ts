@@ -39,10 +39,10 @@ export function usePDF({
     await html2pdf()
       .from(element)
       .set({
-        margin: [0.5, 0.5, 0.5, 0.5],
+        margin: [5, 5, 5, 5],
         filename: `${title || "document"}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "a4", orientation },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: "mm", format: "a4", orientation },
       })
       .save();
 
