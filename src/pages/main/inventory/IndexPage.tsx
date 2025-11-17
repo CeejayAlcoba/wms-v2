@@ -14,42 +14,8 @@ export default function IndexPage() {
 
   return (
     <>
-      {/* <SaveModal
-        open={saveModalOpen}
-        onAfterSave={handleAfterSave}
-        onCancel={handleClickCancel}
-        selectedData={selectedData}
-      /> */}
       <FilterCard onSearch={handleSearch} />
       <InventoryTable search={search} setSearch={setSearch} />
-      {/* <TableComponent<ReportInventoryDTO>
-        rowKey="id"
-        headerTitle={pageTitle}
-        columns={columns}
-        dataSource={inventories}
-        loading={isFetching}
-        print={{ onBeforePrint: async () => await handleUnpaginate() }}
-        pdf={{ onChange: async () => await handleUnpaginate() }}
-        pagination={{
-          total: inventories?.[0]?.totalItems,
-          onChange: handlePaginate,
-        }}
-        expandable={{
-          expandedRowRender: (record) => (
-            <CargoHistoryTable
-              cargoHistories={cargoHistories}
-              record={record}
-            />
-          ),
-          onExpand: handleExpand,
-        }}
-        footer={() => (
-          <TableTotalFooter<ReportInventoryDTO>
-            data={inventories}
-            values={TABLE_TOTAL_FOOTER}
-          />
-        )}
-      /> */}
     </>
   );
 }

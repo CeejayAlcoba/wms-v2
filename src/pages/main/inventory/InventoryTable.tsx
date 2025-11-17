@@ -139,19 +139,25 @@ export default function InventoryTable({
       key: "description",
     },
     {
-      title: "Bin Location",
+      title: "BIN Loc",
       dataIndex: "binLocation",
       key: "binLocation",
     },
     {
-      title: "Balance Pallete",
+      title: "Balance PLT",
       dataIndex: "balancePalleteCount",
       key: "balancePalleteCount",
     },
     {
-      title: "Balance Quantity",
+      title: "Balance QTY",
       dataIndex: "balanceQuantity",
       key: "balanceQuantity",
+    },
+    {
+      title: "Uom",
+      dataIndex: "unitOfMeasurement",
+      key: "unitOfMeasurement",
+     
     },
     {
       title: "Balance CBM",
@@ -169,12 +175,6 @@ export default function InventoryTable({
         return <span className="text-secondary">N/A</span>;
       },
     },
-    {
-      title: "Unit of Measurement",
-      dataIndex: "unitOfMeasurement",
-      key: "unitOfMeasurement",
-    },
-
     {
       title: "Total Amount",
       dataIndex: "totalAmount",
