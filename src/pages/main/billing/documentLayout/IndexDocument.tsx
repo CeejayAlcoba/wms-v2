@@ -128,7 +128,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
               }}
             />
             <BodyLayout
-              header={
+              footer={
                 <div className="d-flex justify-content-center gap-2 fw-bold">
                   <div>STORAGE CHARGES</div>
                   <div>
@@ -138,7 +138,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
                       billing?.billingStatement?.dateTo
                     )}
                     )
-                  </div>               
+                  </div>
                 </div>
               }
               particular={{
@@ -162,9 +162,7 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
           record={billing?.billingStatement as BillingStatementDTO}
           otherServices={billing?.billingStatement?.otherServiceBills ?? []}
         />
-        <BillingFooter
-          billing={billing}
-        />
+        <BillingFooter billing={billing} />
         <div className="text-dark fw-bold mb-2">
           <span>Total Amount Due </span>
           <span className="text-uppercase">
