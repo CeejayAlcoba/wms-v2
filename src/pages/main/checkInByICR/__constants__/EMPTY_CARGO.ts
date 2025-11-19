@@ -20,4 +20,5 @@ export const EMPTY_CARGO: CargoDetails = {
   shelfDetailsId: null,
   totalAmount: null,
   bookingDetailsId: null,
+  isManualCbm: false,
 };

@@ -18,4 +18,5 @@ export type CargoDetails = {
   shelfDetailsId?: number | null;
   totalAmount?: number | null;
   bookingDetailsId?: number | null;
+  isManualCbm?: boolean | null;
 };

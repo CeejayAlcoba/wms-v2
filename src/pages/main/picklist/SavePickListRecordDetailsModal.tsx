@@ -117,12 +117,16 @@ export default function SavePickListRecordDetailsModal(
   const { getFieldProps, setFieldValue, values } = formik;
 
   useEffect(() => {
-    const lengthCm = Number(getFieldProps(`report.lengthCm`).value || 0);
-    const heightCm = Number(getFieldProps(`report.heightCm`).value || 0);
-    const widthCm = Number(getFieldProps(`report.widthCm`).value || 0);
+    // const lengthCm = Number(getFieldProps(`report.lengthCm`).value || 0);
+    // const heightCm = Number(getFieldProps(`report.heightCm`).value || 0);
+    // const widthCm = Number(getFieldProps(`report.widthCm`).value || 0);
     const quantity = Number(getFieldProps(`quantity`).value || 0);
-    const cbm =
-      (lengthCm / 100) * (heightCm / 100) * (widthCm / 100) * quantity;
+    const actualCbm = selectedData?.report?.cubicMeter || 0;
+    const actualQuantity = selectedData?.report?.quantity || 0;
+    console.log((actualCbm / actualQuantity) * quantity);
+    // const cbm =
+    //   (lengthCm / 100) * (heightCm / 100) * (widthCm / 100) * quantity;
+    const cbm = (actualCbm / actualQuantity) * quantity;
     if (cbm >= (values.report?.balanceCubicMeter ?? 0)) {
       setFieldValue(
         `cubicMeter`,
@@ -197,8 +201,8 @@ export default function SavePickListRecordDetailsModal(
               </div>
               <div>
                 <label>
-                  <strong>Dimension (L×W×H):</strong> {values.report?.lengthCm}{" "}
-                  x {values.report?.widthCm} x {values.report?.heightCm} cm
+                  <strong>Dimension (L×W×H):</strong> {values.report?.lengthCm}×
+                  {values.report?.widthCm}×{values.report?.heightCm} cm
                 </label>
               </div>
             </div>

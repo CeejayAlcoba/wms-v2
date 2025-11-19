@@ -16,6 +16,7 @@ import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import { cargoDetailsSchema } from "../../../schemas/cargoDetailsSchema";
 import { useEffect } from "react";
 import { handleRoundOff } from "../../../utils/handleRoundOff";
+import CheckboxFormik from "../../../components/Formik/CheckboxFormik";
 
 type SaveModalProps = {
   open: boolean;
@@ -70,6 +71,8 @@ export default function SaveModal(props: SaveModalProps) {
   const { getFieldProps, setFieldValue } = formik;
 
   useEffect(() => {
+    if (formik.values.isManualCbm) return;
+
     const lengthCm = Number(getFieldProps(`lengthCm`).value || 0);
     const heightCm = Number(getFieldProps(`heightCm`).value || 0);
     const widthCm = Number(getFieldProps(`widthCm`).value || 0);
@@ -84,6 +87,7 @@ export default function SaveModal(props: SaveModalProps) {
     getFieldProps(`heightCm`).value,
     getFieldProps(`widthCm`).value,
     getFieldProps(`quantity`).value,
+    formik.values.isManualCbm,
   ]);
 
   return (
@@ -163,7 +167,7 @@ export default function SaveModal(props: SaveModalProps) {
             <InputNumberFormik<CargoDetails>
               label="Cubic Meter"
               name="cubicMeter"
-              disabled
+              disabled={!formik.values.isManualCbm}
               askterisk
             />
             <InputFormik<CargoDetails>
@@ -182,6 +186,10 @@ export default function SaveModal(props: SaveModalProps) {
               label="Total Amount"
               name="totalAmount"
               askterisk
+            />
+            <CheckboxFormik<CargoDetails>
+              label="Manual Cbm"
+              name="isManualCbm"
             />
           </div>
         </Form>

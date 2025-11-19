@@ -5,10 +5,7 @@ import type { ReportInboundFilterDTO } from "../../../@types/DTOs/ReportInboundF
 import InboundTable from "./InboundTable";
 
 export default function IndexPage() {
-  const [search, setSearch] = useState<ReportInboundFilterDTO>({
-    ...EMPTY_FORM,
-    isStaging: false,
-  });
+  const [search, setSearch] = useState<ReportInboundFilterDTO>(EMPTY_FORM);
 
   const handleSearch = async (value: ReportInboundFilterDTO) => {
     await setSearch(value);

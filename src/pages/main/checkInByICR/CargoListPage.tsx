@@ -2,7 +2,7 @@ import { FieldArray, useFormikContext } from "formik";
 import type { CheckInByICRDTO } from "../../../@types/DTOs/CheckInByICRDTO";
 import InputFormik from "../../../components/Formik/InputFormik";
 import SelectFormik from "../../../components/Formik/SelectFormik";
-import { Button, Collapse, Popconfirm, Tooltip } from "antd";
+import { Button, Collapse, Popconfirm, Tag, Tooltip } from "antd";
 import { EMPTY_CARGO } from "./__constants__/EMPTY_CARGO";
 import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasurement";
 import DatePickerFormik from "../../../components/Formik/DatePicker";
@@ -23,6 +23,7 @@ import { shelfDetailsService } from "../../../services/shelfDetailsService";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { IS_MANUAL_CBM } from "../../../constants/LOCAL_STORAGE_KEYS";
 import handleCaculateCBM from "./__utils__/handleCalculateCBM";
+import React from "react";
 // import ExcelHandler from "../../../components/Documents/excel/ExcelHandler";
 
 const { Panel } = Collapse;
@@ -32,17 +33,12 @@ type ExcelColumnType = {
   shelfDetails: string;
 } & CargoDetails;
 
-type InputNumberType = {
-  key: keyof CargoDetails;
-  value: number;
-};
-
 export default function CargoListPage() {
   const { values, errors, touched, setValues, setFieldValue } =
     useFormikContext<CheckInByICRDTO>();
 
   const [activeKey, setActiveKey] = useState<string[]>(["0"]);
-  const [isManualCbm, setIsManualCbm] = useState<boolean>(
+  const [isManualAllCbm, setIsManualAllCbm] = useState<boolean>(
     localStorage.getItem(IS_MANUAL_CBM) == "YES"
   );
   const onChange = (key: string | string[]) => {
@@ -70,10 +66,15 @@ export default function CargoListPage() {
     initialData: [],
   });
 
-  const handleManualCbm = (value: boolean) => {
+  const handleManualAllCbm = (value: boolean) => {
     localStorage.setItem(IS_MANUAL_CBM, value ? "YES" : "NO");
-    setIsManualCbm(value);
+    setIsManualAllCbm(value);
+    setFieldValue(
+      "cargoDetails",
+      values.cargoDetails.map((c) => ({ ...c, isManualCbm: value }))
+    );
   };
+
   const formatColumns: ExcelColumn<ExcelColumnType>[] = [
     {
       label: "SKU",
@@ -188,13 +189,13 @@ export default function CargoListPage() {
       lengthCm: r?.lengthCm || null,
       heightCm: r?.heightCm || null,
       widthCm: r?.widthCm || null,
-      cubicMeter: isManualCbm
+      cubicMeter: isManualAllCbm
         ? handleRoundOff(r?.cubicMeter ?? 0)
         : handleCaculateCBM({
-            lengthCm: r?.lengthCm,
-            heightCm: r?.heightCm,
-            widthCm: r?.widthCm,
-            quantity: r?.quantity,
+            lengthCm: r.lengthCm,
+            heightCm: r.heightCm,
+            widthCm: r.widthCm,
+            quantity: r.quantity,
           }),
       customerName: r?.customerName ?? null,
       shelfDetailsId:
@@ -204,6 +205,7 @@ export default function CargoListPage() {
         )?.id || null,
       totalAmount: r?.totalAmount || null,
       bookingDetailsId: r?.bookingDetailsId ?? null,
+      isManualCbm: isManualAllCbm,
     }));
 
     setValues((prev) => ({
@@ -215,37 +217,43 @@ export default function CargoListPage() {
   return (
     <>
       <div className="row mb-1">
-        <div className="col d-flex justify-content-end align-items-center gap-3">
-          <Checkbox
-            checked={isManualCbm}
-            onChange={(e) => handleManualCbm(e.target.checked)}
-          >
-            Manual CBM input
-          </Checkbox>
-
-          <ExcelHandler<ExcelColumnType>
-            columns={formatColumns}
-            data={[]}
-            onUpload={handleUpload}
-            onInvalidUpload={(messages: string[]) => {
-              SweetAlert({
-                icon: "error",
-                title: "Invalid Format",
-                html: messages.join("<br/>"),
-                width: 600,
-                timer: undefined,
-                showConfirmButton: true,
-              });
-            }}
-          />
-          <Popconfirm
-            title={"Do you want to clear all items?"}
-            onConfirm={() => {
-              setFieldValue("cargoDetails", []);
-            }}
-          >
-            <Button>Clear All</Button>
-          </Popconfirm>
+        <div className="col d-flex justify-content-between align-items-center gap-3">
+          {!!isManualAllCbm ? (
+            <Tag color="orange">Manual Cbm</Tag>
+          ) : (
+            <Tag color="blue">Auto Cbm</Tag>
+          )}
+          <div className="d-flex align-items-center">
+            <Checkbox
+              checked={isManualAllCbm}
+              onChange={(e) => handleManualAllCbm(e.target.checked)}
+            >
+              Manual All Cbm
+            </Checkbox>
+            <ExcelHandler<ExcelColumnType>
+              columns={formatColumns}
+              data={[]}
+              onUpload={handleUpload}
+              onInvalidUpload={(messages: string[]) => {
+                SweetAlert({
+                  icon: "error",
+                  title: "Invalid Format",
+                  html: messages.join("<br/>"),
+                  width: 600,
+                  timer: undefined,
+                  showConfirmButton: true,
+                });
+              }}
+            />
+            <Popconfirm
+              title={"Do you want to clear all items?"}
+              onConfirm={() => {
+                setFieldValue("cargoDetails", []);
+              }}
+            >
+              <Button>Clear All</Button>
+            </Popconfirm>
+          </div>
         </div>
       </div>
 
@@ -261,24 +269,31 @@ export default function CargoListPage() {
                         <div>
                           {index + 1}. {cargo.skuCode ?? ""}
                         </div>
-                        <Tooltip title="Remove">
-                          <Button
-                            icon={<DeleteOutlined />}
-                            danger
-                            type="link"
-                            onClick={() => remove(index)}
-                          />
-                        </Tooltip>
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <Tooltip title="Remove">
+                            <Button
+                              icon={<DeleteOutlined />}
+                              danger
+                              type="link"
+                              onClick={() => remove(index)}
+                            />
+                          </Tooltip>
+                        </div>
                       </div>
                     }
                     key={index}
                   >
                     <CargoForm
+                      cargo={cargo}
                       arrayName={`cargoDetails[${index}]`}
                       index={index}
                       unitOfMeasurements={unitOfMeasurements}
                       shelfDetails={shelfDetails}
-                      isManualCbm={isManualCbm}
+                      isManualAllCbm={isManualAllCbm}
                     />
                   </Panel>
                 );
@@ -289,7 +304,7 @@ export default function CargoListPage() {
               type="primary"
               style={{ marginTop: 12 }}
               onClick={() => {
-                push(EMPTY_CARGO);
+                push({ ...EMPTY_CARGO, isManualCbm: isManualAllCbm });
                 const nextIndex = values.cargoDetails.length.toString();
                 setActiveKey([nextIndex]);
               }}
@@ -303,165 +318,138 @@ export default function CargoListPage() {
   );
 }
 
-function CargoForm(props: {
-  arrayName: string;
-  index: number;
-  unitOfMeasurements: RefUnitOfMeasurement[];
-  shelfDetails: ShelfDetails[];
-  isManualCbm: boolean;
-}) {
-  const { arrayName, unitOfMeasurements, shelfDetails, isManualCbm } = props;
+const CargoForm = React.memo(
+  function CargoForm(props: {
+    arrayName: string;
+    cargo: CargoDetails;
+    index: number;
+    unitOfMeasurements: RefUnitOfMeasurement[];
+    shelfDetails: ShelfDetails[];
+    isManualAllCbm: boolean;
+  }) {
+    const {
+      arrayName,
+      unitOfMeasurements,
+      shelfDetails,
+      isManualAllCbm,
+      cargo,
+    } = props;
+    const { setFieldValue } = useFormikContext<CheckInByICRDTO>();
 
-  const { getFieldProps, setFieldValue } = useFormikContext<CheckInByICRDTO>();
-
-  // useEffect(() => {
-  //   const lengthCm = Number(getFieldProps(`${arrayName}.lengthCm`).value || 0);
-  //   const heightCm = Number(getFieldProps(`${arrayName}.heightCm`).value || 0);
-  //   const widthCm = Number(getFieldProps(`${arrayName}.widthCm`).value || 0);
-  //   const quantity = Number(getFieldProps(`${arrayName}.quantity`).value || 0);
-
-  //   const cbm =
-  //     (lengthCm / 100) * (heightCm / 100) * (widthCm / 100) * quantity;
-
-  //   !isManualCbm && setFieldValue(`${arrayName}.cubicMeter`, handleRoundOff(cbm));
-  // }, [
-  //   getFieldProps(`${arrayName}.lengthCm`).value,
-  //   getFieldProps(`${arrayName}.heightCm`).value,
-  //   getFieldProps(`${arrayName}.widthCm`).value,
-  //   getFieldProps(`${arrayName}.quantity`).value,
-  // ]);
-
-  const fixDecimalCbm = useCallback(
-    (value: number) => {
-      if (!isManualCbm) return;
-      setFieldValue(`${arrayName}.cubicMeter`, handleRoundOff(value));
-    },
-    [setFieldValue]
-  );
-
-  const calculateCbmField = useCallback(
-    ({ key, value }: InputNumberType) => {
-      if (isManualCbm) return;
-
-      const values: Record<any, number> = {
-        quantity: Number(getFieldProps(`${arrayName}.quantity`).value || 0),
-        lengthCm: Number(getFieldProps(`${arrayName}.lengthCm`).value || 0),
-        heightCm: Number(getFieldProps(`${arrayName}.heightCm`).value || 0),
-        widthCm: Number(getFieldProps(`${arrayName}.widthCm`).value || 0),
+    const calculateCbmField = (value?: number, key?: string) => {
+      if (isManualAllCbm) return;
+      const values: any = {
+        lengthCm: cargo.lengthCm,
+        heightCm: cargo.heightCm,
+        widthCm: cargo.widthCm,
+        quantity: cargo.quantity,
       };
-
-      values[key] = value;
-
-      const cbm = handleCaculateCBM({
-        lengthCm: values.lengthCm,
-        heightCm: values.heightCm,
-        widthCm: values.widthCm,
-        quantity: values.quantity,
-      });
-
-      if (!isManualCbm) {
-        setFieldValue(`${arrayName}.cubicMeter`, handleRoundOff(cbm));
+      if (key) {
+        values[key] = value;
       }
-    },
-    [arrayName, isManualCbm, getFieldProps, setFieldValue]
-  );
 
-  return (
-    <div className="row row-cols-lg-4">
-      <InputFormik<any> label="SKU" name={`${arrayName}.skuCode`} askterisk />
-      <InputFormik<any> label="PRO Number" name={`${arrayName}.proNumber`} />
-      <InputFormik<any>
-        label="Description"
-        name={`${arrayName}.description`}
-        askterisk
-      />
-      <InputFormik<any>
-        label="Delivery Note"
-        name={`${arrayName}.deliveryNote`}
-      />
-      <SelectFormik<any, RefUnitOfMeasurement>
-        label="Unit of packaging"
-        name={`${arrayName}.unitOfMeasurementId`}
-        keyValue="id"
-        keyLabel="name"
-        option={unitOfMeasurements}
-        askterisk
-      />
-      <InputFormik<any> label="Batch No" name={`${arrayName}.batchNo`} />
-      <DatePickerFormik<any>
-        label="Expiration Date"
-        name={`${arrayName}.expirationDate`}
-      />
-      <InputNumberFormik<any>
-        label="Pallete Count"
-        name={`${arrayName}.palleteCount`}
-      />
-      <InputNumberFormik<any>
-        label="quantity"
-        name={`${arrayName}.quantity`}
-        onChange={(value) =>
-          calculateCbmField({ key: "quantity", value: Number(value) })
-        }
-        askterisk
-      />
+      const cbm = handleCaculateCBM(values);
+      setFieldValue(`${arrayName}.cubicMeter`, cbm);
+    };
 
-      <InputNumberFormik<any>
-        label="length"
-        name={`${arrayName}.lengthCm`}
-        addonAfter="cm"
-        onChange={(value) =>
-          calculateCbmField({ key: "lengthCm", value: Number(value) })
-        }
-        askterisk
-      />
+    useEffect(() => {
+      calculateCbmField();
+    }, [isManualAllCbm]);
 
-      <InputNumberFormik<any>
-        label="height"
-        name={`${arrayName}.heightCm`}
-        addonAfter="cm"
-        onChange={(value) =>
-          calculateCbmField({ key: "heightCm", value: Number(value) })
-        }
-        askterisk
-      />
-      <InputNumberFormik<any>
-        label="width"
-        name={`${arrayName}.widthCm`}
-        onChange={(value) =>
-          calculateCbmField({ key: "widthCm", value: Number(value) })
-        }
-        addonAfter="cm"
-        askterisk
-      />
+    return (
+      <div className="row row-cols-lg-4">
+        <InputFormik<any> label="SKU" name={`${arrayName}.skuCode`} askterisk />
+        <InputFormik<any> label="PRO Number" name={`${arrayName}.proNumber`} />
+        <InputFormik<any>
+          label="Description"
+          name={`${arrayName}.description`}
+          askterisk
+        />
+        <InputFormik<any>
+          label="Delivery Note"
+          name={`${arrayName}.deliveryNote`}
+        />
+        <SelectFormik<any, RefUnitOfMeasurement>
+          label="Unit of packaging"
+          name={`${arrayName}.unitOfMeasurementId`}
+          keyValue="id"
+          keyLabel="name"
+          option={unitOfMeasurements}
+          askterisk
+        />
+        <InputFormik<any> label="Batch No" name={`${arrayName}.batchNo`} />
+        <DatePickerFormik<any>
+          label="Expiration Date"
+          name={`${arrayName}.expirationDate`}
+        />
+        <InputNumberFormik<any>
+          label="Pallete Count"
+          name={`${arrayName}.palleteCount`}
+        />
+        <InputNumberFormik<any>
+          label="quantity"
+          name={`${arrayName}.quantity`}
+          onChange={(value) => calculateCbmField(Number(value), "quantity")}
+          askterisk
+        />
 
-      <InputNumberFormik<any>
-        label="CBM (Volume)"
-        name={`${arrayName}.cubicMeter`}
-        askterisk
-        onChange={(value) => fixDecimalCbm(Number(value))}
-        disabled={!isManualCbm}
-      />
-      <InputFormik<any>
-        label="Customer Name"
-        name={`${arrayName}.customerName`}
-      />
-      <SelectFormik<any, ShelfDetails>
-        label="Storage location"
-        name={`${arrayName}.shelfDetailsId`}
-        keyValue="id"
-        keyLabel="name"
-        option={shelfDetails}
-      />
-      <InputNumberFormik<any>
-        prefix="₱"
-        label="Total Amount"
-        name={`${arrayName}.totalAmount`}
-        placeholder="0.00"
-        onChange={(value) => {
-          const money = (value as number).toFixed(2);
-          setFieldValue(`${arrayName}.totalAmount`, money);
-        }}
-      />
-    </div>
-  );
-}
+        <InputNumberFormik<any>
+          label="length"
+          name={`${arrayName}.lengthCm`}
+          addonAfter="cm"
+          onChange={(value) => calculateCbmField(Number(value), "lengthCm")}
+          askterisk
+        />
+
+        <InputNumberFormik<any>
+          label="height"
+          name={`${arrayName}.heightCm`}
+          addonAfter="cm"
+          onChange={(value) => calculateCbmField(Number(value), "heightCm")}
+          askterisk
+        />
+        <InputNumberFormik<any>
+          label="width"
+          name={`${arrayName}.widthCm`}
+          onChange={(value) => calculateCbmField(Number(value), "widthCm")}
+          addonAfter="cm"
+          askterisk
+        />
+
+        <InputNumberFormik<any>
+          label="CBM (Volume)"
+          name={`${arrayName}.cubicMeter`}
+          askterisk
+          onChange={(value) => handleRoundOff(Number(value))}
+          disabled={!cargo.isManualCbm}
+        />
+        <InputFormik<any>
+          label="Customer Name"
+          name={`${arrayName}.customerName`}
+        />
+        <SelectFormik<any, ShelfDetails>
+          label="Storage location"
+          name={`${arrayName}.shelfDetailsId`}
+          keyValue="id"
+          keyLabel="name"
+          option={shelfDetails}
+        />
+        <InputNumberFormik<any>
+          prefix="₱"
+          label="Total Amount"
+          name={`${arrayName}.totalAmount`}
+          placeholder="0.00"
+          onChange={(value) => {
+            const money = (value as number).toFixed(2);
+            setFieldValue(`${arrayName}.totalAmount`, money);
+          }}
+        />
+      </div>
+    );
+  },
+  (prev, next) => {
+    return (
+      prev.cargo === next.cargo && prev.isManualAllCbm === next.isManualAllCbm
+    );
+  }
+);
