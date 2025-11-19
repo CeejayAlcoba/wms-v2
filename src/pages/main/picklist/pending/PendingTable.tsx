@@ -156,7 +156,7 @@ export default function PendingTable() {
       key: "balanceCubicMeter",
     },
     {
-      title: "Dimension",
+      title: "Dimension (L×W×H)",
       key: "dimension",
       render: (_, record) => {
         const { lengthCm, widthCm, heightCm } = record;

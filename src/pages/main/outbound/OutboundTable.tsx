@@ -123,7 +123,7 @@ export default function OutboundTable({
       key: "pickListCubicMeter",
     },
     {
-      title: "Dimension",
+      title: "Dimension (L×W×H)",
       key: "dimension",
       render: (_, record) => {
         const { lengthCm, widthCm, heightCm } = record;

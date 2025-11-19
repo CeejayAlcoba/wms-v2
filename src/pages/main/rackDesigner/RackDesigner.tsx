@@ -23,12 +23,13 @@ import "./RackDesigner.css";
 
 type RackDesignerProps = {
   readonly?: boolean;
-  principalId?: number;
+  principalId?: number | null;
   onClickPallete?: (shelf: ShelfDetails) => void;
 };
 
 export default function RackDesigner({
   readonly = false,
+  principalId,
   onClickPallete,
 }: RackDesignerProps) {
   const [shelfDetails, setShelfDetails] = useState<ShelfDetailsGetDTO[]>([]);
@@ -60,7 +61,7 @@ export default function RackDesigner({
   });
 
   const shelfQuery = useQuery({
-    queryKey: ["shelfDetails"],
+    queryKey: ["shelfDetails", principalId],
     queryFn: async () => {
       if (
         shelfDetails.length != 0 &&
@@ -68,7 +69,10 @@ export default function RackDesigner({
           (pagination.currentPage ?? 0) * (pagination.pageSize ?? 0)
       )
         return [];
-      const res = await shelfDetailsService.GetAll({ ...pagination });
+      const res = await shelfDetailsService.GetAll({
+        ...pagination,
+        principalId,
+      });
       setShelfDetails((prev) => [...prev, ...res]);
       setPagination((res) => ({
         ...res,

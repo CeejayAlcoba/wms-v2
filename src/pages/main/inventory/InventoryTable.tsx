@@ -157,7 +157,6 @@ export default function InventoryTable({
       title: "Uom",
       dataIndex: "unitOfMeasurement",
       key: "unitOfMeasurement",
-     
     },
     {
       title: "Balance CBM",
@@ -165,7 +164,7 @@ export default function InventoryTable({
       key: "balanceCubicMeter",
     },
     {
-      title: "Dimension",
+      title: "Dimension (L×W×H)",
       key: "dimension",
       render: (_, record) => {
         const { lengthCm, widthCm, heightCm } = record;

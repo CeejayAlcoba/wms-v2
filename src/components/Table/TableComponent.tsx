@@ -21,7 +21,7 @@ import { usePrint } from "../../hooks/usePrint";
 import { usePDF } from "../../hooks/usePDF";
 import DocumentTable from "../Documents/DocumentTable";
 import { useSearchParams } from "react-router-dom";
-import "./TableComponent.css"
+import "./TableComponent.css";
 
 export type TableComponentProps<T extends object = any> = TableProps<T> & {
   indexedColumn?: boolean;
@@ -36,6 +36,7 @@ export type TableComponentProps<T extends object = any> = TableProps<T> & {
     onBeforeDownload?: () => Promise<void>;
     onAfterDownload?: () => Promise<void>;
   } & ButtonProps;
+  refetch?: () => void;
 };
 
 type PaginationParams = {
@@ -53,6 +54,7 @@ export default function TableComponent<T extends object = any>({
   columns,
   headerTitle,
   search,
+  refetch,
   ...props
 }: TableComponentProps<T>) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,7 +63,6 @@ export default function TableComponent<T extends object = any>({
     pageSize: searchParams.get("pageSize") ?? "10",
   });
 
-  
   const debouncedSearch = useMemo(
     () => debounce(search?.onChange ? search?.onChange : () => {}, 500),
     []
@@ -115,15 +116,15 @@ export default function TableComponent<T extends object = any>({
     if (print?.onChange) {
       await print.onChange(e);
     }
-      await onPrint();
+    await onPrint();
   };
   const handleDownloadPDF = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     if (pdf?.onChange) {
       await pdf.onChange(e);
-    } 
-      await onDownloadPdf(headerTitle);
+    }
+    await onDownloadPdf(headerTitle);
   };
 
   useEffect(() => {

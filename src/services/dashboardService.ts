@@ -5,8 +5,8 @@ import objectToQueryParam from "./utilities/objectToQueryParam";
 const path = "dashboard";
 
 function _dashboardService() {
-  const GetSummary = async (principal?: number) => {
-    const queryParams = objectToQueryParam({ principal: principal });
+  const GetSummary = async (principalId?: number | null) => {
+    const queryParams = objectToQueryParam({ principalId: principalId });
     const { data: reponseData } = await axiosInstance.get<DashboardSummaryDTO>(
       `${path}/summary?${queryParams}`
     );

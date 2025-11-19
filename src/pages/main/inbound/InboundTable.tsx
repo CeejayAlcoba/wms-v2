@@ -129,7 +129,7 @@ export default function InboundTable({
       key: "cubicMeter",
     },
     {
-      title: "Dimension",
+      title: "Dimension (L×W×H)",
       key: "dimension",
       render: (_, record) => {
         const { lengthCm, widthCm, heightCm } = record;

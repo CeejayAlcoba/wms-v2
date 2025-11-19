@@ -197,8 +197,8 @@ export default function SavePickListRecordDetailsModal(
               </div>
               <div>
                 <label>
-                  <strong>Dimension:</strong> {values.report?.lengthCm} x{" "}
-                  {values.report?.widthCm} x {values.report?.heightCm} cm
+                  <strong>Dimension (L×W×H):</strong> {values.report?.lengthCm}{" "}
+                  x {values.report?.widthCm} x {values.report?.heightCm} cm
                 </label>
               </div>
             </div>

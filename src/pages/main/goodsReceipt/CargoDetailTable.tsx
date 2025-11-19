@@ -30,7 +30,7 @@ export default function CargoDetailTable(props: {
     { title: "Pallet Count", dataIndex: "palleteCount", key: "palleteCount" },
     { title: "Quantity", dataIndex: "quantity", key: "quantity" },
     {
-      title: "Dimensions  (L × W × H)",
+      title: "Dimensions  (L×W×H)",
       dataIndex: "",
       key: "dimensions",
       render: (_, record) =>

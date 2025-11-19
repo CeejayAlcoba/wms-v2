@@ -7,10 +7,14 @@ import ShelfSummaryCard from "./cards/ShelfSummaryCard";
 import { useQuery } from "@tanstack/react-query";
 import { dashboardService } from "../../../services/dashboardService";
 
-export default function SummaryCards() {
+type SummaryCardsProps = {
+  principalId: number | null;
+};
+
+export default function SummaryCards({ principalId }: SummaryCardsProps) {
   const { data: summaries, isFetching } = useQuery({
-    queryKey: ["summaries"],
-    queryFn: async () => await dashboardService.GetSummary(),
+    queryKey: ["summaries", principalId],
+    queryFn: async () => await dashboardService.GetSummary(principalId),
     initialData: {
       returned: 0,
       checkedIn: 0,
@@ -26,7 +30,7 @@ export default function SummaryCards() {
 
   return (
     <div>
-      <div className="row g-3 row-cols-lg-3">
+      <div className="row g-3 row-cols-1 row-cols-md-3">
         <div className="col">
           <InboundStagingCard
             inboundStaging={summaries.inboundStaging}
