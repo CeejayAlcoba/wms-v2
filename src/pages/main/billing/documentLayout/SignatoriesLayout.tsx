@@ -11,7 +11,7 @@ export default function SignatoriesLayout({
       {signatories?.map((signatory) => (
         <div className="row row-cols-sm-1 text-center">
           <div>{signatory.title}</div>
-          <div> ________________________</div>
+          <div> _____________________________________________</div>
           <div className="fw-bold"> {signatory.name}</div>
         </div>
       ))}

@@ -19,11 +19,10 @@ type StorageTableProps = {
   storage?: BillingStorageDTO;
 } & TableComponentProps<StorageDetails>;
 
-const { Text } = Typography;
-
-export default function StorageTable(props: StorageTableProps) {
-  const { storage, ...rest } = props;
-  const columns: TableProps<StorageDetails>["columns"] = [
+export const handleGetStorageColumns = (
+  storage: BillingStorageDTO | undefined
+): TableProps<StorageDetails>["columns"] => {
+  return [
     {
       title: "DATE",
       dataIndex: "transDate",
@@ -36,28 +35,19 @@ export default function StorageTable(props: StorageTableProps) {
       key: "quantity",
     },
     {
-      title: "PALLETE",
-      dataIndex: "palleteCount",
-      key: "palleteCount",
-    },
-    {
       title: `IN (${storage?.totals?.billType})`,
-      dataIndex: "inCbm",
-      key: "inCbm",
-      render: (value: number) =>
-        value ? <Text type="success">{value}</Text> : "",
+      dataIndex: "inValue",
+      key: "inValue",
     },
     {
       title: `OUT (${storage?.totals?.billType})`,
-      dataIndex: "outCbm",
-      key: "outCbm",
-      render: (value: number) =>
-        value ? <Text type="danger">{value}</Text> : "",
+      dataIndex: "outValue",
+      key: "outValue",
     },
     {
       title: `BAL (${storage?.totals?.billType})`,
-      dataIndex: "balanceCbm",
-      key: "balanceCbm",
+      dataIndex: "balanceValue",
+      key: "balanceValue",
     },
     {
       title: "CUT OFF",
@@ -71,12 +61,17 @@ export default function StorageTable(props: StorageTableProps) {
       key: "noOfDays",
     },
     {
-      title: "BILL",
+      title: "",
       dataIndex: "bill",
       key: "bill",
-      render: (value: number) => handleMoney(value),
+      render: (value: number) => handleMoney(value, false),
     },
   ];
+};
+
+export default function StorageTable(props: StorageTableProps) {
+  const { storage, ...rest } = props;
+
   const gridfooter: GridListColumnsProps<StorageTotals> = [
     {
       key: "storageRate",
@@ -103,7 +98,7 @@ export default function StorageTable(props: StorageTableProps) {
       <TableComponent<StorageDetails>
         indexedColumn={false}
         headerTitle="Storage"
-        columns={columns}
+        columns={handleGetStorageColumns(storage)}
         dataSource={storage?.details ?? []}
         footer={() => (
           <GridList<StorageTotals>

@@ -21,9 +21,12 @@ type HandlingOutTableProps = {
 
 const { Text } = Typography;
 
-export default function HandlingOutTable(props: HandlingOutTableProps) {
-  const { handlingOut, ...rest } = props;
-  const columns: TableProps<HandlingOutDetails>["columns"] = [
+export const handleGetHandlingOutColumns = (
+  data?: BillingHandlingOutDTO
+): TableProps<HandlingOutDetails>["columns"] => {
+  const handleBillTypeKey =
+    data?.totals?.billType == "CBM" ? "cubicMeter" : "palleteCount";
+  return [
     {
       title: "DATE",
       dataIndex: "pullOutDate",
@@ -40,28 +43,76 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
       dataIndex: "quantity",
       key: "quantity",
     },
+
     {
-      title: "PALLETE",
-      dataIndex: "palleteCount",
-      key: "palleteCount",
+      title: data?.totals?.billType,
+      dataIndex: handleBillTypeKey,
+      key: handleBillTypeKey,
     },
     {
-      title: "CBM",
-      dataIndex: "cubicMeter",
-      key: "cubicMeter",
-    },
-    {
-      title: "Total CBM/Day",
+      title: "ADJ",
       dataIndex: "totalCbmPerDay",
       key: "totalCbmPerDay",
       render: (value: number, record: HandlingOutDetails) => {
         if (record.isAdjusted && value)
-          return <Text type="danger">{value}</Text>;
+          return (
+            <Text style={{ fontSize: 12 }} type="danger">
+              {value}
+            </Text>
+          );
         else if (!value) return <span></span>;
         else return value;
       },
     },
   ];
+};
+
+//   {
+//     title: "DATE",
+//     dataIndex: "pullOutDate",
+//     key: "pullOutDate",
+//     render: (value: Date) => value && dayjs(value).format("DD-MMM-YY"),
+//   },
+//   {
+//     title: "OCR",
+//     dataIndex: "ocrNumber",
+//     key: "ocrNumber",
+//   },
+//   {
+//     title: "QTY",
+//     dataIndex: "quantity",
+//     key: "quantity",
+//   },
+//   // {
+//   //   title: "PALLETE",
+//   //   dataIndex: "palleteCount",
+//   //   key: "palleteCount",
+//   // },
+//   {
+//     title: "CBM",
+//     dataIndex: "cubicMeter",
+//     key: "cubicMeter",
+//   },
+//   {
+//     title: "ADJ",
+//     dataIndex: "totalCbmPerDay",
+//     key: "totalCbmPerDay",
+//     render: (value: number, record: HandlingOutDetails) => {
+//       if (record.isAdjusted && value)
+//         return (
+//           <Text style={{ fontSize: 12 }} type="danger">
+//             {value}
+//           </Text>
+//         );
+//       else if (!value) return <span></span>;
+//       else return value;
+//     },
+//   },
+// ];
+
+export default function HandlingOutTable(props: HandlingOutTableProps) {
+  const { handlingOut, ...rest } = props;
+
   const gridfooter: GridListColumnsProps<HandlingOutTotals> = [
     {
       key: "billType",
@@ -99,7 +150,7 @@ export default function HandlingOutTable(props: HandlingOutTableProps) {
         indexedColumn={false}
         pagination={false}
         headerTitle="Handling Out"
-        columns={columns}
+        columns={handleGetHandlingOutColumns(handlingOut)}
         dataSource={handlingOut?.details ?? []}
         footer={() => (
           <GridList<HandlingOutTotals>

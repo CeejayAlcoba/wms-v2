@@ -11,56 +11,19 @@ import handleNumberToWords from "../../../../utils/handleNumberToWords";
 import BillingTableHeader from "../BillingTableHeader";
 import SignatoriesLayout from "./SignatoriesLayout";
 import DocumentLayout from "../../../../components/Documents/DocumentLayout";
+import { Typography } from "antd";
+import { handleGetStorageColumns } from "../StorageTable";
+import { handleGetHandlingOutColumns } from "../HandlingOutTable";
+import { handleGetHandlingInColumns } from "../HandlingInTable";
 
 type IndexDocumentProps = {
   billing: BillingDTO | null;
   ref: React.Ref<HTMLDivElement> | undefined;
 };
+const { Text } = Typography;
 
 export default function IndexDocumentLayout(props: IndexDocumentProps) {
   const { billing, ref } = props;
-  const handlingInContent: ContentType[] =
-    billing?.handlingIn?.details?.map((c) => ({
-      date: c?.actualCheckInDate,
-      particulars: [
-        <div>{c?.icrReferenceNumber}</div>,
-        <div>{c?.quantity}</div>,
-        <div>{c?.cubicMeter}</div>,
-        <div className={`${c?.totalCbmPerDay == 1 && "text-danger"}`}>
-          {c?.totalCbmPerDay || ""}
-        </div>,
-      ],
-    })) ?? [];
-
-  const handlingOutContent: ContentType[] =
-    billing?.handlingOut?.details?.map((c) => ({
-      date: c?.pullOutDate,
-      particulars: [
-        <div>{c?.ocrNumber}</div>,
-        <div>{c?.quantity}</div>,
-        <div>{c?.cubicMeter}</div>,
-        <div className={`${c?.totalCbmPerDay == 1 && "text-danger"}`}>
-          {c?.totalCbmPerDay || ""}
-        </div>,
-      ],
-    })) ?? [];
-
-  const storageContent: ContentType[] =
-    billing?.storage?.details?.map((c) => ({
-      date: c?.transDate,
-      particulars: [
-        <div>{c?.inCbm}</div>,
-        <div>{c?.outCbm}</div>,
-        <div>{c?.quantity}</div>,
-        <div>{c?.balanceCbm || ""}</div>,
-        <div style={{ width: 100 }}>
-          {" "}
-          {dayjs(c.cutOff).format("DD-MMM-YY")}
-        </div>,
-        <div> {c.noOfDays}</div>,
-        <div> {handleMoney(c.bill)}</div>,
-      ],
-    })) ?? [];
 
   const handleDecimalText = () => {
     const amount = billing?.vatableAmount ?? 0;
@@ -68,94 +31,91 @@ export default function IndexDocumentLayout(props: IndexDocumentProps) {
 
     return decimal === "00" ? "ONLY" : `AND ${decimal}/100 ONLY`;
   };
+
   return (
     <div className="bg-light d-none" style={{ fontSize: 11 }}>
-      <DocumentLayout ref={ref} headerTitle="BILLING STATEMENT">
+      <div></div>
+      <DocumentLayout ref={ref}>
+        <span className="d-flex justify-content-end mr-2">
+          REF:{" "}
+          <span className="text-danger">
+            {billing?.billingStatement?.referenceNumber}
+          </span>
+        </span>
+        <div className="d-flex justify-content-center">
+          <Text
+            style={{ fontSize: "25px", color: "black", fontWeight: "bold" }}
+          >
+            BILLING STATEMENT
+          </Text>
+        </div>
+
         <BillingTableHeader
           record={billing?.billingStatement as BillingStatementDTO}
         />
-        <table className="table table-bordered mt-2">
-          <TableHeaderLayout />
-          <tbody>
-            <BodyLayout
-              header={
-                <div className="d-flex justify-content-around fw-bold">
-                  <div>HANDLING IN CHARGES</div>
-                  <div>
-                    {billing?.handlingIn?.totals?.total}{" "}
-                    {billing?.handlingIn?.totals?.billType}
-                  </div>
-                  <div>
-                    {handleMoney(billing?.handlingIn?.totals?.handlingInRate)}/
-                    {billing?.handlingIn?.totals?.billType}
-                  </div>
-                  <div>{handleMoney(billing?.handlingIn?.totals?.bill)}</div>
-                </div>
-              }
-              particular={{
-                headers: [
-                  <strong className="text-danger">ICR</strong>,
-                  <strong className="text-danger">QTY</strong>,
-                  <strong className="text-danger"> CBM</strong>,
-                  <strong className="text-danger"> ADJ</strong>,
-                ],
-                contents: handlingInContent,
-              }}
-            />
-            <BodyLayout
-              header={
-                <div className="d-flex justify-content-around fw-bold">
-                  <div>HANDLING OUT CHARGES</div>
-                  <div>
-                    {billing?.handlingOut?.totals?.total}{" "}
-                    {billing?.handlingOut?.totals?.billType}
-                  </div>
-                  <div>
-                    {handleMoney(billing?.handlingOut?.totals?.handlingOutRate)}
-                    /{billing?.handlingOut?.totals?.billType}
-                  </div>
-                  <div>{handleMoney(billing?.handlingOut?.totals?.bill)}</div>
-                </div>
-              }
-              particular={{
-                headers: [
-                  <strong className="text-danger">OCR</strong>,
-                  <strong className="text-danger">QTY</strong>,
-                  <strong className="text-danger"> CBM</strong>,
-                  <strong className="text-danger"> ADJ</strong>,
-                ],
-                contents: handlingOutContent,
-              }}
-            />
-            <BodyLayout
-              footer={
-                <div className="d-flex justify-content-center gap-2 fw-bold">
-                  <div>STORAGE CHARGES</div>
-                  <div>
-                    (
-                    {handleFormatDateRange(
-                      billing?.billingStatement?.dateFrom,
-                      billing?.billingStatement?.dateTo
-                    )}
-                    )
-                  </div>
-                </div>
-              }
-              particular={{
-                headers: [
-                  <strong className="text-danger">IN (cbm)</strong>,
-                  <strong className="text-danger">OUT (cbm)</strong>,
-                  <strong className="text-danger"> QTY</strong>,
-                  <strong className="text-danger"> BAL (cbm)</strong>,
-                  <strong className="text-danger"> CUT OFF</strong>,
-                  <strong className="text-danger"> # of days</strong>,
-                  <div></div>,
-                ],
-                contents: storageContent,
-              }}
-            />
-          </tbody>
-        </table>
+        <TableHeaderLayout />
+
+        {/* HANDLING IN */}
+        <BodyLayout
+          columns={handleGetHandlingInColumns(billing?.handlingIn)}
+          data={billing?.handlingIn?.details}
+          titleHeader="HANDLING IN CHARGES"
+          totalCbmPallete={
+            <div>
+              {billing?.handlingIn?.totals?.total}{" "}
+              {billing?.handlingIn?.totals?.billType}
+            </div>
+          }
+          rate={
+            <div>
+              {handleMoney(billing?.handlingIn?.totals?.handlingInRate)}/
+              {billing?.handlingIn?.totals?.billType}
+            </div>
+          }
+          bill={<div>{handleMoney(billing?.handlingIn?.totals?.bill)}</div>}
+        />
+
+        {/* HANDLING OUT */}
+        <BodyLayout
+          columns={handleGetHandlingOutColumns(billing?.handlingOut)}
+          data={billing?.handlingOut?.details}
+          titleHeader="HANDLING OUT CHARGES"
+          totalCbmPallete={
+            <div>
+              {billing?.handlingOut?.totals?.total}{" "}
+              {billing?.handlingOut?.totals?.billType}
+            </div>
+          }
+          rate={
+            <div>
+              {handleMoney(billing?.handlingOut?.totals?.handlingOutRate)}/
+              {billing?.handlingOut?.totals?.billType}
+            </div>
+          }
+          bill={<div>{handleMoney(billing?.handlingOut?.totals?.bill)}</div>}
+        />
+
+        {/* STORAGE */}
+        <BodyLayout
+          columns={handleGetStorageColumns(billing?.storage)}
+          data={billing?.storage?.details}
+          titleFooter={
+            <div className="d-flex justify-content-center gap-2 fw-bold">
+              <div>STORAGE CHARGES</div>
+            </div>
+          }
+          totalCbmPallete={
+            <div>
+              (
+              {handleFormatDateRange(
+                billing?.billingStatement?.dateFrom,
+                billing?.billingStatement?.dateTo
+              )}
+              )
+            </div>
+          }
+        />
+
         <OtherServicesTable
           style={{ fontSize: 12 }}
           forPrinting={true}

@@ -7,9 +7,9 @@ export type StorageDetails = {
   transDate: Date;
   quantity: number;
   palleteCount: number;
-  inCbm: number;
-  outCbm: number;
-  balanceCbm: number;
+  inValue: number;
+  outValue: number;
+  balanceValue: number;
   cutOff: Date;
   noOfDays: number;
   bill: number;

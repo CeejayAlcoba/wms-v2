@@ -1,64 +1,94 @@
+import type { ColumnType } from "antd/es/table";
 import dayjs from "dayjs";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export type ContentType = {
   date?: Date | null;
   particulars?: ReactNode[];
 };
-type BodyLayoutProps = {
-  particular?: {
-    headers: ReactNode[];
-    contents?: ContentType[];
-  };
+type BodyLayoutProps<T> = {
+  columns?: ColumnType<T>[];
+  data?: T[];
+  titleHeader?: ReactNode;
+  titleFooter?: ReactNode;
+  totalCbmPallete?: ReactNode;
   rate?: ReactNode;
-  bill?: ReactNode[];
-  header?: ReactNode;
-  footer?: ReactNode;
+  bill?: ReactNode;
 };
-const bgColor = "#d9d9d9";
-export default function BodyLayout({
-  particular,
-  header,
-  footer,
-}: BodyLayoutProps) {
+
+const mainTh: CSSProperties = {
+  color: "red",
+};
+
+export default function BodyLayout<T = any>({
+  columns,
+  data,
+  titleHeader,
+  titleFooter,
+  totalCbmPallete,
+  rate,
+  bill,
+}: BodyLayoutProps<T>) {
   return (
     <>
-      {header && (
-        <tr>
-          <td style={{ backgroundColor: bgColor }}></td>
-          <td style={{ backgroundColor: bgColor }}>{header}</td>
-        </tr>
+      {titleHeader && (
+        <table className="table  table-bordered" style={{ margin: 0 }}>
+          <thead>
+            <tr>
+              <th style={{ width: "100px" }}></th>
+              <th className="d-flex justify-content-around">
+                <div>{titleHeader}</div> <div>{totalCbmPallete}</div>
+                <div>{rate}</div> <div>{bill}</div>
+              </th>
+            </tr>
+          </thead>
+        </table>
       )}
 
-      <tr className="text-center">
-        <td></td>
-        <td className={`row row-cols-${particular?.headers.length}`}>
-          {particular?.headers?.map((c, idx) => (
-            <div style={{ width: 100 }} key={idx} className="col">
-              {c}
-            </div>
+      <table className="table table-bordered text-center" style={{ margin: 0 }}>
+        <thead>
+          <tr>
+            <th style={{ width: "100px" }}></th>
+            {columns?.slice(1).map((c, key) => (
+              <th style={mainTh} key={key}>
+                {c.title as string}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data?.map((d, rowIdx) => (
+            <tr>
+              {columns?.map((c, colIdx) => {
+                const value =
+                  typeof c.dataIndex === "string"
+                    ? (d as any)[c.dataIndex]
+                    : undefined;
+
+                const cellContent = c.render
+                  ? c.render(value, d, rowIdx)
+                  : value;
+                if (!cellContent) return <td key={colIdx}></td>;
+
+                return <td key={colIdx}>{cellContent}</td>;
+              })}
+            </tr>
           ))}
-        </td>
-      </tr>
-      {particular?.contents?.map((c, index) => (
-        <tr key={index} className="text-center">
-          <td>{c.date && dayjs(c.date).format("DD-MMM-YY")}</td>
-          <td>
-            <td className={`row row-cols-${particular?.headers.length}`}>
-              {c.particulars?.map((p) => (
-                <div style={{ width: 100 }} className="col">
-                  {p}
-                </div>
-              ))}
-            </td>
-          </td>
-        </tr>
-      ))}
-      {footer && (
-        <tr>
-          <td style={{ backgroundColor: bgColor }}></td>
-          <td style={{ backgroundColor: bgColor }}>{footer}</td>
-        </tr>
+        </tbody>
+      </table>
+
+      {titleFooter && (
+        <table className="table  table-bordered" style={{ margin: 0 }}>
+          <thead>
+            <tr>
+              <th style={{ width: "100px" }}></th>
+              <th className="d-flex justify-content-around">
+                <div>{titleFooter}</div> <div>{totalCbmPallete}</div>
+                <div>{rate}</div> <div>{bill}</div>
+              </th>
+            </tr>
+          </thead>
+        </table>
       )}
     </>
   );

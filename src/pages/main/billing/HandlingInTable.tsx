@@ -20,9 +20,12 @@ type HandlingInTableProps = {
 
 const { Text } = Typography;
 
-export default function HandlingInTable(props: HandlingInTableProps) {
-  const { handlingIn, ...rest } = props;
-  const columns: TableProps<HandlingInDetails>["columns"] = [
+export const handleGetHandlingInColumns = (
+  data?: BillingHandlingInDTO
+): TableProps<HandlingInDetails>["columns"] => {
+  const handleBillTypeKey =
+    data?.totals?.billType == "CBM" ? "cubicMeter" : "palleteCount";
+  return [
     {
       title: "DATE",
       dataIndex: "actualCheckInDate",
@@ -39,27 +42,33 @@ export default function HandlingInTable(props: HandlingInTableProps) {
       dataIndex: "quantity",
       key: "quantity",
     },
+
     {
-      title: "PALLETE",
-      dataIndex: "palleteCount",
-      key: "palleteCount",
+      title: data?.totals?.billType,
+      dataIndex: handleBillTypeKey,
+      key: handleBillTypeKey,
     },
     {
-      title: "CBM",
-      dataIndex: "cubicMeter",
-      key: "cubicMeter",
-    },
-    {
-      title: "Total CBM/Day",
+      title: "ADJ",
       dataIndex: "totalCbmPerDay",
       key: "totalCbmPerDay",
       render: (value: number) => {
-        if (value == 1) return <Text type="danger">{value}</Text>;
+        if (value == 1)
+          return (
+            <Text style={{ fontSize: 12 }} type="danger">
+              {value}
+            </Text>
+          );
         else if (!value) return <span></span>;
         else return value;
       },
     },
   ];
+};
+
+export default function HandlingInTable(props: HandlingInTableProps) {
+  const { handlingIn, ...rest } = props;
+
   const gridfooter: GridListColumnsProps<HandlingInTotals> = [
     {
       key: "billType",
@@ -96,7 +105,7 @@ export default function HandlingInTable(props: HandlingInTableProps) {
       <TableComponent<HandlingInDetails>
         indexedColumn={false}
         headerTitle="Handling In"
-        columns={columns}
+        columns={handleGetHandlingInColumns(handlingIn)}
         dataSource={handlingIn?.details ?? []}
         pagination={false}
         footer={() => (

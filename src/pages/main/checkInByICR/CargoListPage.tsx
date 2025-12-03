@@ -8,7 +8,7 @@ import type { RefUnitOfMeasurement } from "../../../@types/tables/RefUnitOfMeasu
 import DatePickerFormik from "../../../components/Formik/DatePicker";
 import InputNumberFormik from "../../../components/Formik/InputNumberFormik";
 import type { ShelfDetails } from "../../../@types/tables/ShelfDetails";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { handleRoundOff } from "../../../utils/handleRoundOff";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";

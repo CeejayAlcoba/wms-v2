@@ -30,6 +30,7 @@ import { useFormik } from "formik";
 import { EMPTY_FORM } from "./__constants__/EMPTY_FORM";
 import { billingFilterSchema } from "../../../schemas/billingFilterSchema";
 import OtherServicesSaveModal from "../otherServiceBill/SaveModal";
+import { handleMoney } from "../../../utils/handleMoney";
 
 export default function IndexPage() {
   const [billing, setBilling] = useState<BillingDTO | null>(null);
@@ -205,7 +206,19 @@ export default function IndexPage() {
         pagination={false}
         loading={isLoading}
       />
-      <BillingFooter billing={billing} />
+
+      {/* TOTAL FOOTER */}
+      <div className="d-flex flex-column align-items-end">
+        <div>
+          <strong>Total </strong> {handleMoney(billing?.unVatableAmount)}
+        </div>
+        <div>
+          <strong>VAT {billing?.vat}% </strong> {handleMoney(billing?.vatCost)}
+        </div>
+        <div>
+          <strong>Total Amount </strong> {handleMoney(billing?.vatableAmount)}
+        </div>
+      </div>
     </div>
   );
 }

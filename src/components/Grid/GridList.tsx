@@ -4,6 +4,7 @@ export type GridListColumnsProps<T = any> = {
   key: keyof T;
   label?: string;
   title?: string;
+  width?: any;
   render?: (value?: any, record?: T, index?: number) => ReactNode;
 }[];
 
